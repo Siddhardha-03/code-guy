@@ -5,13 +5,15 @@ import Toast from '../components/Toast';
 
 const formatDate = (dateString) => {
   if (!dateString) return 'N/A';
-  const date = new Date(dateString);
+  // Handle MySQL datetime format properly
+  const date = new Date(dateString.replace(' ', 'T'));
   return date.toLocaleString();
 };
 
 const calculateTimeLeft = (endTime) => {
   if (!endTime) return null;
-  const end = new Date(endTime).getTime();
+  // Handle MySQL datetime format properly
+  const end = new Date(endTime.replace(' ', 'T')).getTime();
   const now = Date.now();
   const diff = end - now;
   
@@ -25,8 +27,9 @@ const calculateTimeLeft = (endTime) => {
 
 const ContestStatus = ({ contest }) => {
   const now = new Date();
-  const start = new Date(contest.start_time);
-  const end = new Date(contest.end_time);
+  // Handle MySQL datetime format properly
+  const start = new Date(contest.start_time.replace(' ', 'T'));
+  const end = new Date(contest.end_time.replace(' ', 'T'));
   
   if (now < start) {
     return (
