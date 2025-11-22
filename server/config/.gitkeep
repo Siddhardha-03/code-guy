@@ -1,0 +1,29 @@
+# Firebase Service Account Key
+
+This directory should contain your Firebase service account key file.
+
+## Setup Instructions
+
+1. Go to [Firebase Console](https://console.firebase.google.com/)
+2. Select project: **code-guy**
+3. Go to Project Settings > Service Accounts
+4. Click "Generate New Private Key"
+5. Save the downloaded file as `serviceAccountKey.json` in this directory
+
+## Security
+
+**IMPORTANT:** The `serviceAccountKey.json` file is already in `.gitignore`.
+Never commit this file to version control as it contains sensitive credentials.
+
+## File Structure
+
+After setup, this directory should contain:
+```
+config/
+├── .gitkeep (this file)
+└── serviceAccountKey.json (you need to add this)
+```
+
+## For Production
+
+In production environments (Google Cloud, etc.), you can use Application Default Credentials instead of the service account file. The app will automatically fall back to this option if the file is not found.

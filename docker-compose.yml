@@ -1,0 +1,69 @@
+version: '3.8'
+
+services:
+  # Database
+  mysql:
+    image: mysql:8.0
+    container_name: codeguy_mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-rootpassword}
+      MYSQL_DATABASE: ${DB_NAME:-campus_platform}
+      MYSQL_USER: ${DB_USER:-codeguy}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-password}
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./database:/docker-entrypoint-initdb.d
+    networks:
+      - codeguy_network
+
+  # Backend API
+  api:
+    build: 
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: codeguy_api
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    environment:
+      - NODE_ENV=production
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_NAME=${DB_NAME:-campus_platform}
+      - DB_USER=${DB_USER:-codeguy}
+      - DB_PASSWORD=${DB_PASSWORD:-password}
+      - JWT_SECRET=${JWT_SECRET}
+      - CLIENT_URL=${CLIENT_URL:-http://localhost:3000}
+      - FIREBASE_PROJECT_ID=${FIREBASE_PROJECT_ID:-code-guy}
+    depends_on:
+      - mysql
+    volumes:
+      - ./server/config:/app/config:ro
+    networks:
+      - codeguy_network
+
+  # Frontend
+  frontend:
+    build: 
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: codeguy_frontend
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    environment:
+      - REACT_APP_API_URL=${REACT_APP_API_URL:-http://localhost:5000/api}
+    depends_on:
+      - api
+    networks:
+      - codeguy_network
+
+volumes:
+  mysql_data:
+
+networks:
+  codeguy_network:
+    driver: bridge

@@ -1,0 +1,39 @@
+# Security and Performance Headers for React Client
+# This file configures HTTP headers for Render Static Sites
+
+# Default security headers for all files
+/*
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  X-XSS-Protection: 1; mode=block
+  Referrer-Policy: strict-origin-when-cross-origin
+
+# Cache static assets for 1 year (immutable files with hashes)
+/static/js/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/static/css/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/static/media/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Don't cache the main HTML file
+/index.html
+  Cache-Control: no-cache, no-store, must-revalidate
+  Pragma: no-cache
+  Expires: 0
+
+# Cache manifest and service worker for short time
+/manifest.json
+  Cache-Control: public, max-age=3600
+
+# Fonts caching
+*.woff2
+  Cache-Control: public, max-age=31536000, immutable
+
+*.woff
+  Cache-Control: public, max-age=31536000, immutable
+
+*.ttf
+  Cache-Control: public, max-age=31536000, immutable

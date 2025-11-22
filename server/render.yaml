@@ -1,0 +1,66 @@
+# Render Web Service Configuration for Node.js Server
+# Place this file in the root of your server directory
+# Render automatically detects and uses this configuration
+
+services:
+  - type: web
+    name: code-guy-server
+    env: node
+    region: oregon  # or singapore, frankfurt
+    plan: starter  # $7/month - upgrade to standard for production
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/health
+    
+    # Auto-deploy on git push
+    autoDeploy: true
+    branch: main
+    
+    # Environment variables (set these in Render dashboard)
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      
+      # Database connection (copy from Railway)
+      - key: DB_HOST
+        sync: false  # Set manually in dashboard
+      - key: DB_PORT  
+        value: 3306
+      - key: DB_USER
+        sync: false  # Set manually in dashboard
+      - key: DB_PASSWORD
+        sync: false  # Set manually in dashboard
+      - key: DB_NAME
+        sync: false  # Set manually in dashboard
+      
+      # Security
+      - key: JWT_SECRET
+        sync: false  # Generate secure secret
+        
+      # External APIs
+      - key: JUDGE0_BASE_URL
+        value: https://ce.judge0.com
+        
+      # Client URL (update after client deployment)
+      - key: CLIENT_URL
+        sync: false  # Set to Render static site URL
+        
+      # Firebase
+      - key: FIREBASE_PROJECT_ID
+        value: code-guy
+
+    # Resource limits
+    disk:
+      name: code-guy-server-disk
+      size: 1GB
+      
+    # Custom domains (optional)
+    # domains:
+    #   - api.your-domain.com
+    
+    # Scaling (for standard plan and above)
+    scaling:
+      minInstances: 1
+      maxInstances: 3
