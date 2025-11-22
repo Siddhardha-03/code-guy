@@ -39,50 +39,86 @@ const verifyFirebaseToken = async (req, res, next) => {
 
     // Get or create user in MySQL database
     try {
-      const [users] = await req.db.execute(
+      // First try to find user by firebase_uid
+      let [users] = await req.db.execute(
         'SELECT * FROM users WHERE firebase_uid = ?',
         [decodedToken.uid]
       );
 
       if (users.length === 0) {
-        // User doesn't exist in MySQL - create them
-        const [result] = await req.db.execute(
-          `INSERT INTO users (firebase_uid, name, email, email_verified, role, created_at) 
-           VALUES (?, ?, ?, ?, ?, NOW())`,
+        // User doesn't exist by firebase_uid, check by email
+        const [emailUsers] = await req.db.execute(
+          'SELECT * FROM users WHERE email = ?',
+          [decodedToken.email]
+        );
+
+        if (emailUsers.length > 0) {
+          // User exists with this email but different firebase_uid - update the firebase_uid
+          console.log(`Updating existing user ${decodedToken.email} with new firebase_uid`);
+          await req.db.execute(
+            'UPDATE users SET firebase_uid = ?, name = ?, email_verified = ?, updated_at = NOW() WHERE email = ?',
+            [
+              decodedToken.uid,
+              req.firebaseUser.name,
+              decodedToken.email_verified ? 1 : 0,
+              decodedToken.email
+            ]
+          );
+          
+          // Fetch the updated user
+          [users] = await req.db.execute(
+            'SELECT * FROM users WHERE firebase_uid = ?',
+            [decodedToken.uid]
+          );
+        } else {
+          // User doesn't exist at all - create new user
+          console.log(`Creating new user: ${decodedToken.email}`);
+          const [result] = await req.db.execute(
+            `INSERT INTO users (firebase_uid, name, email, email_verified, role, created_at) 
+             VALUES (?, ?, ?, ?, ?, NOW())`,
+            [
+              decodedToken.uid,
+              req.firebaseUser.name,
+              decodedToken.email,
+              decodedToken.email_verified ? 1 : 0,
+              'student' // default role
+            ]
+          );
+
+          // Fetch the newly created user
+          [users] = await req.db.execute(
+            'SELECT * FROM users WHERE id = ?',
+            [result.insertId]
+          );
+        }
+      } else {
+        // User exists by firebase_uid - update their info if needed
+        console.log(`Found existing user by firebase_uid: ${decodedToken.email}`);
+        await req.db.execute(
+          'UPDATE users SET name = ?, email = ?, email_verified = ?, updated_at = NOW() WHERE firebase_uid = ?',
           [
-            decodedToken.uid,
             req.firebaseUser.name,
             decodedToken.email,
             decodedToken.email_verified ? 1 : 0,
-            'student' // default role
+            decodedToken.uid
           ]
         );
-
-        req.user = {
-          id: result.insertId,
-          firebase_uid: decodedToken.uid,
-          name: req.firebaseUser.name,
-          email: decodedToken.email,
-          email_verified: decodedToken.email_verified ? 1 : 0,
-          role: 'student',
-          created_at: new Date()
-        };
-
-        console.log(`✅ New user created in MySQL: ${decodedToken.email}`);
-      } else {
-        // User exists - update email_verified if changed
-        const user = users[0];
-        
-        if (user.email_verified !== (decodedToken.email_verified ? 1 : 0)) {
-          await req.db.execute(
-            'UPDATE users SET email_verified = ? WHERE id = ?',
-            [decodedToken.email_verified ? 1 : 0, user.id]
-          );
-          user.email_verified = decodedToken.email_verified ? 1 : 0;
-        }
-
-        req.user = user;
       }
+
+      // Set req.user from the fetched/updated user data
+      const user = users[0];
+      req.user = {
+        id: user.id,
+        firebase_uid: user.firebase_uid,
+        name: user.name,
+        email: user.email,
+        email_verified: user.email_verified,
+        role: user.role,
+        created_at: user.created_at,
+        updated_at: user.updated_at
+      };
+
+      console.log(`✅ User authenticated: ${user.email} (Role: ${user.role})`);
 
       next();
     } catch (dbError) {
