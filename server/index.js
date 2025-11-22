@@ -19,26 +19,61 @@ const contestRoutes = require('./routes/contests');
 // Create Express app
 const app = express();
 
-// Middleware
+// Dynamic CORS configuration - auto-accepts legitimate origins
 const corsOptions = {
   origin: function (origin, callback) {
-    // Allow requests with no origin (like mobile apps or curl requests)
+    // Allow requests with no origin (mobile apps, curl, etc.)
     if (!origin) return callback(null, true);
     
-    const allowedOrigins = process.env.CLIENT_URL 
-      ? process.env.CLIENT_URL.split(',') 
-      : ['http://localhost:3000'];
+    console.log('CORS request from origin:', origin);
     
-    if (allowedOrigins.indexOf(origin) !== -1) {
-      callback(null, true);
-    } else {
-      console.log('CORS blocked origin:', origin);
-      callback(new Error('Not allowed by CORS'));
+    // Auto-allow common development origins
+    const devOrigins = ['localhost', '127.0.0.1', '0.0.0.0'];
+    if (devOrigins.some(dev => origin.includes(dev))) {
+      console.log('✅ CORS: Allowing development origin');
+      return callback(null, true);
     }
+    
+    // Auto-allow Render deployments
+    if (origin.includes('.onrender.com')) {
+      console.log('✅ CORS: Allowing Render deployment');
+      return callback(null, true);
+    }
+    
+    // Auto-allow Netlify deployments
+    if (origin.includes('.netlify.app') || origin.includes('.netlify.com')) {
+      console.log('✅ CORS: Allowing Netlify deployment');
+      return callback(null, true);
+    }
+    
+    // Auto-allow Vercel deployments
+    if (origin.includes('.vercel.app') || origin.includes('.vercel.com')) {
+      console.log('✅ CORS: Allowing Vercel deployment');
+      return callback(null, true);
+    }
+    
+    // Check CLIENT_URL environment variable if set
+    if (process.env.CLIENT_URL) {
+      const allowedOrigins = process.env.CLIENT_URL.split(',').map(url => url.trim());
+      if (allowedOrigins.includes(origin)) {
+        console.log('✅ CORS: Allowing configured origin');
+        return callback(null, true);
+      }
+    }
+    
+    // Allow HTTPS origins that contain 'code-guy' (project-specific)
+    if (origin.startsWith('https://') && origin.includes('code-guy')) {
+      console.log('✅ CORS: Allowing code-guy project origin');
+      return callback(null, true);
+    }
+    
+    console.log('❌ CORS: Blocking origin:', origin);
+    callback(new Error(`CORS: Origin ${origin} not allowed`));
   },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+  optionsSuccessStatus: 200
 };
 
 app.use(cors(corsOptions));
