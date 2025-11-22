@@ -56,7 +56,7 @@ const verifyFirebaseToken = async (req, res, next) => {
           // User exists with this email but different firebase_uid - update the firebase_uid
           console.log(`Updating existing user ${decodedToken.email} with new firebase_uid`);
           await req.db.execute(
-            'UPDATE users SET firebase_uid = ?, name = ?, email_verified = ?, updated_at = NOW() WHERE email = ?',
+            'UPDATE users SET firebase_uid = ?, name = ?, email_verified = ? WHERE email = ?',
             [
               decodedToken.uid,
               req.firebaseUser.name,
@@ -95,7 +95,7 @@ const verifyFirebaseToken = async (req, res, next) => {
         // User exists by firebase_uid - update their info if needed
         console.log(`Found existing user by firebase_uid: ${decodedToken.email}`);
         await req.db.execute(
-          'UPDATE users SET name = ?, email = ?, email_verified = ?, updated_at = NOW() WHERE firebase_uid = ?',
+          'UPDATE users SET name = ?, email = ?, email_verified = ? WHERE firebase_uid = ?',
           [
             req.firebaseUser.name,
             decodedToken.email,
@@ -114,8 +114,7 @@ const verifyFirebaseToken = async (req, res, next) => {
         email: user.email,
         email_verified: user.email_verified,
         role: user.role,
-        created_at: user.created_at,
-        updated_at: user.updated_at
+        created_at: user.created_at
       };
 
       console.log(`✅ User authenticated: ${user.email} (Role: ${user.role})`);
