@@ -1,37 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getAvailableContests, registerForContest } from '../services/contestService';
+import { formatMySQLDateTime, calculateTimeRemaining, getContestStatus } from '../utils/dateUtils';
 import Toast from '../components/Toast';
 
-const formatDate = (dateString) => {
-  if (!dateString) return 'N/A';
-  // Handle MySQL datetime format properly
-  const date = new Date(dateString.replace(' ', 'T'));
-  return date.toLocaleString();
-};
-
-const calculateTimeLeft = (endTime) => {
-  if (!endTime) return null;
-  // Handle MySQL datetime format properly
-  const end = new Date(endTime.replace(' ', 'T')).getTime();
-  const now = Date.now();
-  const diff = end - now;
-  
-  if (diff <= 0) return null;
-  
-  const hours = Math.floor(diff / (1000 * 60 * 60));
-  const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-  
-  return `${hours}h ${minutes}m`;
-};
-
 const ContestStatus = ({ contest }) => {
-  const now = new Date();
-  // Handle MySQL datetime format properly
-  const start = new Date(contest.start_time.replace(' ', 'T'));
-  const end = new Date(contest.end_time.replace(' ', 'T'));
+  const { status } = getContestStatus(contest.start_time, contest.end_time);
   
-  if (now < start) {
+  if (status === 'upcoming') {
     return (
       <span className="inline-block px-3 py-1 bg-yellow-100 text-yellow-800 text-xs font-semibold rounded-full">
         Upcoming
@@ -39,7 +15,7 @@ const ContestStatus = ({ contest }) => {
     );
   }
   
-  if (now > end) {
+  if (status === 'ended') {
     return (
       <span className="inline-block px-3 py-1 bg-gray-100 text-gray-800 text-xs font-semibold rounded-full">
         Ended
@@ -211,7 +187,7 @@ const ContestsList = ({ user }) => {
               const end = new Date(contest.end_time);
               const isUpcoming = now < start;
               const isLive = now >= start && now <= end;
-              const timeLeft = isLive ? calculateTimeLeft(contest.end_time) : null;
+              const timeLeft = isLive ? calculateTimeRemaining(contest.end_time) : null;
               
               return (
                 <div key={contest.id} className="bg-blue-50 bg-opacity-30 rounded-lg border border-blue-200 hover:border-blue-400 transition-all overflow-hidden">
@@ -233,14 +209,14 @@ const ContestsList = ({ user }) => {
                         <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                         </svg>
-                        <span>Starts: {formatDate(contest.start_time)}</span>
+                        <span>Starts: {formatMySQLDateTime(contest.start_time)}</span>
                       </div>
 
                       <div className="flex items-center gap-2 text-sm text-gray-700">
                         <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
-                        <span>Ends: {formatDate(contest.end_time)}</span>
+                        <span>Ends: {formatMySQLDateTime(contest.end_time)}</span>
                       </div>
 
                       {timeLeft && (

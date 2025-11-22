@@ -9,6 +9,7 @@ import {
   getCodeDraft,
   saveCodeDraft
 } from '../services/submissionService';
+import { parseMySQLDateTimeAsUTC } from '../utils/dateUtils';
 import CodeEditor from '../components/CodeEditor';
 import Toast from '../components/Toast';
 // Note: QuizCard component retained in repo for legacy/fallback, but
@@ -94,48 +95,20 @@ const ContestAttempt = ({ user }) => {
         setContestEnded(true);
       }
 
-      // Debug: Log the raw contest times from server
-      console.log('[Contest Debug] Raw contest data:', {
-        title: c.title,
-        start_time: c.start_time,
-        end_time: c.end_time,
-        status: c.status
-      });
-
-      // compute remaining time if end_time exists
+      // Calculate contest timing using UTC parsing
       if (c && c.end_time) {
         const now = Date.now();
-        // Ensure proper date parsing for MySQL datetime format
-        const end = new Date(c.end_time.replace(' ', 'T')).getTime();
-        const timeLeftSeconds = Math.max(Math.floor((end - now) / 1000), 0);
-        
-        console.log('[Contest Debug] End time calculation:', {
-          end_time_raw: c.end_time,
-          end_time_parsed: new Date(c.end_time).toISOString(),
-          current_time: new Date(now).toISOString(),
-          time_left_seconds: timeLeftSeconds,
-          contest_ended: end <= now
-        });
+        const endTime = parseMySQLDateTimeAsUTC(c.end_time).getTime();
+        const timeLeftSeconds = Math.max(Math.floor((endTime - now) / 1000), 0);
         
         setTimeLeft(timeLeftSeconds);
-        setContestEnded(end <= now);
+        setContestEnded(endTime <= now);
       }
       
       if (c && c.start_time) {
         const now = Date.now();
-        // Ensure proper date parsing for MySQL datetime format
-        const start = new Date(c.start_time.replace(' ', 'T')).getTime();
-        const notStarted = start > now;
-        
-        console.log('[Contest Debug] Start time calculation:', {
-          start_time_raw: c.start_time,
-          start_time_parsed: new Date(c.start_time).toISOString(),
-          current_time: new Date(now).toISOString(),
-          time_diff_minutes: Math.floor((start - now) / (1000 * 60)),
-          not_started: notStarted
-        });
-        
-        setContestNotStarted(notStarted);
+        const startTime = parseMySQLDateTimeAsUTC(c.start_time).getTime();
+        setContestNotStarted(startTime > now);
       }
 
       const it = await getContestItems(contestId);
