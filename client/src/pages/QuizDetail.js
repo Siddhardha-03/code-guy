@@ -323,7 +323,7 @@ const QuizDetail = ({ user }) => {
         <div className="mt-8 flex justify-center">
           <button
             onClick={() => navigate('/quizzes')}
-            className="px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+            className="px-4 py-2 border border-transparent text-sm font-bold rounded-lg shadow-md text-white bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 dark:from-blue-600 dark:to-cyan-600 dark:hover:from-blue-700 dark:hover:to-cyan-700 transition-all"
           >
             Back to Quizzes
           </button>
@@ -429,7 +429,7 @@ const QuizDetail = ({ user }) => {
         <button
           onClick={handleSubmitQuiz}
           disabled={isSubmitting || Object.values(answers).some(answer => answer === null)}
-          className="px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="px-4 py-2 border border-transparent text-sm font-bold rounded-lg shadow-md text-white bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 dark:from-blue-600 dark:to-cyan-600 dark:hover:from-blue-700 dark:hover:to-cyan-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isSubmitting ? 'Submitting...' : 'Submit Quiz'}
         </button>

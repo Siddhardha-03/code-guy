@@ -92,6 +92,13 @@
   text-decoration: none;
 }
 
+/* Exclude button-like links from link color override */
+.dark a[class*="btn"],
+.dark a[class*="button"],
+.dark a.block {
+  color: inherit !important;
+}
+
 /* Navigation */
 .dark .navbar {
   background-color: var(--bg-secondary);

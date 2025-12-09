@@ -48,55 +48,58 @@ const Leaderboard = () => {
     return new Date(dateString).toLocaleString();
   };
 
-  const getRankIcon = (rank) => {
+  const getRankBadge = (rank) => {
+    const baseClasses = 'inline-flex items-center justify-center w-8 h-8 rounded-full font-bold text-white text-sm';
     switch (rank) {
-      case 1: return '🥇';
-      case 2: return '🥈';
-      case 3: return '🥉';
-      default: return `#${rank}`;
+      case 1: return <div className={`${baseClasses} bg-gradient-to-br from-yellow-400 to-yellow-600 shadow-lg`}>1</div>;
+      case 2: return <div className={`${baseClasses} bg-gradient-to-br from-gray-300 to-gray-500 shadow-lg`}>2</div>;
+      case 3: return <div className={`${baseClasses} bg-gradient-to-br from-orange-300 to-orange-600 shadow-lg`}>3</div>;
+      default: return <div className={`${baseClasses} bg-gradient-to-br from-blue-400 to-blue-600`}>{rank}</div>;
     }
   };
 
   const renderQuizLeaderboard = () => {
     if (!leaderboardData.quiz || leaderboardData.quiz.length === 0) {
-      return <div className="text-center py-8 text-gray-500">No quiz data available</div>;
+      return <div className="text-center py-8 text-gray-500 dark:text-gray-400">No quiz data available</div>;
     }
 
     return (
       <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
+        <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+          <thead className="bg-transparent border-b-2 border-blue-300 dark:border-blue-600">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Rank</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Avg Score</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quizzes</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Best Score</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Attempts</th>
+              <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 dark:text-gray-200 uppercase tracking-wider">Rank</th>
+              <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 dark:text-gray-200 uppercase tracking-wider">User</th>
+              <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 dark:text-gray-200 uppercase tracking-wider">Avg Score</th>
+              <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 dark:text-gray-200 uppercase tracking-wider">Quizzes</th>
+              <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 dark:text-gray-200 uppercase tracking-wider">Best Score</th>
+              <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 dark:text-gray-200 uppercase tracking-wider">Attempts</th>
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
+          <tbody className="bg-transparent dark:bg-transparent divide-y divide-gray-200 dark:divide-gray-700">
             {leaderboardData.quiz.map((user, index) => (
-              <tr key={user.id} className={index < 3 ? 'bg-yellow-50' : ''}>
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                  {getRankIcon(index + 1)}
+              <tr key={user.id} className={`hover:bg-blue-900 dark:hover:bg-blue-900/30 transition ${index < 3 ? 'bg-gradient-to-r from-yellow-900/20 to-orange-900/20 dark:from-yellow-900/20 dark:to-orange-900/20 border-l-4 border-yellow-400' : 'border-l-4 border-transparent'}`}>
+                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                  {getRankBadge(index + 1)}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm font-medium text-gray-900">{user.name}</div>
-                  <div className="text-sm text-gray-500">{user.email}</div>
+                  <div className="text-sm font-semibold text-gray-900 dark:text-gray-100">{user.name}</div>
+                  <div className="text-xs text-gray-500 dark:text-gray-400">{user.email}</div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
-                    Avg: {user.avg_score}
+                  <span className="inline-flex px-3 py-1 text-xs font-bold rounded-full bg-gradient-to-r from-green-100 to-emerald-100 dark:from-green-900 dark:to-emerald-900 text-green-800 dark:text-green-200">
+                    {user.avg_score}
                   </span>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900 dark:text-gray-100">
                   {user.quizzes_completed}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                  Best: {user.highest_score}
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <span className="inline-flex px-3 py-1 text-xs font-bold rounded-full bg-gradient-to-r from-purple-100 to-pink-100 dark:from-purple-900 dark:to-pink-900 text-purple-800 dark:text-purple-200">
+                    {user.highest_score}
+                  </span>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-400">
                   {user.total_attempts}
                 </td>
               </tr>
@@ -109,50 +112,50 @@ const Leaderboard = () => {
 
   const renderCodingLeaderboard = () => {
     if (!leaderboardData.coding || leaderboardData.coding.length === 0) {
-      return <div className="text-center py-8 text-gray-500">No coding data available</div>;
+      return <div className="text-center py-8 text-gray-500 dark:text-gray-400">No coding data available</div>;
     }
 
     return (
       <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
+        <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+          <thead className="bg-transparent border-b-2 border-green-300 dark:border-green-600">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Rank</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Solved</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Attempted</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Success Rate</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Submissions</th>
+              <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 dark:text-gray-200 uppercase tracking-wider">Rank</th>
+              <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 dark:text-gray-200 uppercase tracking-wider">User</th>
+              <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 dark:text-gray-200 uppercase tracking-wider">Solved</th>
+              <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 dark:text-gray-200 uppercase tracking-wider">Attempted</th>
+              <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 dark:text-gray-200 uppercase tracking-wider">Success Rate</th>
+              <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 dark:text-gray-200 uppercase tracking-wider">Submissions</th>
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
+          <tbody className="bg-transparent dark:bg-transparent divide-y divide-gray-200 dark:divide-gray-700">
             {leaderboardData.coding.map((user, index) => (
-              <tr key={user.id} className={index < 3 ? 'bg-yellow-50' : ''}>
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                  {getRankIcon(index + 1)}
+              <tr key={user.id} className={`hover:bg-green-900 dark:hover:bg-green-900/30 transition ${index < 3 ? 'bg-gradient-to-r from-yellow-900/20 to-orange-900/20 dark:from-yellow-900/20 dark:to-orange-900/20 border-l-4 border-yellow-400' : 'border-l-4 border-transparent'}`}>
+                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                  {getRankBadge(index + 1)}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm font-medium text-gray-900">{user.name}</div>
-                  <div className="text-sm text-gray-500">{user.email}</div>
+                  <div className="text-sm font-semibold text-gray-900 dark:text-gray-100">{user.name}</div>
+                  <div className="text-xs text-gray-500 dark:text-gray-400">{user.email}</div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
+                  <span className="inline-flex px-3 py-1 text-xs font-bold rounded-full bg-gradient-to-r from-blue-100 to-cyan-100 dark:from-blue-900 dark:to-cyan-900 text-blue-800 dark:text-blue-200">
                     {user.problems_solved}
                   </span>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900 dark:text-gray-100">
                   {user.problems_attempted}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                    user.success_rate >= 70 ? 'bg-green-100 text-green-800' : 
-                    user.success_rate >= 50 ? 'bg-yellow-100 text-yellow-800' : 
-                    'bg-red-100 text-red-800'
+                  <span className={`inline-flex px-3 py-1 text-xs font-bold rounded-full ${
+                    user.success_rate >= 70 ? 'bg-gradient-to-r from-green-100 to-emerald-100 dark:from-green-900 dark:to-emerald-900 text-green-800 dark:text-green-200' : 
+                    user.success_rate >= 50 ? 'bg-gradient-to-r from-yellow-100 to-orange-100 dark:from-yellow-900 dark:to-orange-900 text-yellow-800 dark:text-yellow-200' : 
+                    'bg-gradient-to-r from-red-100 to-pink-100 dark:from-red-900 dark:to-pink-900 text-red-800 dark:text-red-200'
                   }`}>
                     {user.success_rate}%
                   </span>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-400">
                   {user.total_submissions}
                 </td>
               </tr>
@@ -166,46 +169,43 @@ const Leaderboard = () => {
   const renderOverallStats = () => {
     if (!leaderboardData.stats) return null;
 
+    const statCards = [
+      { value: leaderboardData.stats.total_active_users, label: 'Active Users', borderColor: 'border-l-4 border-blue-500 dark:border-blue-400', textColor: 'text-blue-700 dark:text-blue-300' },
+      { value: leaderboardData.stats.total_quizzes, label: 'Total Quizzes', borderColor: 'border-l-4 border-green-500 dark:border-green-400', textColor: 'text-green-700 dark:text-green-300' },
+      { value: leaderboardData.stats.total_questions, label: 'Coding Questions', borderColor: 'border-l-4 border-purple-500 dark:border-purple-400', textColor: 'text-purple-700 dark:text-purple-300' },
+      { value: leaderboardData.stats.total_submissions, label: 'Total Submissions', borderColor: 'border-l-4 border-orange-500 dark:border-orange-400', textColor: 'text-orange-700 dark:text-orange-300' }
+    ];
+
     return (
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-        <div className="bg-blue-50 p-4 rounded-lg">
-          <div className="text-2xl font-bold text-blue-600">{leaderboardData.stats.total_active_users}</div>
-          <div className="text-sm text-blue-800">Active Users</div>
-        </div>
-        <div className="bg-green-50 p-4 rounded-lg">
-          <div className="text-2xl font-bold text-green-600">{leaderboardData.stats.total_quizzes}</div>
-          <div className="text-sm text-green-800">Total Quizzes</div>
-        </div>
-        <div className="bg-purple-50 p-4 rounded-lg">
-          <div className="text-2xl font-bold text-purple-600">{leaderboardData.stats.total_questions}</div>
-          <div className="text-sm text-purple-800">Coding Questions</div>
-        </div>
-        <div className="bg-orange-50 p-4 rounded-lg">
-          <div className="text-2xl font-bold text-orange-600">{leaderboardData.stats.total_submissions}</div>
-          <div className="text-sm text-orange-800">Total Submissions</div>
-        </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        {statCards.map((stat, idx) => (
+          <div key={idx} className={`bg-transparent dark:bg-transparent p-6 rounded-lg shadow-md hover:shadow-lg transition ${stat.borderColor} border-t border-r border-b border-gray-200 dark:border-gray-700`}>
+            <div className={`text-3xl font-bold ${stat.textColor}`}>{stat.value}</div>
+            <div className={`text-sm font-semibold ${stat.textColor} mt-2`}>{stat.label}</div>
+          </div>
+        ))}
       </div>
     );
   };
 
   const renderRecentActivity = () => {
     if (recentActivity.length === 0) {
-      return <div className="text-center py-8 text-gray-500">No recent activity</div>;
+      return <div className="text-center py-8 text-gray-500 dark:text-gray-400">No recent activity</div>;
     }
 
     return (
       <div className="space-y-3">
         {recentActivity.map((activity, index) => (
-          <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-            <div className="flex items-center space-x-3">
-              <div className={`w-2 h-2 rounded-full ${
-                activity.activity_type === 'quiz' ? 'bg-blue-500' : 'bg-green-500'
+          <div key={index} className="flex items-center justify-between p-4 bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800 rounded-lg border-l-4 hover:shadow-md transition" style={{borderLeftColor: activity.activity_type === 'quiz' ? '#0e639c' : '#4ec9b0'}}>
+            <div className="flex items-center space-x-4">
+              <div className={`w-3 h-3 rounded-full ${
+                activity.activity_type === 'quiz' ? 'bg-gradient-to-r from-blue-400 to-cyan-400' : 'bg-gradient-to-r from-green-400 to-emerald-400'
               }`}></div>
               <div>
-                <div className="text-sm font-medium text-gray-900">
+                <div className="text-sm font-semibold text-gray-900 dark:text-gray-100">
                   {activity.user_name}
                 </div>
-                <div className="text-xs text-gray-500">
+                <div className="text-xs text-gray-600 dark:text-gray-400 mt-1">
                   {activity.activity_type === 'quiz' 
                     ? `Completed "${activity.quiz_title}" with score ${activity.score}`
                     : `${activity.passed ? 'Solved' : 'Attempted'} "${activity.question_title}"`
@@ -213,7 +213,7 @@ const Leaderboard = () => {
                 </div>
               </div>
             </div>
-            <div className="text-xs text-gray-400">
+            <div className="text-xs font-medium text-gray-500 dark:text-gray-400 whitespace-nowrap ml-4">
               {formatDate(activity.submitted_at)}
             </div>
           </div>
@@ -224,15 +224,15 @@ const Leaderboard = () => {
 
   if (loading) {
     return (
-      <div className="flex justify-center py-8">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary-600"></div>
+      <div className="flex justify-center items-center py-12">
+        <div className="animate-spin rounded-full h-16 w-16 border-4 border-blue-200 dark:border-gray-600 border-t-4 border-t-blue-500 dark:border-t-blue-400"></div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+      <div className="bg-gradient-to-r from-red-100 to-pink-100 dark:from-red-900 dark:to-pink-900 border-2 border-red-300 dark:border-red-700 text-red-700 dark:text-red-200 px-6 py-4 rounded-lg font-semibold">
         {error}
       </div>
     );
@@ -241,10 +241,10 @@ const Leaderboard = () => {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold text-gray-900">Leaderboard</h1>
+        <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">Leaderboard</h1>
         <button
           onClick={fetchLeaderboardData}
-          className="px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500"
+          className="px-6 py-2 bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-semibold rounded-lg hover:from-blue-600 hover:to-cyan-600 focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-md transition"
         >
           Refresh
         </button>
@@ -252,17 +252,17 @@ const Leaderboard = () => {
 
       {activeTab === 'overall' && renderOverallStats()}
 
-      <div className="bg-white shadow-sm rounded-lg">
-        <div className="border-b border-gray-200">
+      <div className="bg-transparent dark:bg-transparent shadow-lg rounded-xl border-2 border-blue-200 dark:border-blue-700">
+        <div className="border-b border-gray-200 dark:border-gray-700">
           <nav className="-mb-px flex space-x-8 px-6">
             {['overall', 'quiz', 'coding'].map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
-                className={`py-4 px-1 border-b-2 font-medium text-sm ${
+                className={`py-4 px-1 border-b-2 font-semibold text-sm transition ${
                   activeTab === tab
-                    ? 'border-primary-500 text-primary-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                    ? 'border-gradient-to-r from-blue-500 to-cyan-500 text-transparent bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text'
+                    : 'border-transparent text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 hover:border-gray-300 dark:hover:border-gray-600'
                 }`}
               >
                 {tab === 'overall' ? 'Overall' : tab === 'quiz' ? 'Quiz Champions' : 'Coding Masters'}
@@ -275,11 +275,11 @@ const Leaderboard = () => {
           {activeTab === 'overall' && (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <div>
-                <h3 className="text-lg font-medium text-gray-900 mb-4">🏆 Quiz Champions</h3>
+                <h3 className="text-xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent mb-4">Quiz Champions</h3>
                 {renderQuizLeaderboard()}
               </div>
               <div>
-                <h3 className="text-lg font-medium text-gray-900 mb-4">💻 Coding Masters</h3>
+                <h3 className="text-xl font-bold bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent mb-4">Coding Masters</h3>
                 {renderCodingLeaderboard()}
               </div>
             </div>
@@ -289,8 +289,8 @@ const Leaderboard = () => {
         </div>
       </div>
 
-      <div className="bg-white shadow-sm rounded-lg p-6">
-        <h3 className="text-lg font-medium text-gray-900 mb-4">📈 Recent Activity</h3>
+      <div className="bg-transparent dark:bg-transparent shadow-lg rounded-xl p-6 border-2 border-purple-200 dark:border-purple-700">
+        <h3 className="text-xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent mb-4">Recent Activity</h3>
         {renderRecentActivity()}
       </div>
     </div>
