@@ -2,6 +2,7 @@
 import { Link } from 'react-router-dom';
 import { getQuestions } from '../services/questionService';
 import { getUserSubmissions } from '../services/submissionService';
+import { getFeaturedSheets } from '../services/sheetsService';
 
 const DEFAULT_TAGS = [
   'array',
@@ -48,6 +49,8 @@ const Practice = ({ user }) => {
     solved: 0,
     attempted: 0
   });
+  const [featuredSheets, setFeaturedSheets] = useState([]);
+  const [sheetsLoading, setSheetsLoading] = useState(false);
 
   // Fetch user submissions for progress tracking (for logged-in users)
   const fetchUserSubmissions = useCallback(async () => {
@@ -147,6 +150,22 @@ const Practice = ({ user }) => {
   useEffect(() => {
     fetchQuestions();
   }, [fetchQuestions]);
+
+  useEffect(() => {
+    const loadFeaturedSheets = async () => {
+      setSheetsLoading(true);
+      try {
+        const sheets = await getFeaturedSheets();
+        setFeaturedSheets(sheets.slice(0, 4)); // Display top 4 featured sheets
+      } catch (err) {
+        console.error('Failed to load featured sheets:', err);
+      } finally {
+        setSheetsLoading(false);
+      }
+    };
+
+    loadFeaturedSheets();
+  }, []);
 
   useEffect(() => {
     const handleProgressUpdate = async () => {
@@ -302,6 +321,48 @@ const Practice = ({ user }) => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Practice</h1>
           <p className="text-gray-600">Solve coding problems to improve your programming skills</p>
+          
+          {/* Featured Sheets Section */}
+          {!sheetsLoading && featuredSheets.length > 0 && (
+            <div className="mt-8">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-2xl font-bold text-gray-900">📚 Curated Learning Paths</h2>
+                <Link
+                  to="/practice/sheets"
+                  className="text-blue-600 hover:text-blue-700 font-medium flex items-center gap-2"
+                >
+                  More Sheets →
+                </Link>
+              </div>
+              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+                {featuredSheets.map(sheet => (
+                  <Link
+                    key={sheet.id}
+                    to={`/practice/sheets/${sheet.id}`}
+                    className="bg-white p-5 rounded-lg border border-gray-200 hover:border-blue-400 hover:shadow-md transition-all group"
+                  >
+                    <div className="flex items-start justify-between mb-3">
+                      <h3 className="text-lg font-semibold text-gray-900 group-hover:text-blue-600 transition-colors line-clamp-2">
+                        {sheet.title}
+                      </h3>
+                      <span className={`ml-2 px-2.5 py-1 rounded-full text-xs font-medium whitespace-nowrap flex-shrink-0 ${
+                        sheet.difficulty_level === 'easy' ? 'bg-green-100 text-green-700' :
+                        sheet.difficulty_level === 'medium' ? 'bg-yellow-100 text-yellow-700' :
+                        'bg-red-100 text-red-700'
+                      }`}>
+                        {sheet.difficulty_level?.toUpperCase() || 'MIXED'}
+                      </span>
+                    </div>
+                    <p className="text-gray-600 text-sm mb-4 line-clamp-2">{sheet.description}</p>
+                    <div className="flex items-center gap-4 text-sm text-gray-500">
+                      <span>📚 {sheet.total_problems}</span>
+                      {sheet.estimated_hours && <span>⏱️ {sheet.estimated_hours}h</span>}
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
           
           {user && (
             <div className="mt-6 grid grid-cols-2 md:grid-cols-4 gap-4">

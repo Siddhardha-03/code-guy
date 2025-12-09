@@ -8,6 +8,8 @@ import Register from './pages/Register';
 import ForgotPassword from './pages/ForgotPassword';
 import Practice from './pages/Practice';
 import ProblemDetail from './pages/ProblemDetail';
+import Sheets from './pages/Sheets';
+import SheetDetail from './pages/SheetDetail';
 import Compiler from './pages/Compiler';
 import Quiz from './pages/Quiz';
 import QuizDetail from './pages/QuizDetail';
@@ -80,6 +82,8 @@ function AppContent() {
                 }
               />
               <Route path="/practice" element={<Practice user={userData} />} />
+              <Route path="/practice/sheets" element={<Sheets user={userData} />} />
+              <Route path="/practice/sheets/:sheetId" element={<SheetDetail user={userData} />} />
               <Route path="/practice/:id" element={<ProblemDetail user={userData} />} />
               <Route path="/compiler" element={<Compiler user={userData} />} />
               <Route path="/quizzes" element={<Quiz user={userData} />} />

@@ -15,6 +15,7 @@ const compilerRoutes = require('./routes/compiler');
 const adminRoutes = require('./routes/admin');
 const codeDraftRoutes = require('./routes/codeDrafts');
 const contestRoutes = require('./routes/contests');
+const sheetsRoutes = require('./routes/sheets');
 
 // Create Express app
 const app = express();
@@ -136,6 +137,7 @@ app.use('/api/compiler', compilerRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/code-drafts', codeDraftRoutes);
 app.use('/api/contests', contestRoutes);
+app.use('/api/sheets', sheetsRoutes);
 
 // Health check route
 app.get('/api/health', (req, res) => {

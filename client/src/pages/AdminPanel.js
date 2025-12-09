@@ -10,6 +10,7 @@ import ContestManager from '../components/admin/ContestManager';
 import CreateContest from '../components/admin/CreateContest';
 import ContestLeaderboard from '../components/admin/ContestLeaderboard';
 import BulkQuestionUpload from '../components/admin/BulkQuestionUpload';
+import SheetsManager from '../components/admin/SheetsManager';
 
 const AdminPanel = ({ user }) => {
   const location = useLocation();
@@ -26,6 +27,8 @@ const AdminPanel = ({ user }) => {
       setActiveTab('questions');
     } else if (path === 'quizzes') {
       setActiveTab('quizzes');
+    } else if (path === 'sheets') {
+      setActiveTab('sheets');
     } else if (path === 'leaderboard') {
       setActiveTab('leaderboard');
     }
@@ -74,6 +77,13 @@ const AdminPanel = ({ user }) => {
               Quizzes
             </Link>
             <Link
+              to="/admin/sheets"
+              className={`py-4 px-6 border-b-2 font-medium text-sm ${activeTab === 'sheets' ? 'border-primary-500 text-primary-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}`}
+              onClick={() => setActiveTab('sheets')}
+            >
+              📚 Learning Sheets
+            </Link>
+            <Link
               to="/admin/leaderboard"
               className={`py-4 px-6 border-b-2 font-medium text-sm ${activeTab === 'leaderboard' ? 'border-primary-500 text-primary-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}`}
               onClick={() => setActiveTab('leaderboard')}
@@ -92,6 +102,7 @@ const AdminPanel = ({ user }) => {
             <Route path="contests" element={<ContestManager />} />
             <Route path="contests/create" element={<CreateContest />} />
             <Route path="contests/:contestId/leaderboard" element={<ContestLeaderboard />} />
+            <Route path="sheets" element={<SheetsManager />} />
             <Route path="leaderboard" element={<Leaderboard />} />
           </Routes>
         </div>
