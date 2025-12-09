@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { Routes, Route, Link, useLocation } from 'react-router-dom';
 import { getUsers, getPlatformStats, deleteQuestion, deleteQuiz } from '../services/adminService';
 import { getQuestions } from '../services/questionService';
@@ -78,7 +78,7 @@ const AdminPanel = ({ user }) => {
               className={`py-4 px-6 border-b-2 font-medium text-sm ${activeTab === 'leaderboard' ? 'border-primary-500 text-primary-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}`}
               onClick={() => setActiveTab('leaderboard')}
             >
-              🏆 Leaderboard
+               🏆 Leaderboard
             </Link>
           </nav>
         </div>
@@ -299,7 +299,7 @@ const QuestionsManagement = () => {
   const [error, setError] = useState('');
   const [showForm, setShowForm] = useState(false);
   const [editingQuestion, setEditingQuestion] = useState(null);
-    const [showBulkUpload, setShowBulkUpload] = useState(false);
+  const [showBulkUpload, setShowBulkUpload] = useState(false);
 
   useEffect(() => {
     fetchQuestions();
@@ -308,7 +308,7 @@ const QuestionsManagement = () => {
   const fetchQuestions = async () => {
     setLoading(true);
     try {
-      const data = await getQuestions({ page: 1, limit: 100 });
+      const data = await getQuestions({ page: 1, limit: 10000 });
       setQuestions(data.questions || []);
     } catch (err) {
       setError('Failed to load questions. Please try again.');
@@ -326,6 +326,35 @@ const QuestionsManagement = () => {
       } catch (err) {
         setError('Failed to delete question. Please try again.');
       }
+    }
+  };
+
+  const handleDeleteAllQuestions = async () => {
+    if (!questions.length) {
+      setError('No questions to delete.');
+      return;
+    }
+
+    const firstConfirm = window.confirm(
+      `⚠️ WARNING: This will permanently delete all ${questions.length} questions. This action cannot be undone. Are you sure?`
+    );
+    if (!firstConfirm) return;
+
+    const secondConfirm = window.confirm('Please confirm again by clicking OK. This is irreversible.');
+    if (!secondConfirm) return;
+
+    setLoading(true);
+    setError('');
+    try {
+      await Promise.all(questions.map(q => deleteQuestion(q.id)));
+      setQuestions([]);
+      setError('All questions deleted successfully.');
+      setTimeout(() => setError(''), 3000); // Clear message after 3 seconds
+    } catch (err) {
+      setError('Failed to delete all questions. Some questions may have been deleted.');
+      await fetchQuestions(); // Refresh the list to show current state
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -372,6 +401,17 @@ const QuestionsManagement = () => {
               className="px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
             >
               Add Question
+            </button>
+            <button 
+              onClick={handleDeleteAllQuestions}
+              disabled={!questions.length}
+              className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 flex items-center gap-2 disabled:bg-red-400 disabled:text-white disabled:hover:bg-red-400 disabled:cursor-not-allowed"
+              title="Delete all questions permanently"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+              </svg>
+              Delete All Questions
             </button>
           </div>
       </div>
