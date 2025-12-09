@@ -48,6 +48,7 @@ const ProblemDetail = ({ user }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [activeTab, setActiveTab] = useState('description');
+  const [showSolutionModal, setShowSolutionModal] = useState(false);
   
   // Submission tracking
   const [submissions, setSubmissions] = useState([]);
@@ -767,6 +768,18 @@ const ProblemDetail = ({ user }) => {
                     >
                       {submitting ? 'Submitting…' : 'Submit Solution'}
                     </button>
+                    {problem?.solution_video_url && (
+                      <button
+                        onClick={() => setShowSolutionModal(true)}
+                        className="px-3 py-2 text-sm bg-red-600 hover:bg-red-700 text-white rounded-md flex items-center gap-2 dark:bg-red-500 dark:hover:bg-red-600"
+                        title="Watch video solution"
+                      >
+                        <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M19.615 3.412c-3.898-3.898-10.236-3.898-14.134 0-3.898 3.898-3.898 10.236 0 14.134 3.898 3.898 10.236 3.898 14.134 0 3.898-3.898 3.898-10.236 0-14.134zM10.5 14.5v-5l4 2.5-4 2.5z" />
+                        </svg>
+                        View Solution
+                      </button>
+                    )}
                   </div>
                 </div>
               </div>
@@ -913,8 +926,64 @@ const ProblemDetail = ({ user }) => {
         rawOutput={output}
         executing={executing || submitting}
       />
+
+      {/* Solution Video Modal */}
+      {showSolutionModal && problem?.solution_video_url && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between p-6 border-b dark:border-gray-700">
+              <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">Video Solution</h2>
+              <button
+                onClick={() => setShowSolutionModal(false)}
+                className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            <div className="p-6">
+              <div className="aspect-video bg-black rounded-lg overflow-hidden">
+                <iframe
+                  width="100%"
+                  height="100%"
+                  src={`https://www.youtube.com/embed/${extractYouTubeId(problem.solution_video_url)}`}
+                  title="Video Solution"
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  className="w-full h-full"
+                />
+              </div>
+              <div className="mt-4 flex items-center justify-between">
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  Watch the video explanation to understand the solution approach.
+                </p>
+                <a
+                  href={problem.solution_video_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 font-medium text-sm"
+                >
+                  Open on YouTube →
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
+};
+
+/**
+ * Extracts the YouTube video ID from a URL
+ */
+const extractYouTubeId = (url) => {
+  if (!url) return '';
+  const regex = /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\n?#]+)/;
+  const match = url.match(regex);
+  return match ? match[1] : '';
 };
 
 export default ProblemDetail;

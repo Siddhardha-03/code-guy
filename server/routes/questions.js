@@ -17,7 +17,7 @@ router.get('/', async (req, res) => {
     
     let query = `
       SELECT q.id, q.title, q.function_name, q.difficulty, q.question_type, q.tags, 
-      q.leetcode_url, q.geeksforgeeks_url, q.other_platform_url, q.other_platform_name,
+      q.leetcode_url, q.geeksforgeeks_url, q.other_platform_url, q.other_platform_name, q.solution_video_url,
       (SELECT COUNT(*) FROM submissions s WHERE s.question_id = q.id) as attempt_count
       FROM questions q
       WHERE 1=1
@@ -201,7 +201,7 @@ router.get('/:id', async (req, res) => {
  */
 router.post('/', verifyFirebaseToken, isAdmin, async (req, res) => {
   try {
-    const { title, function_name, description, difficulty, question_type, parameter_schema, language_supported, tags, examples, testCases } = req.body;
+    const { title, function_name, description, difficulty, question_type, parameter_schema, language_supported, tags, examples, testCases, solution_video_url } = req.body;
     
     // Validate input
     if (!title || !description || !difficulty || !language_supported || !tags || !testCases) {
@@ -218,7 +218,7 @@ router.post('/', verifyFirebaseToken, isAdmin, async (req, res) => {
     try {
       // Insert question
       const [questionResult] = await connection.execute(
-        'INSERT INTO questions (title, function_name, description, difficulty, question_type, parameter_schema, language_supported, tags, examples, created_by) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+        'INSERT INTO questions (title, function_name, description, difficulty, question_type, parameter_schema, language_supported, tags, examples, solution_video_url, created_by) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
         [
           title,
           function_name && function_name.trim() ? function_name.trim() : null,
@@ -229,6 +229,7 @@ router.post('/', verifyFirebaseToken, isAdmin, async (req, res) => {
           JSON.stringify(language_supported),
           JSON.stringify(tags),
           JSON.stringify(examples || []),
+          solution_video_url || null,
           req.user.id
         ]
       );
@@ -277,7 +278,7 @@ router.post('/', verifyFirebaseToken, isAdmin, async (req, res) => {
 router.put('/:id', verifyFirebaseToken, isAdmin, async (req, res) => {
   try {
     const questionId = req.params.id;
-    const { title, function_name, description, difficulty, question_type, parameter_schema, language_supported, tags, examples, testCases } = req.body;
+    const { title, function_name, description, difficulty, question_type, parameter_schema, language_supported, tags, examples, testCases, solution_video_url } = req.body;
     
     // Validate required fields
     if (!title?.trim() || !description?.trim() || !difficulty) {
@@ -309,7 +310,7 @@ router.put('/:id', verifyFirebaseToken, isAdmin, async (req, res) => {
 
     // Update question
     await req.db.execute(
-      'UPDATE questions SET title = ?, function_name = ?, description = ?, difficulty = ?, question_type = ?, parameter_schema = ?, language_supported = ?, tags = ?, examples = ? WHERE id = ?',
+      'UPDATE questions SET title = ?, function_name = ?, description = ?, difficulty = ?, question_type = ?, parameter_schema = ?, language_supported = ?, tags = ?, examples = ?, solution_video_url = ? WHERE id = ?',
       [
         title.trim(),
         function_name && function_name.trim() ? function_name.trim() : null,
@@ -320,6 +321,7 @@ router.put('/:id', verifyFirebaseToken, isAdmin, async (req, res) => {
         JSON.stringify(safeLanguageSupported),
         JSON.stringify(safeTags),
         JSON.stringify(safeExamples),
+        solution_video_url || null,
         questionId
       ]
     );

@@ -49,7 +49,7 @@ const Practice = ({ user }) => {
     attempted: 0
   });
 
-  // Fetch user submissions for progress tracking
+  // Fetch user submissions for progress tracking (for logged-in users)
   const fetchUserSubmissions = useCallback(async () => {
     if (!user) return;
     

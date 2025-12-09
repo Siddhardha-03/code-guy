@@ -16,6 +16,7 @@ const QuestionForm = ({ question, onSave, onCancel }) => {
     geeksforgeeks_url: '',
     other_platform_url: '',
     other_platform_name: '',
+    solution_video_url: '',
     testCases: [{ input: '', expected_output: '', hidden: false }]
   });
   const [loading, setLoading] = useState(false);
@@ -95,6 +96,7 @@ const QuestionForm = ({ question, onSave, onCancel }) => {
           geeksforgeeks_url: question.geeksforgeeks_url || '',
           other_platform_url: question.other_platform_url || '',
           other_platform_name: question.other_platform_name || '',
+          solution_video_url: question.solution_video_url || '',
           testCases: testCases
         });
       }
@@ -465,6 +467,19 @@ const QuestionForm = ({ question, onSave, onCancel }) => {
                       />
                     </div>
                     <p className="text-xs text-gray-500 mt-2">Add external references to help users find similar problems. Leave blank if none.</p>
+                  </div>
+
+                  <div className="lg:col-span-2">
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Solution Video URL (optional)</label>
+                    <input
+                      type="url"
+                      name="solution_video_url"
+                      value={formData.solution_video_url}
+                      onChange={handleInputChange}
+                      placeholder="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                    />
+                    <p className="text-xs text-gray-500 mt-1">Paste a YouTube link to display a "View Solution" button for users. Supports youtube.com and youtu.be URLs.</p>
                   </div>
                 </div>
 
