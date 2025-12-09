@@ -25,80 +25,70 @@ const Navbar = ({ user }) => {
   };
 
   return (
-    <nav className="navbar">
-      <div className="container">
-        <div className="flex justify-between items-center">
+    <nav className="sticky top-0 z-50 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 shadow-sm">
+      <div className="w-full px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-16">
           {/* Logo and site name - Left */}
-          <Link to="/" className="navbar-brand" onClick={closeMobileMenu}>
-            <span className="mr-2">🧑‍💻</span>
-            <span>CodeGuy</span>
+          <Link to="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity" onClick={closeMobileMenu}>
+            <span className="text-2xl">🧑‍💻</span>
+            <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 dark:from-blue-400 dark:to-cyan-400 bg-clip-text text-transparent">CodeGuy</span>
           </Link>
 
           {/* Desktop Navigation - Right */}
-          <div className="hidden md:flex items-center gap-6">
+          <div className="hidden md:flex items-center gap-8">
             {/* Navigation links */}
-            <div className="flex items-center gap-6">
-              <Link to="/practice" className="nav-link">
+            <div className="flex items-center gap-8">
+              <Link to="/practice" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors text-sm">
                 Practice
               </Link>
-              <Link to="/compiler" className="nav-link">
+              <Link to="/compiler" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors text-sm">
                 Compiler
               </Link>
-              <Link to="/quizzes" className="nav-link">
+              <Link to="/quizzes" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors text-sm">
                 Quizzes
               </Link>
               {user && (
                 <>
-                  <Link to="/contests" className="nav-link">
+                  <Link to="/contests" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors text-sm">
                     Contests
                   </Link>
-                  <Link to="/dashboard" className="nav-link">
+                  <Link to="/dashboard" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors text-sm">
                     Dashboard
                   </Link>
                 </>
               )}
               {user && user.role === 'admin' && (
-                <Link to="/admin" className="nav-link">
+                <Link to="/admin" className="text-gray-700 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-400 font-medium transition-colors text-sm">
                   Admin
                 </Link>
               )}
             </div>
 
             {/* Theme toggle and auth buttons */}
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-6 border-l border-gray-200 dark:border-gray-700 pl-6">
               <ThemeToggle />
               {user ? (
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-4">
                   {/* Profile Avatar */}
-                  <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white text-sm font-semibold">
+                  <div className="flex items-center gap-3">
+                    <div className="w-9 h-9 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full flex items-center justify-center text-white text-sm font-bold">
                       {user.name?.charAt(0)?.toUpperCase() || 'U'}
                     </div>
-                    <span className="text-sm font-medium">{user.name}</span>
+                    <span className="text-sm font-medium text-gray-700 dark:text-gray-300">{user.name}</span>
                   </div>
                   <button
                     onClick={handleLogout}
-                    className="btn btn-ghost btn-sm flex items-center gap-1"
+                    className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-400 transition-colors"
                   >
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
-                      <polyline points="16,17 21,12 16,7"/>
-                      <line x1="21" y1="12" x2="9" y2="12"/>
-                    </svg>
                     Logout
                   </button>
                 </div>
               ) : (
-                <div className="flex items-center gap-2">
-                  <Link to="/login" className="btn btn-ghost btn-sm flex items-center gap-1">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
-                      <polyline points="10,17 15,12 10,7"/>
-                      <line x1="15" y1="12" x2="3" y2="12"/>
-                    </svg>
+                <div className="flex items-center gap-3">
+                  <Link to="/login" className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
                     Login
                   </Link>
-                  <Link to="/register" className="btn btn-primary btn-sm">
+                  <Link to="/register" className="text-sm font-bold px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors">
                     Register
                   </Link>
                 </div>
@@ -111,15 +101,15 @@ const Navbar = ({ user }) => {
             <ThemeToggle />
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+              className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
               aria-label="Toggle menu"
             >
               {isMobileMenuOpen ? (
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-6 h-6 text-gray-700 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
               ) : (
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-6 h-6 text-gray-700 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
                 </svg>
               )}
@@ -129,25 +119,25 @@ const Navbar = ({ user }) => {
 
         {/* Mobile Menu */}
         {isMobileMenuOpen && (
-          <div className="md:hidden mt-4 pb-4 border-t border-gray-200 dark:border-gray-700">
-            <div className="flex flex-col space-y-3 pt-4">
+          <div className="md:hidden pb-6 border-t border-gray-200 dark:border-gray-800">
+            <div className="flex flex-col space-y-3 pt-6">
               <Link
                 to="/practice"
-                className="nav-link px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800"
+                className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors px-3 py-2"
                 onClick={closeMobileMenu}
               >
                 Practice
               </Link>
               <Link
                 to="/compiler"
-                className="nav-link px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800"
+                className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors px-3 py-2"
                 onClick={closeMobileMenu}
               >
                 Compiler
               </Link>
               <Link
                 to="/quizzes"
-                className="nav-link px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800"
+                className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors px-3 py-2"
                 onClick={closeMobileMenu}
               >
                 Quizzes
@@ -156,14 +146,14 @@ const Navbar = ({ user }) => {
                 <>
                   <Link
                     to="/contests"
-                    className="nav-link px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800"
+                    className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors px-3 py-2"
                     onClick={closeMobileMenu}
                   >
                     Contests
                   </Link>
                   <Link
                     to="/dashboard"
-                    className="nav-link px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800"
+                    className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors px-3 py-2"
                     onClick={closeMobileMenu}
                   >
                     Dashboard
@@ -173,51 +163,41 @@ const Navbar = ({ user }) => {
               {user && user.role === 'admin' && (
                 <Link
                   to="/admin"
-                  className="nav-link px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800"
+                  className="text-gray-700 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-400 font-medium transition-colors px-3 py-2"
                   onClick={closeMobileMenu}
                 >
                   Admin
                 </Link>
               )}
               
-              <div className="border-t border-gray-200 dark:border-gray-700 pt-3 mt-3">
+              <div className="border-t border-gray-200 dark:border-gray-800 pt-4 mt-4">
                 {user ? (
                   <>
-                    <div className="flex items-center gap-2 px-3 py-2 mb-2">
-                      <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white text-sm font-semibold">
+                    <div className="flex items-center gap-3 px-3 py-2 mb-3">
+                      <div className="w-9 h-9 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full flex items-center justify-center text-white text-sm font-bold">
                         {user.name?.charAt(0)?.toUpperCase() || 'U'}
                       </div>
-                      <span className="text-sm font-medium">{user.name}</span>
+                      <span className="text-sm font-medium text-gray-700 dark:text-gray-300">{user.name}</span>
                     </div>
                     <button
                       onClick={handleLogout}
-                      className="w-full text-left px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 flex items-center gap-2"
+                      className="w-full text-left px-3 py-2 text-gray-700 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-400 font-medium transition-colors"
                     >
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
-                        <polyline points="16,17 21,12 16,7"/>
-                        <line x1="21" y1="12" x2="9" y2="12"/>
-                      </svg>
                       Logout
                     </button>
                   </>
                 ) : (
-                  <div className="flex flex-col gap-2">
+                  <div className="flex flex-col gap-3">
                     <Link
                       to="/login"
-                      className="px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 flex items-center gap-2"
+                      className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors px-3 py-2"
                       onClick={closeMobileMenu}
                     >
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
-                        <polyline points="10,17 15,12 10,7"/>
-                        <line x1="15" y1="12" x2="3" y2="12"/>
-                      </svg>
                       Login
                     </Link>
                     <Link
                       to="/register"
-                      className="px-3 py-2 bg-blue-600 text-white rounded-md text-center hover:bg-blue-700"
+                      className="text-center px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg transition-colors"
                       onClick={closeMobileMenu}
                     >
                       Register

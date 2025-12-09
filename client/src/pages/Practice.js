@@ -324,22 +324,23 @@ const Practice = ({ user }) => {
           
           {/* Featured Sheets Section */}
           {!sheetsLoading && featuredSheets.length > 0 && (
-            <div className="mt-8">
+            <div className="mt-8 animate-slide-up">
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-2xl font-bold text-gray-900">📚 Curated Learning Paths</h2>
                 <Link
                   to="/practice/sheets"
-                  className="text-blue-600 hover:text-blue-700 font-medium flex items-center gap-2"
+                  className="text-blue-600 hover:text-blue-700 font-medium flex items-center gap-2 transition-colors hover:gap-3"
                 >
                   More Sheets →
                 </Link>
               </div>
               <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
-                {featuredSheets.map(sheet => (
+                {featuredSheets.map((sheet, idx) => (
                   <Link
                     key={sheet.id}
                     to={`/practice/sheets/${sheet.id}`}
-                    className="bg-white p-5 rounded-lg border border-gray-200 hover:border-blue-400 hover:shadow-md transition-all group"
+                    className="card-premium animate-fade-scale animate-shine group"
+                    style={{ animationDelay: `${idx * 0.1}s` }}
                   >
                     <div className="flex items-start justify-between mb-3">
                       <h3 className="text-lg font-semibold text-gray-900 group-hover:text-blue-600 transition-colors line-clamp-2">
@@ -365,23 +366,35 @@ const Practice = ({ user }) => {
           )}
           
           {user && (
-            <div className="mt-6 grid grid-cols-2 md:grid-cols-4 gap-4">
-              <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
-                <div className="text-sm text-gray-500 mb-1">Total</div>
-                <div className="text-2xl font-bold text-gray-900">{stats.total}</div>
+            <div className="mt-6 grid grid-cols-2 md:grid-cols-4 gap-4 animate-slide-up">
+              <div className="border-premium-glow bg-transparent rounded-lg p-4 relative overflow-hidden group hover:shadow-lg transition-all">
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-cyan-400 opacity-0 group-hover:opacity-10 transition-opacity rounded-lg"></div>
+                <div className="relative z-10">
+                  <div className="text-sm text-gray-600 mb-1 font-semibold">Total</div>
+                  <div className="text-2xl font-bold text-gray-700 group-hover:text-blue-600 transition-colors">{stats.total}</div>
+                </div>
               </div>
-              <div className="bg-green-50 rounded-lg p-4 border border-green-200">
-                <div className="text-sm text-green-600 mb-1">Solved</div>
-                <div className="text-2xl font-bold text-green-700">{stats.solved}</div>
+              <div className="border-2 border-green-400 bg-transparent rounded-lg p-4 relative overflow-hidden group hover:shadow-lg transition-all hover:-translate-y-1">
+                <div className="absolute inset-0 bg-gradient-to-r from-green-400 to-emerald-400 opacity-0 group-hover:opacity-10 transition-opacity rounded-lg"></div>
+                <div className="relative z-10">
+                  <div className="text-sm text-green-600 mb-1 font-semibold">✓ Solved</div>
+                  <div className="text-2xl font-bold text-green-700 group-hover:text-green-600 transition-colors">{stats.solved}</div>
+                </div>
               </div>
-              <div className="bg-yellow-50 rounded-lg p-4 border border-yellow-200">
-                <div className="text-sm text-yellow-600 mb-1">Attempted</div>
-                <div className="text-2xl font-bold text-yellow-700">{stats.attempted}</div>
+              <div className="border-2 border-yellow-400 bg-transparent rounded-lg p-4 relative overflow-hidden group hover:shadow-lg transition-all hover:-translate-y-1">
+                <div className="absolute inset-0 bg-gradient-to-r from-yellow-400 to-amber-400 opacity-0 group-hover:opacity-10 transition-opacity rounded-lg"></div>
+                <div className="relative z-10">
+                  <div className="text-sm text-yellow-600 mb-1 font-semibold">◐ Attempted</div>
+                  <div className="text-2xl font-bold text-yellow-700 group-hover:text-yellow-600 transition-colors">{stats.attempted}</div>
+                </div>
               </div>
-              <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
-                <div className="text-sm text-blue-600 mb-1">Accuracy</div>
-                <div className="text-2xl font-bold text-blue-700">
-                  {stats.total > 0 ? Math.round((stats.solved / stats.total) * 100) : 0}%
+              <div className="border-2 border-blue-400 bg-transparent rounded-lg p-4 relative overflow-hidden group hover:shadow-lg transition-all hover:-translate-y-1">
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-cyan-400 opacity-0 group-hover:opacity-10 transition-opacity rounded-lg"></div>
+                <div className="relative z-10">
+                  <div className="text-sm text-blue-600 mb-1 font-semibold">📊 Accuracy</div>
+                  <div className="text-2xl font-bold text-blue-700 group-hover:text-blue-600 transition-colors">
+                    {stats.total > 0 ? Math.round((stats.solved / stats.total) * 100) : 0}%
+                  </div>
                 </div>
               </div>
             </div>
@@ -479,7 +492,7 @@ const Practice = ({ user }) => {
         ) : (
           <>
             {/* Problems Table */}
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+            <div className="border-premium-glow bg-white rounded-lg overflow-hidden animate-slide-up">
               <div className="overflow-x-auto">
                 <table className="min-w-full divide-y divide-gray-200">
                   <thead className="bg-gray-50">
@@ -494,10 +507,10 @@ const Practice = ({ user }) => {
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
                     {displayedQuestions.length > 0 ? (
-                      displayedQuestions.map(({ question, displayNumber }) => {
+                      displayedQuestions.map(({ question, displayNumber }, idx) => {
                         const status = getSubmissionStatus(question.id);
                         return (
-                          <tr key={question.id} className="hover:bg-gray-50 transition-colors">
+                          <tr key={question.id} className="hover:bg-gray-50 transition-colors animate-fade-in" style={{ animationDelay: `${idx * 0.05}s` }}>
                             {/* Status Icon */}
                             {user && (
                               <td className="px-4 py-4 whitespace-nowrap">

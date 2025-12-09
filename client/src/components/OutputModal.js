@@ -29,9 +29,9 @@ const OutputModal = ({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-black bg-opacity-50" onClick={onClose} />
-      <div className="relative w-full max-w-4xl bg-white rounded-xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+      <div className="relative w-full max-w-4xl bg-white dark:bg-slate-900 rounded-xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b bg-gradient-to-r from-blue-600 to-purple-600">
+        <div className="flex items-center justify-between px-6 py-4 border-b bg-gray-100 dark:bg-slate-800">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 bg-white bg-opacity-20 rounded-lg flex items-center justify-center">
               <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -39,8 +39,8 @@ const OutputModal = ({
               </svg>
             </div>
             <div>
-              <h3 className="text-lg font-semibold text-white">{heading || (mode === 'submit' ? 'Submission Results' : 'Run Result')}</h3>
-              <p className="text-xs text-blue-100">{mode === 'submit' ? 'Full test suite evaluation' : 'Single test case execution'}</p>
+              <h3 className="text-lg font-semibold">{heading || (mode === 'submit' ? 'Submission Results' : 'Run Result')}</h3>
+              <p className="text-xs text-gray-600 dark:text-gray-300">{mode === 'submit' ? 'Full test suite evaluation' : 'Single test case execution'}</p>
             </div>
           </div>
           <button

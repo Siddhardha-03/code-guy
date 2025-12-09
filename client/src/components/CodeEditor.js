@@ -147,7 +147,7 @@ const CodeEditor = ({
   const currentTheme = isDark ? 'nightfall-dark' : 'vs';
 
   return (
-    <div className="code-editor-container">
+    <div className="code-editor-container border-premium rounded-lg overflow-hidden">
       {showHeader && (
         <div className="code-editor-header">
           <div className="code-editor-title">

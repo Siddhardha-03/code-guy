@@ -123,24 +123,24 @@ const Compiler = ({ user }) => {
   return (
     <div className="min-h-screen flex flex-col">
       {/* Header */}
-      <div className="mx-2 mt-2 p-3">
-        <h1 className="text-xl font-bold">Online Code Compiler</h1>
+      <div className="px-4 py-4 border-b border-gray-200 dark:border-gray-700">
+        <h1 className="text-2xl font-bold">Online Code Compiler</h1>
         <p className="text-muted mt-1 text-sm">
           Write, run and test your code in multiple programming languages.
         </p>
       </div>
 
       {/* Main Content - Full Width */}
-      <div className="flex-1 grid grid-cols-1 lg:grid-cols-2 gap-2 p-2">
+      <div className="flex-1 grid grid-cols-1 lg:grid-cols-2 gap-4 p-4">
         {/* Left - Code Editor */}
-        <div className="card p-3">
+        <div className="flex flex-col">
           <div className="flex justify-between items-center mb-3">
-            <h2 className="text-md font-semibold">Code Editor</h2>
+            <h2 className="text-sm font-semibold">Code Editor</h2>
             <div className="flex items-center gap-2">
               <select
                 value={language}
                 onChange={handleLanguageChange}
-                className="form-select text-sm"
+                className="form-select text-sm rounded-lg"
               >
                 {languages.map((lang) => (
                   <option key={lang.id} value={lang.id}>
@@ -150,7 +150,7 @@ const Compiler = ({ user }) => {
               </select>
               <button
                 onClick={handleClearCode}
-                className="btn btn-ghost btn-sm"
+                className="btn btn-secondary btn-sm"
               >
                 Clear
               </button>
@@ -175,36 +175,32 @@ const Compiler = ({ user }) => {
             code={code}
             language={language}
             onChange={handleCodeChange}
-            height="580px"
+            height="520px"
             title="Code Editor"
           />
         </div>
 
         {/* Right - Output with Input at Top */}
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-4">
           {/* Input Section */}
-          <div className="card p-3">
-            <div className="flex justify-between items-center mb-2">
+          <div className="border-premium rounded-lg overflow-hidden">
+            <div className="border-b-2 border-gray-300 dark:border-gray-600 px-4 py-3">
               <h3 className="text-sm font-semibold">Input</h3>
-              <button
-                onClick={handleClearInput}
-                className="btn btn-ghost btn-sm"
-              >
-                Clear
-              </button>
             </div>
-            <textarea
-              value={input}
-              onChange={handleInputChange}
-              className="form-textarea h-20 font-mono text-sm"
-              placeholder="Enter input for your program here..."
-            />
+            <div className="p-4">
+              <textarea
+                value={input}
+                onChange={handleInputChange}
+                className="w-full h-24 font-mono text-sm p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+                placeholder="Enter input for your program here..."
+              />
+            </div>
           </div>
 
           {/* Output Section */}
-          <div className="output-panel flex-1">
-            <div className="output-header flex justify-between items-center">
-              <span>Output</span>
+          <div className="border-premium rounded-lg overflow-hidden flex flex-col flex-1">
+            <div className="border-b-2 border-gray-300 dark:border-gray-600 px-4 py-3 flex justify-between items-center">
+              <span className="text-sm font-semibold">Output</span>
               <button
                 onClick={handleClearOutput}
                 className="btn btn-ghost btn-sm"
@@ -213,7 +209,7 @@ const Compiler = ({ user }) => {
               </button>
             </div>
             
-            <div className="output-content">
+            <div className="flex-1 p-4 overflow-y-auto">
               {error && (
                 <div className="alert alert-danger mb-4">
                   {error}
@@ -221,13 +217,15 @@ const Compiler = ({ user }) => {
               )}
               
               {executing ? (
-                <div className="flex items-center justify-center py-8">
-                  <div className="spinner mr-2"></div>
-                  <span>Executing your code...</span>
+                <div className="flex items-center justify-center h-full">
+                  <div className="text-center">
+                    <div className="spinner mx-auto mb-3"></div>
+                    <span className="text-sm text-gray-600 dark:text-gray-300">Executing your code...</span>
+                  </div>
                 </div>
               ) : (
-                <pre className="whitespace-pre-wrap text-sm">
-                  {output || 'Run your code to see the output here.'}
+                <pre className="whitespace-pre-wrap text-sm font-mono text-gray-800 dark:text-gray-200 leading-relaxed">
+                  {output || <span className="text-gray-500 dark:text-gray-400 italic">Run your code to see the output here.</span>}
                 </pre>
               )}
             </div>
