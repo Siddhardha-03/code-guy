@@ -79,6 +79,42 @@ export const addContestItems = async (contestId, items) => {
   }
 };
 
+export const listContestAccess = async (contestId) => {
+  try {
+    const res = await axios.get(`${API_URL}/contests/${contestId}/access`, { headers: getAuthHeader() });
+    return res.data;
+  } catch (err) {
+    const msg = err.response?.data?.message || err.message || 'Failed to fetch contest access list';
+    const error = new Error(msg);
+    error.status = err.response?.status;
+    throw error;
+  }
+};
+
+export const addContestAccess = async (contestId, payload) => {
+  try {
+    const res = await axios.post(`${API_URL}/contests/${contestId}/access`, payload, { headers: getAuthHeader() });
+    return res.data;
+  } catch (err) {
+    const msg = err.response?.data?.message || err.message || 'Failed to add contest access';
+    const error = new Error(msg);
+    error.status = err.response?.status;
+    throw error;
+  }
+};
+
+export const removeContestAccess = async (contestId, accessId) => {
+  try {
+    const res = await axios.delete(`${API_URL}/contests/${contestId}/access/${accessId}`, { headers: getAuthHeader() });
+    return res.data;
+  } catch (err) {
+    const msg = err.response?.data?.message || err.message || 'Failed to remove contest access';
+    const error = new Error(msg);
+    error.status = err.response?.status;
+    throw error;
+  }
+};
+
 export const getContestParticipants = async (contestId) => {
   try {
     const res = await axios.get(`${API_URL}/contests/${contestId}/participants`, { headers: getAuthHeader() });

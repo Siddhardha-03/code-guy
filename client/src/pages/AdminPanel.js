@@ -11,6 +11,8 @@ import CreateContest from '../components/admin/CreateContest';
 import ContestLeaderboard from '../components/admin/ContestLeaderboard';
 import BulkQuestionUpload from '../components/admin/BulkQuestionUpload';
 import SheetsManager from '../components/admin/SheetsManager';
+import VideoLinkModal from '../components/admin/VideoLinkModal';
+import TestCasesModal from '../components/admin/TestCasesModal';
 
 const AdminPanel = ({ user }) => {
   const location = useLocation();
@@ -326,6 +328,9 @@ const QuestionsManagement = () => {
   const [showForm, setShowForm] = useState(false);
   const [editingQuestion, setEditingQuestion] = useState(null);
   const [showBulkUpload, setShowBulkUpload] = useState(false);
+  const [showVideoModal, setShowVideoModal] = useState(false);
+  const [showTestCasesModal, setShowTestCasesModal] = useState(false);
+  const [selectedQuestion, setSelectedQuestion] = useState(null);
 
   useEffect(() => {
     fetchQuestions();
@@ -468,10 +473,10 @@ const QuestionsManagement = () => {
                     <div className="text-sm font-semibold text-gray-900 dark:text-gray-100">{question.title}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`px-3 py-1 inline-flex text-xs leading-5 font-bold rounded-full 
-                      ${question.difficulty === 'Easy' ? 'bg-gradient-to-r from-green-100 to-emerald-100 dark:from-green-900 dark:to-emerald-900 text-green-700 dark:text-green-300' : 
-                        question.difficulty === 'Medium' ? 'bg-gradient-to-r from-yellow-100 to-orange-100 dark:from-yellow-900 dark:to-orange-900 text-yellow-700 dark:text-yellow-300' : 
-                        question.difficulty === 'Hard' ? 'bg-gradient-to-r from-red-100 to-pink-100 dark:from-red-900 dark:to-pink-900 text-red-700 dark:text-red-300' : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300'}`}
+                    <span className={`px-3 py-1 inline-flex text-xs leading-5 font-bold rounded-full bg-transparent border-2
+                      ${question.difficulty === 'Easy' ? 'border-green-500 dark:border-green-400 text-green-600 dark:text-green-400' : 
+                        question.difficulty === 'Medium' ? 'border-yellow-500 dark:border-yellow-400 text-yellow-600 dark:text-yellow-400' : 
+                        question.difficulty === 'Hard' ? 'border-red-500 dark:border-red-400 text-red-600 dark:text-red-400' : 'border-gray-500 dark:border-gray-400 text-gray-600 dark:text-gray-400'}`}
                     >
                       {question.difficulty}
                     </span>
@@ -479,25 +484,45 @@ const QuestionsManagement = () => {
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex flex-wrap gap-2">
                       {question.tags && Array.isArray(question.tags) && question.tags.map((tag, index) => (
-                        <span key={index} className="px-3 py-1 text-xs rounded-full bg-gradient-to-r from-blue-100 to-cyan-100 dark:from-blue-900 dark:to-cyan-900 text-blue-700 dark:text-blue-300 font-bold border border-blue-200 dark:border-blue-700">
+                        <span key={index} className="px-3 py-1 text-xs rounded-full bg-transparent text-blue-600 dark:text-blue-400 font-bold border-2 border-blue-500 dark:border-blue-400">
                           {tag}
                         </span>
                       ))}
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                    <button 
-                      onClick={() => handleEditQuestion(question)}
-                      className="px-3 py-1 rounded-lg bg-gradient-to-r from-blue-100 to-cyan-100 dark:from-blue-900 dark:to-cyan-900 text-blue-600 dark:text-blue-400 hover:from-blue-200 hover:to-cyan-200 dark:hover:from-blue-800 dark:hover:to-cyan-800 font-semibold mr-3 transition-all"
-                    >
-                      Edit
-                    </button>
-                    <button 
-                      className="px-3 py-1 rounded-lg bg-gradient-to-r from-red-100 to-pink-100 dark:from-red-900 dark:to-pink-900 text-red-600 dark:text-red-400 hover:from-red-200 hover:to-pink-200 dark:hover:from-red-800 dark:hover:to-pink-800 font-semibold transition-all"
-                      onClick={() => handleDeleteQuestion(question.id)}
-                    >
-                      Delete
-                    </button>
+                    <div className="flex flex-wrap gap-2">
+                      <button 
+                        onClick={() => handleEditQuestion(question)}
+                        className="px-3 py-1 rounded-lg bg-transparent border-2 border-blue-500 dark:border-blue-400 text-blue-600 dark:text-blue-400 hover:bg-blue-500 hover:dark:bg-blue-400 hover:text-white dark:hover:text-white font-semibold transition-all"
+                      >
+                        Edit
+                      </button>
+                      <button 
+                        onClick={() => {
+                          setSelectedQuestion(question);
+                          setShowVideoModal(true);
+                        }}
+                        className="px-3 py-1 rounded-lg bg-transparent border-2 border-purple-500 dark:border-purple-400 text-purple-600 dark:text-purple-400 hover:bg-purple-500 hover:dark:bg-purple-400 hover:text-white dark:hover:text-white font-semibold transition-all"
+                      >
+                        Video Link
+                      </button>
+                      <button 
+                        onClick={() => {
+                          setSelectedQuestion(question);
+                          setShowTestCasesModal(true);
+                        }}
+                        className="px-3 py-1 rounded-lg bg-transparent border-2 border-green-500 dark:border-green-400 text-green-600 dark:text-green-400 hover:bg-green-500 hover:dark:bg-green-400 hover:text-white dark:hover:text-white font-semibold transition-all"
+                      >
+                        Test Cases
+                      </button>
+                      <button 
+                        className="px-3 py-1 rounded-lg bg-transparent border-2 border-red-500 dark:border-red-400 text-red-600 dark:text-red-400 hover:bg-red-500 hover:dark:bg-red-400 hover:text-white dark:hover:text-white font-semibold transition-all"
+                        onClick={() => handleDeleteQuestion(question.id)}
+                      >
+                        Delete
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}
@@ -519,6 +544,32 @@ const QuestionsManagement = () => {
             onClose={() => setShowBulkUpload(false)}
             onSuccess={() => {
               setShowBulkUpload(false);
+              fetchQuestions();
+            }}
+          />
+        )}
+
+        {showVideoModal && selectedQuestion && (
+          <VideoLinkModal
+            question={selectedQuestion}
+            onClose={() => {
+              setShowVideoModal(false);
+              setSelectedQuestion(null);
+            }}
+            onSuccess={() => {
+              fetchQuestions();
+            }}
+          />
+        )}
+
+        {showTestCasesModal && selectedQuestion && (
+          <TestCasesModal
+            question={selectedQuestion}
+            onClose={() => {
+              setShowTestCasesModal(false);
+              setSelectedQuestion(null);
+            }}
+            onSuccess={() => {
               fetchQuestions();
             }}
           />

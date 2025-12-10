@@ -23,42 +23,6 @@ const upload = multer({
 });
 
 /**
- * @route   GET /api/admin/users
- * @desc    Get all users (admin only)
- * @access  Private (Admin only)
- */
-router.get('/users', verifyFirebaseToken, isAdmin, async (req, res) => {
-  try {
-    let users;
-    try {
-      // Try with last_signed_in column
-      [users] = await req.db.execute(
-        'SELECT id, name, email, role, created_at, last_signed_in FROM users ORDER BY created_at DESC'
-      );
-    } catch (error) {
-      console.log('last_signed_in column not found, using fallback query');
-      // Fallback without last_signed_in column
-      [users] = await req.db.execute(
-        'SELECT id, name, email, role, created_at, NULL as last_signed_in FROM users ORDER BY created_at DESC'
-      );
-    }
-    
-    res.status(200).json({
-      status: 'success',
-      data: {
-        users
-      }
-    });
-  } catch (error) {
-    console.error('Get users error:', error.message);
-    res.status(500).json({
-      status: 'error',
-      message: 'Failed to fetch users. Please try again.'
-    });
-  }
-});
-
-/**
  * @route   POST /api/admin/users
  * @desc    Create a new user (admin only)
  * @access  Private (Admin only)
@@ -123,6 +87,37 @@ router.post('/users', verifyFirebaseToken, isAdmin, async (req, res) => {
       status: 'error',
       message: 'Failed to create user. Please try again.'
     });
+  }
+});
+
+/**
+ * @route   GET /api/admin/users
+ * @desc    Get all users (admin only) with optional search by name/email
+ * @access  Private
+ */
+router.get('/users', verifyFirebaseToken, isAdmin, async (req, res) => {
+  const { search } = req.query;
+  try {
+    if (search) {
+      const like = `%${search}%`;
+      const [users] = await req.db.query(
+        `SELECT id, name, email, role, created_at
+         FROM users
+         WHERE name LIKE ? OR email LIKE ?
+         ORDER BY created_at DESC
+         LIMIT 200`,
+        [like, like]
+      );
+      return res.json({ success: true, data: users });
+    }
+
+    const [users] = await req.db.query(
+      'SELECT id, name, email, role, created_at FROM users ORDER BY created_at DESC LIMIT 200'
+    );
+    res.json({ success: true, data: users });
+  } catch (error) {
+    console.error('Error fetching users:', error);
+    res.status(500).json({ success: false, message: 'Server error' });
   }
 });
 
@@ -553,6 +548,107 @@ router.post('/questions/bulk-upload', verifyFirebaseToken, isAdmin, upload.singl
     res.status(500).json({
       status: 'error',
       message: error.message || 'Failed to process Excel file. Please try again.'
+    });
+  }
+});
+
+/**
+ * @route   POST /api/admin/questions/:questionId/test-cases
+ * @desc    Add a single test case to a question (admin only)
+ * @access  Private (Admin only)
+ */
+router.post('/questions/:questionId/test-cases', verifyFirebaseToken, isAdmin, async (req, res) => {
+  try {
+    const { questionId } = req.params;
+    const { input, expected_output, hidden } = req.body;
+
+    if (!input || !expected_output) {
+      return res.status(400).json({
+        status: 'error',
+        message: 'Input and expected output are required'
+      });
+    }
+
+    const [result] = await req.db.execute(
+      'INSERT INTO test_cases (question_id, input, expected_output, hidden) VALUES (?, ?, ?, ?)',
+      [questionId, input, expected_output, hidden ? 1 : 0]
+    );
+
+    res.status(201).json({
+      status: 'success',
+      message: 'Test case added successfully',
+      data: {
+        id: result.insertId,
+        question_id: questionId,
+        input,
+        expected_output,
+        hidden: hidden ? true : false
+      }
+    });
+  } catch (error) {
+    console.error('Add test case error:', error.message);
+    res.status(500).json({
+      status: 'error',
+      message: 'Failed to add test case. Please try again.'
+    });
+  }
+});
+
+/**
+ * @route   PUT /api/admin/test-cases/:testCaseId
+ * @desc    Update a test case (admin only)
+ * @access  Private (Admin only)
+ */
+router.put('/test-cases/:testCaseId', verifyFirebaseToken, isAdmin, async (req, res) => {
+  try {
+    const { testCaseId } = req.params;
+    const { input, expected_output, hidden } = req.body;
+
+    if (!input || !expected_output) {
+      return res.status(400).json({
+        status: 'error',
+        message: 'Input and expected output are required'
+      });
+    }
+
+    await req.db.execute(
+      'UPDATE test_cases SET input = ?, expected_output = ?, hidden = ? WHERE id = ?',
+      [input, expected_output, hidden ? 1 : 0, testCaseId]
+    );
+
+    res.status(200).json({
+      status: 'success',
+      message: 'Test case updated successfully'
+    });
+  } catch (error) {
+    console.error('Update test case error:', error.message);
+    res.status(500).json({
+      status: 'error',
+      message: 'Failed to update test case. Please try again.'
+    });
+  }
+});
+
+/**
+ * @route   DELETE /api/admin/test-cases/:testCaseId
+ * @desc    Delete a test case (admin only)
+ * @access  Private (Admin only)
+ */
+router.delete('/test-cases/:testCaseId', verifyFirebaseToken, isAdmin, async (req, res) => {
+  try {
+    const { testCaseId } = req.params;
+
+    await req.db.execute('DELETE FROM test_cases WHERE id = ?', [testCaseId]);
+
+    res.status(200).json({
+      status: 'success',
+      message: 'Test case deleted successfully'
+    });
+  } catch (error) {
+    console.error('Delete test case error:', error.message);
+    res.status(500).json({
+      status: 'error',
+      message: 'Failed to delete test case. Please try again.'
     });
   }
 });

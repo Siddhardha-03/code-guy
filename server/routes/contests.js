@@ -8,8 +8,11 @@ const archiver = require('archiver');
 // Get all contests (public). Uses optional auth so unauthenticated users can see public contests.
 router.get('/', optionalVerifyFirebaseToken, async (req, res) => {
   try {
+    const user = req.user || {};
+    const userId = user.id;
+
     // If user is admin, get all contests
-    if (req.user.role === 'admin') {
+    if (user.role === 'admin') {
       const [contests] = await req.db.query(`
         SELECT * FROM contests 
         ORDER BY created_at DESC
@@ -17,17 +20,18 @@ router.get('/', optionalVerifyFirebaseToken, async (req, res) => {
       return res.json(contests);
     }
 
-    // If user is authenticated (non-admin) try to return public contests and any they're registered for
-    if (req.user && req.user.id) {
+    // If user is authenticated (non-admin) return public + ones they can access/are registered for
+    if (userId) {
       const [contests] = await req.db.query(`
         SELECT DISTINCT c.*,
           cp.status as participant_status,
           cp.score as current_score
         FROM contests c
         LEFT JOIN contest_participants cp ON c.id = cp.contest_id AND cp.user_id = ?
-        WHERE c.visibility = 'public' OR cp.user_id = ?
+        LEFT JOIN contest_access ca ON c.id = ca.contest_id AND ca.user_id = ?
+        WHERE c.visibility = 'public' OR cp.user_id IS NOT NULL OR ca.user_id IS NOT NULL
         ORDER BY c.created_at DESC
-      `, [req.user.id, req.user.id]);
+      `, [userId, userId]);
       return res.json(contests);
     }
 
@@ -50,8 +54,7 @@ router.post('/', verifyFirebaseToken, isAdmin, async (req, res) => {
     visibility,
     start_time,
     end_time,
-    max_participants,
-    created_by
+    max_participants
   } = req.body;
 
   console.log('[POST /contests] Creating contest:', {
@@ -67,7 +70,7 @@ router.post('/', verifyFirebaseToken, isAdmin, async (req, res) => {
         title, description, contest_type, visibility,
         start_time, end_time, max_participants, created_by, status
       ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'pending')
-    `, [title, description, contest_type, visibility, start_time, end_time, max_participants, created_by]);
+    `, [title, description, contest_type, visibility, start_time, end_time, max_participants, req.user.id]);
 
     console.log('[POST /contests] Contest created successfully:', result.insertId);
     res.status(201).json({ id: result.insertId });
@@ -124,6 +127,74 @@ router.post('/:contestId/items', verifyFirebaseToken, isAdmin, async (req, res) 
   }
 });
 
+// Manage contest access (invites)
+router.get('/:contestId/access', verifyFirebaseToken, isAdmin, async (req, res) => {
+  const { contestId } = req.params;
+  try {
+    const [rows] = await req.db.query(
+      `SELECT ca.id, ca.user_id, u.email, u.name, ca.role, ca.expires_at, ca.created_at
+       FROM contest_access ca
+       LEFT JOIN users u ON ca.user_id = u.id
+       WHERE ca.contest_id = ?
+       ORDER BY ca.created_at DESC`,
+      [contestId]
+    );
+    res.json(rows);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+router.post('/:contestId/access', verifyFirebaseToken, isAdmin, async (req, res) => {
+  const { contestId } = req.params;
+  const { email, role = 'participant', expires_at = null } = req.body;
+
+  if (!email) {
+    return res.status(400).json({ error: 'email is required' });
+  }
+
+  try {
+    const [[user]] = await req.db.query('SELECT id FROM users WHERE email = ?', [email]);
+    if (!user) {
+      return res.status(404).json({ error: 'User not found for email' });
+    }
+
+    // Upsert without relying on unique key (schema may not have composite unique)
+    const [[existing]] = await req.db.query(
+      'SELECT id FROM contest_access WHERE contest_id = ? AND user_id = ?',
+      [contestId, user.id]
+    );
+
+    if (existing) {
+      await req.db.query(
+        'UPDATE contest_access SET role = ?, expires_at = ? WHERE id = ?',
+        [role, expires_at, existing.id]
+      );
+      return res.status(200).json({ id: existing.id, updated: true });
+    }
+
+    const [result] = await req.db.query(
+      `INSERT INTO contest_access (contest_id, user_id, role, expires_at)
+       VALUES (?, ?, ?, ?)` ,
+      [contestId, user.id, role, expires_at]
+    );
+
+    res.status(201).json({ id: result.insertId });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+router.delete('/:contestId/access/:accessId', verifyFirebaseToken, isAdmin, async (req, res) => {
+  const { contestId, accessId } = req.params;
+  try {
+    await req.db.query('DELETE FROM contest_access WHERE id = ? AND contest_id = ?', [accessId, contestId]);
+    res.json({ message: 'Access removed' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // Get contest details
 router.get('/:contestId', verifyFirebaseToken, async (req, res) => {
   const { contestId } = req.params;
@@ -142,6 +213,7 @@ router.get('/:contestId', verifyFirebaseToken, async (req, res) => {
     }
 
     // For participants, check access and return limited details
+    const userId = req.user.id;
     const [[contest]] = await req.db.query(`
       SELECT 
         c.id, c.title, c.description, c.contest_type,
@@ -151,11 +223,18 @@ router.get('/:contestId', verifyFirebaseToken, async (req, res) => {
         cp.total_time_seconds
       FROM contests c
       LEFT JOIN contest_participants cp ON c.id = cp.contest_id AND cp.user_id = ?
-      WHERE c.id = ? AND (c.visibility = 'public' OR EXISTS (
-        SELECT 1 FROM contest_participants 
-        WHERE contest_id = c.id AND user_id = ?
-      ))
-    `, [req.user.id, contestId, req.user.id]);
+      WHERE c.id = ? AND (
+        c.visibility = 'public' 
+        OR EXISTS (
+          SELECT 1 FROM contest_participants 
+          WHERE contest_id = c.id AND user_id = ?
+        )
+        OR EXISTS (
+          SELECT 1 FROM contest_access
+          WHERE contest_id = c.id AND user_id = ?
+        )
+      )
+    `, [userId, contestId, userId, userId]);
 
     if (!contest) return res.status(404).json({ error: 'Contest not found or access denied' });
     res.json(contest);
@@ -247,6 +326,19 @@ router.post('/:contestId/register', verifyFirebaseToken, async (req, res) => {
       return res.status(404).json({ error: 'Contest not found' });
     }
 
+    // For private contests, ensure user is invited (contest_access) or is the creator
+    if (contest.visibility === 'private') {
+      const [[invite]] = await connection.query(
+        'SELECT * FROM contest_access WHERE contest_id = ? AND user_id = ?',
+        [contestId, userId]
+      );
+
+      if (!invite && contest.created_by !== userId) {
+        await connection.rollback();
+        return res.status(403).json({ error: 'This private contest requires an invitation' });
+      }
+    }
+
     // Check if user is already registered
     const [[existing]] = await connection.query(
       'SELECT * FROM contest_participants WHERE contest_id = ? AND user_id = ?',
@@ -299,6 +391,29 @@ router.post('/:contestId/register', verifyFirebaseToken, async (req, res) => {
 router.get('/:contestId/items', verifyFirebaseToken, checkContestExists, async (req, res) => {
   const { contestId } = req.params;
   try {
+    const user = req.user || {};
+
+    // Access control: admins always allowed; others only if public, participant, or invited
+    if (user.role !== 'admin') {
+      const contest = req.contest;
+      const userId = user.id;
+
+      if (contest.visibility !== 'public') {
+        const [[participant]] = await req.db.query(
+          'SELECT 1 FROM contest_participants WHERE contest_id = ? AND user_id = ?',
+          [contestId, userId]
+        );
+        const [[invite]] = await req.db.query(
+          'SELECT 1 FROM contest_access WHERE contest_id = ? AND user_id = ?',
+          [contestId, userId]
+        );
+
+        if (!participant && !invite) {
+          return res.status(403).json({ error: 'Access denied to contest items' });
+        }
+      }
+    }
+
     // Try with linked_quiz_id column (new schema), fallback to old if not available
     let items = [];
     try {

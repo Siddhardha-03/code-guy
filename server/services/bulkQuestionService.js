@@ -119,7 +119,8 @@ function transformRowToQuestion(row) {
     leetcode_url: row.leetcode_url?.trim() || '',
     geeksforgeeks_url: row.geeksforgeeks_url?.trim() || '',
     other_platform_url: row.other_platform_url?.trim() || '',
-    other_platform_name: row.other_platform_name?.trim() || ''
+    other_platform_name: row.other_platform_name?.trim() || '',
+    solution_video_url: row.solution_video_url?.trim() || ''
   };
 }
 
@@ -144,8 +145,8 @@ async function bulkInsertQuestions(db, questions, testCasesMap) {
         // Insert question
         const [result] = await connection.execute(
           `INSERT INTO questions 
-          (title, function_name, description, difficulty, question_type, tags, language_supported, parameter_schema, examples, leetcode_url, geeksforgeeks_url, other_platform_url, other_platform_name) 
-          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+          (title, function_name, description, difficulty, question_type, tags, language_supported, parameter_schema, examples, leetcode_url, geeksforgeeks_url, other_platform_url, other_platform_name, solution_video_url) 
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
           [
             question.title,
             question.function_name,
@@ -159,7 +160,8 @@ async function bulkInsertQuestions(db, questions, testCasesMap) {
             question.leetcode_url,
             question.geeksforgeeks_url,
             question.other_platform_url,
-            question.other_platform_name
+            question.other_platform_name,
+            question.solution_video_url
           ]
         );
         

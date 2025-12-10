@@ -182,12 +182,15 @@ export const getQuestionSubmissions = async (questionId, params = {}) => {
  * Get all users (admin only)
  * @returns {Promise} - Promise with users data
  */
-export const getUsers = async () => {
+export const getUsers = async (search) => {
   try {
     const response = await axios.get(`${API_URL}/admin/users`, {
-      headers: getAuthHeader()
+      headers: getAuthHeader(),
+      params: search ? { search } : undefined
     });
-    return response.data.data;
+    const payload = response.data;
+    const users = payload?.data?.users || payload?.data || payload?.users || [];
+    return { users };
   } catch (error) {
     throw error.response?.data?.message || 'Failed to fetch users';
   }
@@ -346,6 +349,7 @@ export const getRecentActivity = async (limit = 20) => {
           geeksforgeeks_url: '',
           other_platform_url: '',
           other_platform_name: '',
+          solution_video_url: 'https://www.youtube.com/watch?v=example1',
           testcase_1_input: '[2,7,11,15]\n9',
           testcase_1_output: '[0,1]',
           testcase_1_hidden: 'false',
@@ -370,6 +374,7 @@ export const getRecentActivity = async (limit = 20) => {
           geeksforgeeks_url: 'https://www.geeksforgeeks.org/reverse-a-string/',
           other_platform_url: 'https://a2zdsa.pages.dev/strings_part_1',
           other_platform_name: 'A2Z DSA',
+          solution_video_url: 'https://www.youtube.com/watch?v=example2',
           testcase_1_input: '["h","e","l","l","o"]',
           testcase_1_output: '["o","l","l","e","h"]',
           testcase_1_hidden: 'false',
@@ -412,3 +417,69 @@ export const getRecentActivity = async (limit = 20) => {
       throw new Error('Failed to generate template file');
     }
   };
+
+/**
+ * Get test cases for a question (admin view - includes all test cases)
+ * @param {number} questionId - Question ID
+ * @returns {Promise} - Promise with test cases data
+ */
+export const getTestCases = async (questionId) => {
+  try {
+    const response = await axios.get(`${API_URL}/questions/${questionId}/all-test-cases`, {
+      headers: getAuthHeader()
+    });
+    return response.data.data;
+  } catch (error) {
+    throw error.response?.data?.message || 'Failed to fetch test cases';
+  }
+};
+
+/**
+ * Add a single test case to a question
+ * @param {number} questionId - Question ID
+ * @param {Object} testCaseData - Test case data {input, expected_output, hidden}
+ * @returns {Promise} - Promise with success message
+ */
+export const addTestCase = async (questionId, testCaseData) => {
+  try {
+    const response = await axios.post(`${API_URL}/admin/questions/${questionId}/test-cases`, testCaseData, {
+      headers: getAuthHeader()
+    });
+    return response.data;
+  } catch (error) {
+    throw error.response?.data?.message || 'Failed to add test case';
+  }
+};
+
+/**
+ * Update a test case
+ * @param {number} testCaseId - Test case ID
+ * @param {Object} testCaseData - Test case data {input, expected_output, hidden}
+ * @returns {Promise} - Promise with success message
+ */
+export const updateTestCase = async (testCaseId, testCaseData) => {
+  try {
+    const response = await axios.put(`${API_URL}/admin/test-cases/${testCaseId}`, testCaseData, {
+      headers: getAuthHeader()
+    });
+    return response.data;
+  } catch (error) {
+    throw error.response?.data?.message || 'Failed to update test case';
+  }
+};
+
+/**
+ * Delete a test case
+ * @param {number} testCaseId - Test case ID
+ * @returns {Promise} - Promise with success message
+ */
+export const deleteTestCase = async (testCaseId) => {
+  try {
+    const response = await axios.delete(`${API_URL}/admin/test-cases/${testCaseId}`, {
+      headers: getAuthHeader()
+    });
+    return response.data;
+  } catch (error) {
+    throw error.response?.data?.message || 'Failed to delete test case';
+  }
+};
