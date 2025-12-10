@@ -82,21 +82,15 @@
   color: var(--text-primary);
 }
 
-.dark a {
+/* Only style regular text links, not buttons or UI elements */
+.dark a:not([class*="btn"]):not([class*="button"]):not(.nav-link):not([class*="gradient"]):not([class*="from-"]):not([class*="to-"]) {
   color: var(--info);
 }
 
-.dark a:hover,
-.dark a:focus {
+.dark a:hover:not([class*="btn"]):not([class*="button"]):not(.nav-link):not([class*="gradient"]):not([class*="from-"]):not([class*="to-"]),
+.dark a:focus:not([class*="btn"]):not([class*="button"]):not(.nav-link):not([class*="gradient"]):not([class*="from-"]):not([class*="to-"]) {
   color: var(--accent-secondary);
   text-decoration: none;
-}
-
-/* Exclude button-like links from link color override */
-.dark a[class*="btn"],
-.dark a[class*="button"],
-.dark a.block {
-  color: inherit !important;
 }
 
 /* Navigation */

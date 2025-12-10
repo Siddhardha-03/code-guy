@@ -69,13 +69,13 @@ const Navbar = ({ user }) => {
               <ThemeToggle />
               {user ? (
                 <div className="flex items-center gap-4">
-                  {/* Profile Avatar */}
-                  <div className="flex items-center gap-3">
+                  {/* Profile Avatar - Clickable */}
+                  <Link to="/dashboard" className="flex items-center gap-3 hover:opacity-80 transition-opacity cursor-pointer">
                     <div className="w-9 h-9 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full flex items-center justify-center text-white text-sm font-bold">
                       {user.name?.charAt(0)?.toUpperCase() || 'U'}
                     </div>
                     <span className="text-sm font-medium text-gray-700 dark:text-gray-300">{user.name}</span>
-                  </div>
+                  </Link>
                   <button
                     onClick={handleLogout}
                     className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-400 transition-colors"

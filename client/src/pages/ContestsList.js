@@ -1,11 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getAvailableContests, registerForContest } from '../services/contestService';
-import { formatMySQLDateTime, calculateTimeRemaining, getContestStatus } from '../utils/dateUtils';
+import { formatMySQLDateTime, calculateTimeRemaining, getContestStatus, parseMySQLDateTimeAsUTC } from '../utils/dateUtils';
 import Toast from '../components/Toast';
 
 const ContestStatus = ({ contest }) => {
   const { status } = getContestStatus(contest.start_time, contest.end_time);
+
+  if (status === 'invalid') {
+    return (
+      <span className="inline-block px-3 py-1 bg-gray-200 dark:bg-gray-800 text-gray-700 dark:text-gray-300 text-xs font-semibold rounded-full border border-gray-300 dark:border-gray-600">
+        N/A
+      </span>
+    );
+  }
   
   if (status === 'upcoming') {
     return (
@@ -97,11 +105,14 @@ const ContestsList = ({ user }) => {
 
   const filterContests = () => {
     const now = new Date();
-    
-    return contests.filter(contest => {
-      const start = new Date(contest.start_time);
-      const end = new Date(contest.end_time);
-      
+
+    return contests.filter((contest) => {
+      const start = parseMySQLDateTimeAsUTC(contest.start_time);
+      const end = parseMySQLDateTimeAsUTC(contest.end_time);
+
+      // If dates are invalid, only show in "All" to avoid broken filters
+      if (!start || !end) return filter === 'all';
+
       switch (filter) {
         case 'upcoming':
           return now < start;
@@ -162,9 +173,20 @@ const ContestsList = ({ user }) => {
               >
                 {f.charAt(0).toUpperCase() + f.slice(1)}
                 {f === 'all' && ` (${contests.length})`}
-                {f === 'upcoming' && ` (${contests.filter(c => new Date() < new Date(c.start_time)).length})`}
-                {f === 'live' && ` (${contests.filter(c => new Date() >= new Date(c.start_time) && new Date() <= new Date(c.end_time)).length})`}
-                {f === 'ended' && ` (${contests.filter(c => new Date() > new Date(c.end_time)).length})`}
+                {f === 'upcoming' && ` (${contests.filter(c => {
+                  const start = parseMySQLDateTimeAsUTC(c.start_time);
+                  return start && new Date() < start;
+                }).length})`}
+                {f === 'live' && ` (${contests.filter(c => {
+                  const start = parseMySQLDateTimeAsUTC(c.start_time);
+                  const end = parseMySQLDateTimeAsUTC(c.end_time);
+                  const now = new Date();
+                  return start && end && now >= start && now <= end;
+                }).length})`}
+                {f === 'ended' && ` (${contests.filter(c => {
+                  const end = parseMySQLDateTimeAsUTC(c.end_time);
+                  return end && new Date() > end;
+                }).length})`}
               </button>
             ))}
           </div>
@@ -183,12 +205,15 @@ const ContestsList = ({ user }) => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredContests.map(contest => {
               const now = new Date();
-              const start = new Date(contest.start_time);
-              const end = new Date(contest.end_time);
-              const isUpcoming = now < start;
-              const isLive = now >= start && now <= end;
+              const start = parseMySQLDateTimeAsUTC(contest.start_time);
+              const end = parseMySQLDateTimeAsUTC(contest.end_time);
+
+              const isUpcoming = start && now < start;
+              const isLive = start && end && now >= start && now <= end;
+              const isEnded = end && now > end;
               const timeLeft = isLive ? calculateTimeRemaining(contest.end_time) : null;
-              
+              const startsIn = !isLive && isUpcoming ? calculateTimeRemaining(contest.start_time) : null;
+
               return (
                 <div key={contest.id} className="card overflow-hidden hover:shadow-xl transition-all border-2 border-premium-glow animate-glow">
                   {/* Header */}
@@ -231,6 +256,14 @@ const ContestsList = ({ user }) => {
                             <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z" />
                           </svg>
                           <span>Time left: {timeLeft}</span>
+                        </div>
+                      )}
+                      {!timeLeft && startsIn && (
+                        <div className="flex items-center gap-2 text-sm font-semibold text-blue-600 dark:text-blue-300">
+                          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm1-13h-2v5l4.25 2.55.75-1.23L13 11.2V7z" />
+                          </svg>
+                          <span>Starts in: {startsIn}</span>
                         </div>
                       )}
 

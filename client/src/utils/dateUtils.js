@@ -10,8 +10,29 @@
  * @returns {Date} Date object parsed as UTC
  */
 export const parseMySQLDateTimeAsUTC = (mysqlDateTime) => {
-  if (!mysqlDateTime) return null;
-  return new Date(mysqlDateTime.replace(' ', 'T') + 'Z');
+  if (mysqlDateTime === null || mysqlDateTime === undefined) return null;
+
+  // Allow passing Date instances or numeric timestamps directly
+  if (mysqlDateTime instanceof Date) {
+    const d = new Date(mysqlDateTime.getTime());
+    return isNaN(d.getTime()) ? null : d;
+  }
+  if (typeof mysqlDateTime === 'number') {
+    const d = new Date(mysqlDateTime);
+    return isNaN(d.getTime()) ? null : d;
+  }
+
+  if (typeof mysqlDateTime !== 'string') return null;
+
+  // 1) Try native parsing (handles ISO strings with timezone offsets)
+  const direct = new Date(mysqlDateTime);
+  if (!isNaN(direct.getTime())) return direct;
+
+  // 2) Fallback for MySQL-style "YYYY-MM-DD HH:MM:SS"
+  const normalized = new Date(mysqlDateTime.replace(' ', 'T') + 'Z');
+  if (!isNaN(normalized.getTime())) return normalized;
+
+  return null;
 };
 
 /**
@@ -22,9 +43,11 @@ export const parseMySQLDateTimeAsUTC = (mysqlDateTime) => {
 export const formatMySQLDateTime = (mysqlDateTime) => {
   if (!mysqlDateTime) return 'N/A';
   const utcDate = parseMySQLDateTimeAsUTC(mysqlDateTime);
+  if (!utcDate) return 'Invalid date';
+
   return utcDate.toLocaleString('en-GB', {
     day: '2-digit',
-    month: '2-digit', 
+    month: '2-digit',
     year: 'numeric',
     hour: '2-digit',
     minute: '2-digit',
@@ -40,15 +63,25 @@ export const formatMySQLDateTime = (mysqlDateTime) => {
  */
 export const calculateTimeRemaining = (mysqlDateTime) => {
   if (!mysqlDateTime) return null;
-  const endTimeUTC = parseMySQLDateTimeAsUTC(mysqlDateTime).getTime();
-  const diff = endTimeUTC - Date.now();
-  
+  const parsed = parseMySQLDateTimeAsUTC(mysqlDateTime);
+  if (!parsed) return null;
+
+  const diff = parsed.getTime() - Date.now();
   if (diff <= 0) return null;
-  
-  const hours = Math.floor(diff / (1000 * 60 * 60));
-  const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-  
-  return `${hours}h ${minutes}m`;
+
+  const totalSeconds = Math.floor(diff / 1000);
+  const days = Math.floor(totalSeconds / 86400);
+  const hours = Math.floor((totalSeconds % 86400) / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+
+  const parts = [];
+  if (days) parts.push(`${days}d`);
+  if (hours || days) parts.push(`${hours}h`);
+  if (minutes || hours || days) parts.push(`${minutes}m`);
+  parts.push(`${seconds}s`);
+
+  return parts.join(' ');
 };
 
 /**
@@ -61,14 +94,18 @@ export const getContestStatus = (startTime, endTime) => {
   const now = new Date();
   const start = parseMySQLDateTimeAsUTC(startTime);
   const end = parseMySQLDateTimeAsUTC(endTime);
-  
+
+  if (!start || !end) {
+    return { status: 'invalid', notStarted: false, ended: false };
+  }
+
   if (now < start) {
     return { status: 'upcoming', notStarted: true, ended: false };
   }
-  
+
   if (now > end) {
     return { status: 'ended', notStarted: false, ended: true };
   }
-  
+
   return { status: 'active', notStarted: false, ended: false };
 };
