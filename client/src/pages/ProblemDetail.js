@@ -5,7 +5,7 @@
  * submission handling for multiple languages.
  */
 
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getQuestion } from '../services/questionService';
 import {
@@ -30,7 +30,6 @@ const ProblemDetail = ({ user }) => {
   // Problem metadata and test case collections retrieved from the API.
   const [problem, setProblem] = useState(null);
   const [testCases, setTestCases] = useState([]);
-  const [testCaseIndex, setTestCaseIndex] = useState(0);
   
   // Code editor state
   const [code, setCode] = useState('');
@@ -49,6 +48,7 @@ const ProblemDetail = ({ user }) => {
   const [error, setError] = useState('');
   const [activeTab, setActiveTab] = useState('description');
   const [showSolutionModal, setShowSolutionModal] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   
   // Submission tracking
   const [submissions, setSubmissions] = useState([]);
@@ -67,6 +67,81 @@ const ProblemDetail = ({ user }) => {
   useEffect(() => {
     languageRef.current = language;
   }, [language]);
+
+  // Helper to show a quick status for the first few test cases (pass/fail/error/not run)
+  const getTestCasePreviewStatus = useCallback((result) => {
+    if (!result) return { label: 'Not run', tone: 'text-gray-500 bg-gray-50 border-gray-200' };
+
+    if (result.passed) return { label: 'Passed', tone: 'text-green-700 bg-green-50 border-green-200' };
+    if (result.error) return { label: 'Error', tone: 'text-red-700 bg-red-50 border-red-200' };
+    return { label: 'Failed', tone: 'text-yellow-700 bg-yellow-50 border-yellow-200' };
+  }, []);
+
+  // Normalizes submission results and helps surface the first failing/error case
+  const mapSubmissionResult = useCallback((result, index) => ({
+    testCaseNumber: index + 1,
+    input: result.input,
+    expectedOutput: result.expectedOutput,
+    actualOutput: result.actualOutput,
+    error: result.error,
+    passed: result.passed,
+    hidden: result.hidden,
+    _originalIndex: index
+  }), []);
+
+  const selectFirstFailOrDefault = useCallback((mappedResults) => {
+    const firstFail = mappedResults.find(r => !r.passed || r.error);
+    return firstFail ? [firstFail] : mappedResults.slice(0, 1);
+  }, []);
+
+  const formatPerCaseOutput = useCallback((results) => {
+    return results.map((result) => {
+      const status = result.passed ? 'PASS' : (result.error ? 'ERROR' : 'FAIL');
+      const lines = [
+        `Test Case ${result.testCaseNumber}: ${status}`,
+        `  Expected: ${result.expectedOutput || '—'}`,
+        `  Actual: ${result.actualOutput || (result.error ? 'Error' : 'No output')}`
+      ];
+
+      if (result.error) {
+        lines.push(`  Error: ${result.error}`);
+      }
+
+      return lines.join('\n');
+    }).join('\n\n');
+  }, []);
+
+  // Build preview items: always show up to three, but include the first failing/error case even if later.
+  const previewItems = useMemo(() => {
+    const total = Math.min(3, Math.max(testResults.length || 0, testCases.length || 0, 3));
+    const items = Array.from({ length: total }).map((_, idx) => ({
+      result: testResults[idx],
+      testCase: testCases[idx],
+      index: idx
+    }));
+
+    const firstFailIndex = testResults.findIndex(r => r && (!r.passed || r.error));
+    if (firstFailIndex >= total && testResults[firstFailIndex]) {
+      items[total - 1] = {
+        result: testResults[firstFailIndex],
+        testCase: testCases[firstFailIndex],
+        index: firstFailIndex
+      };
+    }
+
+    return items;
+  }, [testCases, testResults]);
+
+  // Track viewport to tailor mobile-specific UI (e.g., test cases tab)
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(max-width: 1023px)');
+    const handleResize = (event) => setIsMobile(event.matches);
+
+    setIsMobile(mediaQuery.matches);
+    mediaQuery.addEventListener('change', handleResize);
+
+    return () => mediaQuery.removeEventListener('change', handleResize);
+  }, []);
 
   /**
    * Retrieves the most relevant code draft for the active language or falls
@@ -220,7 +295,7 @@ const ProblemDetail = ({ user }) => {
       return;
     }
 
-    const currentTestCase = testCases[testCaseIndex];
+    const casesToRun = testCases.slice(0, 3);
 
     setExecuting(true);
     setError('');
@@ -229,44 +304,26 @@ const ProblemDetail = ({ user }) => {
     setResultStatus(null);
 
     try {
-      const response = await runSubmissionCode({
-        code,
-        language,
-        questionId: id,
-        testCaseId: currentTestCase?.id
-      });
+      const results = [];
 
-      const expectedOutput = response?.expectedOutput ?? '';
-      const actualOutput = response?.actualOutput ?? '';
-      const errorOutput = response?.error ?? '';
-      const inputValue = response?.input ?? currentTestCase?.input ?? '';
-      const hidden = Boolean(response?.hidden || currentTestCase?.hidden);
-      const passed = Boolean(response?.passed);
+      for (let idx = 0; idx < casesToRun.length; idx++) {
+        const tc = casesToRun[idx];
+        const response = await runSubmissionCode({
+          code,
+          language,
+          questionId: id,
+          testCaseId: tc?.id
+        });
 
-      const statusMessage = passed
-        ? `✅ Test Case ${testCaseIndex + 1} Passed!`
-        : errorOutput
-          ? `❌ Test Case ${testCaseIndex + 1} encountered an error.`
-          : `❌ Test Case ${testCaseIndex + 1} Failed.`;
+        const expectedOutput = response?.expectedOutput ?? '';
+        const actualOutput = response?.actualOutput ?? '';
+        const errorOutput = response?.error ?? '';
+        const inputValue = response?.input ?? tc?.input ?? '';
+        const hidden = Boolean(response?.hidden || tc?.hidden);
+        const passed = Boolean(response?.passed);
 
-      const details = [
-        statusMessage,
-        '',
-        `Input: ${inputValue || '—'}`,
-        `Expected: ${expectedOutput || '—'}`,
-        `Actual: ${actualOutput || (errorOutput ? 'Error' : 'No output')}`
-      ];
-
-      if (errorOutput) {
-        details.push(`Error: ${errorOutput}`);
-      }
-
-      const rawOut = details.join('\n');
-      setOutput(rawOut);
-
-      const singleResult = [
-        {
-          testCaseNumber: testCaseIndex + 1,
+        results.push({
+          testCaseNumber: idx + 1,
           input: inputValue,
           expectedOutput,
           actualOutput,
@@ -276,10 +333,27 @@ const ProblemDetail = ({ user }) => {
           stdout: response?.stdout || '',
           stderr: response?.stderr || '',
           compileOutput: response?.compileOutput || ''
-        }
-      ];
-      setTestResults(singleResult);
-      setResultStatus(passed ? 'success' : errorOutput ? 'error' : 'failed');
+        });
+      }
+
+      setTestResults(results);
+
+      const anyError = results.some(r => r.error);
+      const allPassed = results.length > 0 && results.every(r => r.passed);
+      const statusMessage = allPassed ? 'All selected test cases passed!' : anyError ? 'Some test cases errored.' : 'Some test cases failed.';
+      const aggregateOutput = results.map((r) => {
+        const status = r.passed ? '✅ Passed' : (r.error ? '❌ Error' : '❌ Failed');
+        return [
+          `Test Case ${r.testCaseNumber}: ${status}`,
+          `Input: ${r.input || '—'}`,
+          `Expected: ${r.expectedOutput || '—'}`,
+          `Actual: ${r.actualOutput || (r.error ? 'Error' : 'No output')}`,
+          r.error ? `Error: ${r.error}` : null
+        ].filter(Boolean).join('\n');
+      }).join('\n\n');
+
+      setOutput(`${statusMessage}\n\n${aggregateOutput}`);
+      setResultStatus(allPassed ? 'success' : anyError ? 'error' : 'failed');
       setShowOutputModal(true);
     } catch (err) {
       setError(err.message || 'Failed to execute code');
@@ -308,6 +382,9 @@ const ProblemDetail = ({ user }) => {
       const response = await submitSolution(id, { code, language });
 
       const results = response?.results || [];
+      if (results.length === 0) {
+        setTestResults([]);
+      }
       const totalTests = results.length;
       const passedCount = results.filter(result => result.passed).length;
       const allPassed = Boolean(response?.passed);
@@ -329,36 +406,15 @@ const ProblemDetail = ({ user }) => {
       }
 
       if (results.length > 0) {
-        const perCase = results.map((result, index) => {
-          const status = result.passed ? 'PASS' : (result.error ? 'ERROR' : 'FAIL');
-          const lines = [
-            `Test Case ${index + 1}: ${status}`,
-            `  Expected: ${result.expectedOutput || '—'}`,
-            `  Actual: ${result.actualOutput || (result.error ? 'Error' : 'No output')}`
-          ];
-
-          if (result.error) {
-            lines.push(`  Error: ${result.error}`);
-          }
-
-          return lines.join('\n');
-        }).join('\n\n');
+        const mappedResults = results.map(mapSubmissionResult);
+        const displayedResults = allPassed ? mappedResults : selectFirstFailOrDefault(mappedResults);
+        const perCase = formatPerCaseOutput(displayedResults);
 
         finalOutput += `${perCase}\n\n`;
+        setTestResults(displayedResults);
       }
 
       setOutput(finalOutput);
-
-      const mappedResults = results.map((result, index) => ({
-        testCaseNumber: index + 1,
-        input: result.input,
-        expectedOutput: result.expectedOutput,
-        actualOutput: result.actualOutput,
-        error: result.error,
-        passed: result.passed,
-        hidden: result.hidden
-      }));
-      setTestResults(mappedResults);
 
       if (allPassed) {
         setResultStatus('success');
@@ -405,21 +461,21 @@ const ProblemDetail = ({ user }) => {
     <div className="min-h-screen bg-gray-50 flex flex-col">
       {/* Problem Header */}
       <div className="bg-white shadow-sm border-b">
-        <div className="w-full px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
+        <div className="w-full px-4 sm:px-6 py-4">
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex items-start sm:items-center gap-3 sm:gap-4">
               <button
                 onClick={() => navigate('/practice')}
-                className="text-gray-600 hover:text-gray-900 flex items-center gap-2 back-link-btn"
+                className="text-sm sm:text-base text-gray-600 hover:text-gray-900 flex items-center gap-1.5 sm:gap-2 back-link-btn"
               >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
                 </svg>
                 Back to Problems
               </button>
               <div>
-                <h1 className="text-2xl font-bold text-gray-900">{problem?.title || 'Loading...'}</h1>
-                <div className="flex items-center gap-3 mt-2">
+                <h1 className="text-xl sm:text-2xl font-bold text-gray-900 leading-tight">{problem?.title || 'Loading...'}</h1>
+                <div className="flex flex-wrap items-center gap-2 sm:gap-3 mt-2">
                   {problem?.difficulty && (
                     <span className={`px-2 py-1 text-xs font-medium rounded-full ${
                       problem.difficulty.toLowerCase() === 'easy' ? 'bg-green-100 text-green-800' :
@@ -435,7 +491,7 @@ const ProblemDetail = ({ user }) => {
                     </span>
                   )}
                   {user && submissionStats.attempts > 0 && (
-                    <span className="text-sm text-gray-600">
+                    <span className="text-xs sm:text-sm text-gray-600">
                       {submissionStats.attempts} attempt{submissionStats.attempts !== 1 ? 's' : ''}
                     </span>
                   )}
@@ -443,7 +499,7 @@ const ProblemDetail = ({ user }) => {
               </div>
             </div>
             {problem?.tags && (
-              <div className="flex flex-wrap gap-2">
+              <div className="hidden sm:flex flex-wrap gap-2">
                 {problem.tags.slice(0, 3).map((tag) => (
                   <span key={tag} className="px-2 py-1 text-xs bg-gray-100 text-gray-700 rounded-md">
                     {tag}
@@ -461,16 +517,16 @@ const ProblemDetail = ({ user }) => {
       </div>
 
       {/* Main Content */}
-      <div className="w-full px-6 py-4 flex-1">
-        <div className="grid grid-cols-1 xl:grid-cols-[minmax(0,40%)_minmax(0,60%)] gap-6 items-start">
+      <div className="w-full px-4 sm:px-6 py-4 flex-1">
+        <div className="grid grid-cols-1 xl:grid-cols-[minmax(0,40%)_minmax(0,60%)] gap-4 sm:gap-6 items-start">
           {/* Left Panel - Problem Description with Tabs */}
           <div className="bg-white rounded-lg shadow-sm border overflow-hidden">
             {/* Tab Navigation */}
             <div className="border-b bg-gray-50">
-              <nav className="flex">
+              <nav className="flex overflow-x-auto">
                 <button
                   onClick={() => setActiveTab('description')}
-                  className={`px-4 py-3 text-sm font-medium border-b-2 ${
+                  className={`px-3 sm:px-4 py-2.5 sm:py-3 text-sm font-medium border-b-2 ${
                     activeTab === 'description'
                       ? 'border-blue-500 text-blue-600 bg-white'
                       : 'border-transparent text-gray-500 hover:text-gray-700'
@@ -481,7 +537,7 @@ const ProblemDetail = ({ user }) => {
                 {user && (
                   <button
                     onClick={() => setActiveTab('submissions')}
-                    className={`px-4 py-3 text-sm font-medium border-b-2 ${
+                    className={`px-3 sm:px-4 py-2.5 sm:py-3 text-sm font-medium border-b-2 ${
                       activeTab === 'submissions'
                         ? 'border-blue-500 text-blue-600 bg-white'
                         : 'border-transparent text-gray-500 hover:text-gray-700'
@@ -490,9 +546,21 @@ const ProblemDetail = ({ user }) => {
                     Submissions ({submissionStats.attempts})
                   </button>
                 )}
+                {isMobile && (
+                  <button
+                    onClick={() => setActiveTab('testcases')}
+                    className={`px-3 sm:px-4 py-2.5 sm:py-3 text-sm font-medium border-b-2 ${
+                      activeTab === 'testcases'
+                        ? 'border-blue-500 text-blue-600 bg-white'
+                        : 'border-transparent text-gray-500 hover:text-gray-700'
+                    }`}
+                  >
+                    Test Cases
+                  </button>
+                )}
                 <button
                   onClick={() => setActiveTab('hints')}
-                  className={`px-4 py-3 text-sm font-medium border-b-2 ${
+                  className={`px-3 sm:px-4 py-2.5 sm:py-3 text-sm font-medium border-b-2 ${
                     activeTab === 'hints'
                       ? 'border-blue-500 text-blue-600 bg-white'
                       : 'border-transparent text-gray-500 hover:text-gray-700'
@@ -504,12 +572,12 @@ const ProblemDetail = ({ user }) => {
             </div>
 
             {/* Tab Content */}
-            <div className="h-full overflow-y-auto p-6">
+            <div className="h-full overflow-y-auto p-4 sm:p-6">
               {activeTab === 'description' && (
                 <div className="space-y-6">
                   {/* Problem Description */}
                   <div className="problem-statement">
-                    <h4 className="text-lg font-semibold mb-3 text-blue-600">Problem Description</h4>
+                    <h4 className="text-base sm:text-lg font-semibold mb-3 text-blue-600">Problem Description</h4>
                     <div className="prose prose-sm max-w-none">
                       <div dangerouslySetInnerHTML={{ __html: problem?.description || 'Loading problem description...' }} />
                     </div>
@@ -518,11 +586,11 @@ const ProblemDetail = ({ user }) => {
               {/* Examples */}
               {problem?.examples && problem.examples.length > 0 && (
                 <div className="examples-section">
-                  <h4 className="text-lg font-semibold mb-3 text-gray-800 dark:text-gray-100">Examples</h4>
+                  <h4 className="text-base sm:text-lg font-semibold mb-3 text-gray-800 dark:text-gray-100">Examples</h4>
                   <div className="space-y-4">
                     {problem.examples.map((example, index) => (
                       <div key={index} className="example-box p-4 bg-gray-50 dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700">
-                        <div className="example-title font-semibold text-gray-800 dark:text-gray-100 mb-3">Example {index + 1}:</div>
+                        <div className="example-title font-semibold text-gray-800 dark:text-gray-100 mb-3 text-sm sm:text-base">Example {index + 1}:</div>
                         <div className="example-content space-y-2">
                           <div className="flex items-start">
                             <span className="font-medium text-gray-700 dark:text-gray-300 min-w-[60px]">Input:</span>
@@ -546,7 +614,7 @@ const ProblemDetail = ({ user }) => {
               )}
               
               {/* Test Cases Preview */}
-              {testCases && testCases.filter(tc => !tc.hidden).length > 0 && (
+              {!isMobile && testCases && testCases.filter(tc => !tc.hidden).length > 0 && (
                 <div className="test-cases-section">
                   <h4 className="text-lg font-semibold mb-3 text-gray-800 dark:text-gray-100">Test Cases</h4>
                   <div className="bg-gray-50 dark:bg-gray-900 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
@@ -592,7 +660,7 @@ const ProblemDetail = ({ user }) => {
 
                   {/* Constraints */}
                   <div className="constraints-section">
-                    <h4 className="text-lg font-semibold mb-3 text-gray-800 dark:text-gray-100">Constraints</h4>
+                    <h4 className="text-base sm:text-lg font-semibold mb-3 text-gray-800 dark:text-gray-100">Constraints</h4>
                     <div className="bg-gray-50 dark:bg-gray-900 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
                       <ul className="text-sm text-gray-700 dark:text-gray-300 space-y-1">
                         <li>• Follow the function signature provided in the code editor</li>
@@ -708,6 +776,54 @@ const ProblemDetail = ({ user }) => {
                   </div>
                 </div>
               )}
+
+              {activeTab === 'testcases' && isMobile && (
+                <div className="space-y-4">
+                  <h4 className="text-lg font-semibold text-gray-800 dark:text-gray-100">Test Cases</h4>
+                  {testCases && testCases.filter(tc => !tc.hidden).length > 0 ? (
+                    <div className="bg-gray-50 dark:bg-gray-900 rounded-lg p-4 border border-gray-200 dark:border-gray-700 space-y-3">
+                      <p className="text-sm text-gray-700 dark:text-gray-300">
+                        <strong>Note:</strong> Showing up to 4 example test cases to help you understand the problem.
+                      </p>
+                      {testCases
+                        .filter(tc => !tc.hidden)
+                        .slice(0, 4)
+                        .map((testCase, index) => (
+                          <div key={index} className="p-3 rounded border bg-white dark:bg-gray-900 dark:border-gray-700">
+                            <div className="flex items-center justify-between mb-2">
+                              <div className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                                Example {index + 1}
+                              </div>
+                            </div>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                              <div>
+                                <span className="text-xs font-medium text-gray-500 dark:text-gray-400">Input:</span>
+                                <div className="bg-gray-50 dark:bg-gray-700 p-2 rounded mt-1">
+                                  <code className="text-xs font-mono">{testCase.input}</code>
+                                </div>
+                              </div>
+                              <div>
+                                <span className="text-xs font-medium text-gray-500 dark:text-gray-400">Expected Output:</span>
+                                <div className="bg-gray-50 dark:bg-gray-700 p-2 rounded mt-1">
+                                  <code className="text-xs font-mono">{testCase.expected_output}</code>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      {testCases.filter(tc => !tc.hidden).length > 4 && (
+                        <div className="mt-1 text-xs text-blue-600 dark:text-blue-300">
+                          +{testCases.filter(tc => !tc.hidden).length - 4} more visible test cases will be used during submission
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <div className="text-center py-8 text-gray-500">
+                      <p>No visible test cases for this problem.</p>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
           </div>
 
@@ -736,21 +852,8 @@ const ProblemDetail = ({ user }) => {
                 </div>
 
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                  <div className="flex items-center gap-3">
-                    <select
-                      value={testCaseIndex}
-                      onChange={(e) => setTestCaseIndex(parseInt(e.target.value, 10))}
-                      className="px-3 py-2 text-sm border border-gray-300 dark:border-gray-500 rounded-md bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-300 focus:border-blue-500 dark:focus:border-blue-300"
-                    >
-                      {testCases.map((testCase, index) => (
-                        <option key={index} value={index}>
-                          Test Case {index + 1}{testCase.hidden ? ' (Hidden)' : ''}
-                        </option>
-                      ))}
-                    </select>
-                    <span className="text-sm text-gray-600 dark:text-gray-300">
-                      {testCases.length} test case{testCases.length !== 1 ? 's' : ''} available ({testCases.filter(tc => !tc.hidden).length} visible, {testCases.filter(tc => tc.hidden).length} hidden)
-                    </span>
+                  <div className="text-sm text-gray-600 dark:text-gray-300">
+                    {testCases.length} test case{testCases.length !== 1 ? 's' : ''} available ({testCases.filter(tc => !tc.hidden).length} visible, {testCases.filter(tc => tc.hidden).length} hidden)
                   </div>
 
                   <div className="flex items-center gap-2">
@@ -818,6 +921,31 @@ const ProblemDetail = ({ user }) => {
                     <pre className="whitespace-pre-wrap text-sm font-mono bg-gray-50 dark:bg-gray-900 p-3 rounded border dark:border-gray-600 overflow-x-auto">
                       {output}
                     </pre>
+
+                    {/* Quick view of first 3 test cases to mimic LeetCode-style status visibility, always including the first failing case if it occurs later. */}
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                      {previewItems.map(({ result, testCase, index }) => {
+                        const preview = getTestCasePreviewStatus(result);
+                        const isHidden = result?.hidden || testCase?.hidden;
+                        return (
+                          <div
+                            key={index}
+                            className={`rounded-lg border px-3 py-2 text-sm flex flex-col gap-1 ${preview.tone}`}
+                          >
+                            <div className="flex items-center justify-between">
+                              <span className="font-semibold">Test Case {index + 1}{isHidden ? ' (Hidden)' : ''}</span>
+                              <span className="text-xs uppercase">{preview.label}</span>
+                            </div>
+                            {result?.input && (
+                              <div className="text-xs text-gray-700">
+                                <span className="font-medium text-gray-600">Input: </span>
+                                <span className="font-mono">{result.input}</span>
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
 
                     {resultStatus === 'success' && (
                       <div className="bg-green-100 dark:bg-green-900/40 border border-green-400 dark:border-green-600 text-green-700 dark:text-green-200 px-4 py-3 rounded">

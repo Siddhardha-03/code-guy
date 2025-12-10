@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 
 // Pages
@@ -31,6 +31,18 @@ import { AuthProvider, useAuth } from './contexts/AuthContext';
 
 function AppContent() {
   const { userData, loading } = useAuth();
+  const topAdRef = useRef(null);
+
+  // Initialize top AdSense slot after mount (requires adsbygoogle script in index.html)
+  useEffect(() => {
+    try {
+      if (window.adsbygoogle && topAdRef.current) {
+        window.adsbygoogle.push({});
+      }
+    } catch (err) {
+      console.warn('AdSense top slot load skipped:', err);
+    }
+  }, []);
 
   if (loading) {
     return (
@@ -47,6 +59,24 @@ function AppContent() {
     <Router>
       <div className="flex flex-col min-h-screen bg-white dark:bg-gray-900">
         <Navbar user={userData} />
+
+        {/* Google AdSense: top-of-page responsive banner below nav */}
+        <div className="px-4 pt-2 pb-4">
+          {/* AdSense slot: top banner below nav, borderless container */}
+          <div className="bg-transparent p-2">
+            {/* Replace data-ad-client and data-ad-slot with your AdSense IDs */}
+            <ins
+              ref={topAdRef}
+              className="adsbygoogle block w-full"
+              style={{ display: 'block', minHeight: '90px' }}
+              data-ad-client="ca-pub-XXXXXXXXXXXXXXX"
+              data-ad-slot="0987654321"
+              data-ad-format="auto"
+              data-full-width-responsive="true"
+            ></ins>
+          </div>
+        </div>
+
         <main className="flex-grow pb-24">
           <ErrorBoundary>
             <Routes>

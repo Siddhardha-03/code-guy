@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { executeCode, getLanguages, getTemplate } from '../services/compilerService';
 import CodeEditor from '../components/CodeEditor';
 
@@ -11,6 +11,7 @@ const Compiler = ({ user }) => {
   const [error, setError] = useState('');
   const [languages, setLanguages] = useState([]);
   const [loading, setLoading] = useState(true);
+  const adRef = useRef(null);
 
   const fetchLanguages = useCallback(async () => {
     try {
@@ -41,6 +42,17 @@ const Compiler = ({ user }) => {
   useEffect(() => {
     fetchTemplate();
   }, [fetchTemplate, language]);
+
+  // Trigger AdSense fill when component mounts (requires global adsbygoogle script)
+  useEffect(() => {
+    try {
+      if (window.adsbygoogle && adRef.current) {
+        window.adsbygoogle.push({});
+      }
+    } catch (err) {
+      console.warn('AdSense load skipped:', err);
+    }
+  }, []);
 
   const handleLanguageChange = (e) => {
     setLanguage(e.target.value);
@@ -230,6 +242,23 @@ const Compiler = ({ user }) => {
               )}
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* Google AdSense: bottom responsive banner below compiler UI */}
+      <div className="px-4 pb-6">
+        {/* AdSense slot: bottom banner, borderless container */}
+        <div className="bg-transparent p-2">
+          {/* Replace data-ad-client and data-ad-slot with your AdSense IDs */}
+          <ins
+            ref={adRef}
+            className="adsbygoogle block w-full"
+            style={{ display: 'block', minHeight: '120px' }}
+            data-ad-client="ca-pub-XXXXXXXXXXXXXXX"
+            data-ad-slot="1234567890"
+            data-ad-format="auto"
+            data-full-width-responsive="true"
+          ></ins>
         </div>
       </div>
     </div>

@@ -315,26 +315,26 @@ const Practice = ({ user }) => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-24">
+    <div className="min-h-screen bg-gray-50 pb-20 sm:pb-24">
       {/* Header Section */}
       <div className="bg-white border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Practice</h1>
-          <p className="text-gray-600">Solve coding problems to improve your programming skills</p>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">Practice</h1>
+          <p className="text-gray-600 text-sm sm:text-base">Solve coding problems to improve your programming skills</p>
           
           {/* Featured Sheets Section */}
           {!sheetsLoading && featuredSheets.length > 0 && (
             <div className="mt-8 animate-slide-up">
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-bold text-gray-900">📚 Curated Learning Paths</h2>
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-6">
+                <h2 className="text-xl sm:text-2xl font-bold text-gray-900">📚 Curated Learning Paths</h2>
                 <Link
                   to="/practice/sheets"
-                  className="text-blue-600 hover:text-blue-700 font-medium flex items-center gap-2 transition-colors hover:gap-3"
+                  className="text-blue-600 hover:text-blue-700 font-medium text-sm sm:text-base flex items-center gap-2 transition-colors hover:gap-3"
                 >
                   More Sheets →
                 </Link>
               </div>
-              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 {featuredSheets.map((sheet, idx) => (
                   <Link
                     key={sheet.id}
@@ -354,8 +354,8 @@ const Practice = ({ user }) => {
                         {sheet.difficulty_level?.toUpperCase() || 'MIXED'}
                       </span>
                     </div>
-                    <p className="text-gray-600 text-sm mb-4 line-clamp-2">{sheet.description}</p>
-                    <div className="flex items-center gap-4 text-sm text-gray-500">
+                    <p className="text-gray-600 text-sm mb-3 line-clamp-2">{sheet.description}</p>
+                    <div className="flex items-center gap-3 text-sm text-gray-500">
                       <span>📚 {sheet.total_problems}</span>
                       {sheet.estimated_hours && <span>⏱️ {sheet.estimated_hours}h</span>}
                     </div>
@@ -370,29 +370,29 @@ const Practice = ({ user }) => {
               <div className="border-premium-glow bg-transparent rounded-lg p-4 relative overflow-hidden group hover:shadow-lg transition-all">
                 <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-cyan-400 opacity-0 group-hover:opacity-10 transition-opacity rounded-lg"></div>
                 <div className="relative z-10">
-                  <div className="text-sm text-gray-600 mb-1 font-semibold">Total</div>
-                  <div className="text-2xl font-bold text-gray-700 group-hover:text-blue-600 transition-colors">{stats.total}</div>
+                  <div className="text-xs sm:text-sm text-gray-600 mb-1 font-semibold">Total</div>
+                  <div className="text-xl sm:text-2xl font-bold text-gray-700 group-hover:text-blue-600 transition-colors">{stats.total}</div>
                 </div>
               </div>
               <div className="border-2 border-green-400 bg-transparent rounded-lg p-4 relative overflow-hidden group hover:shadow-lg transition-all hover:-translate-y-1">
                 <div className="absolute inset-0 bg-gradient-to-r from-green-400 to-emerald-400 opacity-0 group-hover:opacity-10 transition-opacity rounded-lg"></div>
                 <div className="relative z-10">
-                  <div className="text-sm text-green-600 mb-1 font-semibold">✓ Solved</div>
-                  <div className="text-2xl font-bold text-green-700 group-hover:text-green-600 transition-colors">{stats.solved}</div>
+                  <div className="text-xs sm:text-sm text-green-600 mb-1 font-semibold">✓ Solved</div>
+                  <div className="text-xl sm:text-2xl font-bold text-green-700 group-hover:text-green-600 transition-colors">{stats.solved}</div>
                 </div>
               </div>
               <div className="border-2 border-yellow-400 bg-transparent rounded-lg p-4 relative overflow-hidden group hover:shadow-lg transition-all hover:-translate-y-1">
                 <div className="absolute inset-0 bg-gradient-to-r from-yellow-400 to-amber-400 opacity-0 group-hover:opacity-10 transition-opacity rounded-lg"></div>
                 <div className="relative z-10">
-                  <div className="text-sm text-yellow-600 mb-1 font-semibold">◐ Attempted</div>
-                  <div className="text-2xl font-bold text-yellow-700 group-hover:text-yellow-600 transition-colors">{stats.attempted}</div>
+                  <div className="text-xs sm:text-sm text-yellow-600 mb-1 font-semibold">◐ Attempted</div>
+                  <div className="text-xl sm:text-2xl font-bold text-yellow-700 group-hover:text-yellow-600 transition-colors">{stats.attempted}</div>
                 </div>
               </div>
               <div className="border-2 border-blue-400 bg-transparent rounded-lg p-4 relative overflow-hidden group hover:shadow-lg transition-all hover:-translate-y-1">
                 <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-cyan-400 opacity-0 group-hover:opacity-10 transition-opacity rounded-lg"></div>
                 <div className="relative z-10">
-                  <div className="text-sm text-blue-600 mb-1 font-semibold">📊 Accuracy</div>
-                  <div className="text-2xl font-bold text-blue-700 group-hover:text-blue-600 transition-colors">
+                  <div className="text-xs sm:text-sm text-blue-600 mb-1 font-semibold">📊 Accuracy</div>
+                  <div className="text-xl sm:text-2xl font-bold text-blue-700 group-hover:text-blue-600 transition-colors">
                     {stats.total > 0 ? Math.round((stats.solved / stats.total) * 100) : 0}%
                   </div>
                 </div>
@@ -404,8 +404,8 @@ const Practice = ({ user }) => {
 
       {/* Filters Section */}
       <div className="bg-white border-b sticky top-0 z-10 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex flex-col md:flex-row gap-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-4">
+          <div className="flex flex-col md:flex-row gap-3 sm:gap-4">
             {/* Search */}
             <div className="flex-1">
               <div className="relative">
@@ -427,7 +427,7 @@ const Practice = ({ user }) => {
               name="difficulty"
               value={filters.difficulty}
               onChange={handleFilterChange}
-              className="px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm bg-white"
+              className="px-3 sm:px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm bg-white"
             >
               <option value="">All Difficulty</option>
               <option value="easy">Easy</option>
@@ -440,7 +440,7 @@ const Practice = ({ user }) => {
               name="tag"
               value={filters.tag}
               onChange={handleFilterChange}
-              className="px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm bg-white min-w-[180px]"
+              className="px-3 sm:px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm bg-white min-w-[150px] sm:min-w-[180px]"
             >
               <option value="">All Topics</option>
               {availableTags.map((tag) => (
@@ -456,7 +456,7 @@ const Practice = ({ user }) => {
                 name="status"
                 value={filters.status}
                 onChange={handleFilterChange}
-                className="px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm bg-white"
+                className="px-3 sm:px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm bg-white"
               >
                 <option value="">All Status</option>
                 <option value="solved">Solved</option>
@@ -468,7 +468,7 @@ const Practice = ({ user }) => {
             {(searchTerm || filters.difficulty || filters.tag || filters.status) && (
               <button
                 onClick={clearFilters}
-                className="px-4 py-2.5 text-sm text-gray-600 hover:text-gray-900 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors whitespace-nowrap"
+                className="px-3 sm:px-4 py-2.5 text-sm text-gray-600 hover:text-gray-900 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors whitespace-nowrap"
               >
                 Clear
               </button>
@@ -534,8 +534,9 @@ const Practice = ({ user }) => {
                               </td>
                             )}
                             
-                            {/* Problem Title */}
+                            {/* Problem Title with ID prefix */}
                             <td className="px-6 py-4">
+                              <div className="text-xs text-gray-400 mb-0.5">#{question.id}</div>
                               <Link 
                                 to={`/practice/${question.id}`} 
                                 className="text-blue-600 hover:text-blue-800 font-medium hover:underline"

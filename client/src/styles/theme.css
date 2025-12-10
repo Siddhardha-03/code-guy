@@ -6,6 +6,11 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700;800&display=swap');
 
+/* Global zoom to 90% to match requested layout scale */
+html {
+  zoom: 0.9;
+}
+
 :root {
   /* Light Theme - Primary */
   --bg-primary: #ffffff;
