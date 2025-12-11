@@ -1,7 +1,7 @@
 /*
  * File: theme.css
  * Description: Unified design system with theme variables and animations
- * for both light and dark modes across CodeGuy platform.
+ * for both light and dark modes across CodiGloo platform.
  */
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700;800&display=swap');
@@ -49,23 +49,23 @@ html {
 
 /* Dark Theme Variables - Night Blue inspired by VS Code */
 .dark {
-  --bg-primary: #1e1e1e;
-  --bg-secondary: #252526;
-  --bg-tertiary: #2d2d30;
-  --text-primary: #d4d4d4;
-  --text-secondary: #cccccc;
-  --text-muted: #858585;
-  --border-color: #3e3e42;
+  --bg-primary: #111827;
+  --bg-secondary: #1f2937;
+  --bg-tertiary: #273449;
+  --text-primary: #e5e7eb;
+  --text-secondary: #cfd4dc;
+  --text-muted: #9ca3af;
+  --border-color: #323f52;
   --accent-primary: #0e639c;
   --accent-secondary: #1177bb;
   --success: #4ec9b0;
   --warning: #ce9178;
   --danger: #f48771;
   --info: #569cd6;
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.5);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.5), 0 2px 4px -2px rgb(0 0 0 / 0.5);
-  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.5), 0 4px 6px -4px rgb(0 0 0 / 0.5);
-  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.5), 0 8px 10px -6px rgb(0 0 0 / 0.5);
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.4);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4), 0 2px 4px -2px rgb(0 0 0 / 0.4);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.4), 0 4px 6px -4px rgb(0 0 0 / 0.4);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.4), 0 8px 10px -6px rgb(0 0 0 / 0.4);
 }
 
 .dark body,

@@ -30,8 +30,15 @@ const Navbar = ({ user }) => {
         <div className="flex justify-between items-center h-16">
           {/* Logo and site name - Left */}
           <Link to="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity" onClick={closeMobileMenu}>
-            <span className="text-2xl">🧑‍💻</span>
-            <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 dark:from-blue-400 dark:to-cyan-400 bg-clip-text text-transparent">CodeGuy</span>
+            <img
+              src="/codigloo-logo.png"
+              alt="CodiGloo logo"
+              className="w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20"
+              loading="lazy"
+            />
+            <div className="flex flex-col leading-tight">
+              <span className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 dark:from-blue-400 dark:to-cyan-400 bg-clip-text text-transparent">CodiGloo</span>
+            </div>
           </Link>
 
           {/* Desktop Navigation - Right */}

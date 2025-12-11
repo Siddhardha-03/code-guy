@@ -32,10 +32,10 @@ const Home = ({ user }) => {
         </div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center animate-slide-up">
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-6 leading-tight">
-            Master Coding Skills with <span className="bg-gradient-to-r from-yellow-300 to-orange-300 bg-clip-text text-transparent">CodeGuy</span>
+            Master Coding Skills with <span className="bg-gradient-to-r from-yellow-300 to-orange-300 bg-clip-text text-transparent">CodiGloo</span>
           </h1>
           <p className="text-lg sm:text-xl md:text-2xl text-blue-100 max-w-3xl mx-auto mb-8 font-light">
-            Practice real-world problems, ace your interviews, and join thousands of successful developers.
+            A cool place to code. Practice real-world problems, ace your interviews, and join thousands of successful developers.
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4 mt-8 sm:mt-10">
             <Link
@@ -119,7 +119,7 @@ const Home = ({ user }) => {
       <section className="bg-white py-16 sm:py-20 border-t border-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12 sm:mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">Why Choose CodeGuy?</h2>
+            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">Why Choose CodiGloo?</h2>
             <p className="text-lg sm:text-xl text-gray-600">Everything you need to become a better developer</p>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">

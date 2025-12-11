@@ -12,11 +12,14 @@ const Footer = () => {
           {/* Brand Section */}
           <div className="md:col-span-1">
             <Link to="/" className="text-2xl font-bold flex items-center gap-3 mb-4 group">
-              <span className="text-3xl group-hover:scale-110 transition-transform">🧑‍💻</span>
-              <span className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">CodeGuy</span>
+              <img src="/codigloo-logo.png" alt="CodiGloo logo" className="w-14 h-14 group-hover:scale-110 transition-transform" loading="lazy" />
+              <div className="flex flex-col leading-tight">
+                <span className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">CodiGloo</span>
+                <span className="text-xs text-gray-400">A cool place to code</span>
+              </div>
             </Link>
             <p className="text-gray-400 text-sm leading-relaxed">
-              Master coding skills with thousands of problems, real-world challenges, and instant feedback from industry experts.
+              Master skills with hands-on problems, real-world challenges, and instant feedback.
             </p>
             <div className="flex gap-4 mt-6">
               <a href="#" className="w-10 h-10 bg-blue-600 hover:bg-blue-700 rounded-lg flex items-center justify-center transition-colors" title="GitHub">
@@ -107,28 +110,40 @@ const Footer = () => {
             </h3>
             <ul className="space-y-3">
               <li>
-                <a href="#" className="text-gray-300 hover:text-blue-300 transition-colors flex items-center gap-2 group">
+                <Link to="/about" className="text-gray-300 hover:text-blue-300 transition-colors flex items-center gap-2 group">
                   <span className="group-hover:translate-x-1 transition-transform">→</span>
                   About Us
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="text-gray-300 hover:text-blue-300 transition-colors flex items-center gap-2 group">
+                <Link to="/blog" className="text-gray-300 hover:text-blue-300 transition-colors flex items-center gap-2 group">
                   <span className="group-hover:translate-x-1 transition-transform">→</span>
                   Blog
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="text-gray-300 hover:text-blue-300 transition-colors flex items-center gap-2 group">
+                <Link to="/contact" className="text-gray-300 hover:text-blue-300 transition-colors flex items-center gap-2 group">
                   <span className="group-hover:translate-x-1 transition-transform">→</span>
                   Contact
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="text-gray-300 hover:text-blue-300 transition-colors flex items-center gap-2 group">
+                <Link to="/privacy" className="text-gray-300 hover:text-blue-300 transition-colors flex items-center gap-2 group">
                   <span className="group-hover:translate-x-1 transition-transform">→</span>
-                  Support
-                </a>
+                  Privacy Policy
+                </Link>
+              </li>
+              <li>
+                <Link to="/terms" className="text-gray-300 hover:text-blue-300 transition-colors flex items-center gap-2 group">
+                  <span className="group-hover:translate-x-1 transition-transform">→</span>
+                  Terms of Service
+                </Link>
+              </li>
+              <li>
+                <Link to="/cookies" className="text-gray-300 hover:text-blue-300 transition-colors flex items-center gap-2 group">
+                  <span className="group-hover:translate-x-1 transition-transform">→</span>
+                  Cookie Policy
+                </Link>
               </li>
             </ul>
           </div>
@@ -140,12 +155,12 @@ const Footer = () => {
         {/* Bottom Footer */}
         <div className="py-8 flex flex-col md:flex-row justify-between items-center gap-4">
           <div className="text-gray-400 text-sm">
-            <p>&copy; {currentYear} <span className="font-bold text-white">CodeGuy</span>. All rights reserved.</p>
+            <p>&copy; {currentYear} <span className="font-bold text-white">CodiGloo</span>. All rights reserved.</p>
           </div>
           <div className="flex gap-6 text-sm text-gray-400">
-            <a href="#" className="hover:text-blue-400 transition-colors">Privacy Policy</a>
-            <a href="#" className="hover:text-blue-400 transition-colors">Terms of Service</a>
-            <a href="#" className="hover:text-blue-400 transition-colors">Cookie Policy</a>
+            <Link to="/privacy" className="hover:text-blue-400 transition-colors">Privacy Policy</Link>
+            <Link to="/terms" className="hover:text-blue-400 transition-colors">Terms of Service</Link>
+            <Link to="/cookies" className="hover:text-blue-400 transition-colors">Cookie Policy</Link>
           </div>
         </div>
       </div>

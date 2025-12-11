@@ -391,9 +391,7 @@ const ProblemDetail = ({ user }) => {
       const anyErrors = results.some(result => result.error);
       const successRate = totalTests > 0 ? ((passedCount / totalTests) * 100).toFixed(1) : '0.0';
 
-      let finalOutput = `${'='.repeat(60)}\n`;
-      finalOutput += `🏆 FINAL SUBMISSION RESULTS\n`;
-      finalOutput += `${'='.repeat(60)}\n\n`;
+      let finalOutput = `🏆 FINAL SUBMISSION RESULTS\n`;
 
       if (allPassed) {
         finalOutput += `🎉 ACCEPTED! All ${totalTests} test cases passed!\n\n`;
@@ -860,21 +858,21 @@ const ProblemDetail = ({ user }) => {
                     <button
                       onClick={handleRunCode}
                       disabled={executing || submitting}
-                      className="px-3 py-2 text-sm bg-gray-600 hover:bg-gray-700 text-white rounded-md disabled:opacity-50 disabled:cursor-not-allowed dark:bg-gray-100 dark:hover:bg-gray-200 dark:text-gray-900"
+                      className="px-2.5 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm bg-gray-600 hover:bg-gray-700 text-white rounded-md disabled:opacity-50 disabled:cursor-not-allowed dark:bg-gray-100 dark:hover:bg-gray-200 dark:text-gray-900"
                     >
                       {executing ? 'Running…' : 'Run Test'}
                     </button>
                     <button
                       onClick={handleSubmitCode}
                       disabled={submitting}
-                      className="px-3 py-2 text-sm bg-blue-600 hover:bg-blue-700 text-white rounded-md disabled:opacity-50 disabled:cursor-not-allowed dark:bg-blue-400 dark:hover:bg-blue-300 dark:text-blue-950"
+                      className="px-2.5 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm bg-blue-600 hover:bg-blue-700 text-white rounded-md disabled:opacity-50 disabled:cursor-not-allowed dark:bg-blue-400 dark:hover:bg-blue-300 dark:text-blue-950"
                     >
                       {submitting ? 'Submitting…' : 'Submit Solution'}
                     </button>
                     {problem?.solution_video_url && (
                       <button
                         onClick={() => setShowSolutionModal(true)}
-                        className="px-3 py-2 text-sm bg-red-600 hover:bg-red-700 text-white rounded-md flex items-center gap-2 dark:bg-red-500 dark:hover:bg-red-600"
+                        className="px-2.5 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm bg-red-600 hover:bg-red-700 text-white rounded-md flex items-center gap-2 dark:bg-red-500 dark:hover:bg-red-600"
                         title="Watch video solution"
                       >
                         <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
@@ -904,7 +902,7 @@ const ProblemDetail = ({ user }) => {
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Output</h3>
               </div>
               
-              <div className="p-4 h-64 overflow-y-auto text-gray-900 dark:text-gray-100">
+              <div className="p-3 sm:p-4 max-h-[70vh] overflow-y-auto text-gray-900 dark:text-gray-100">
                 {error && (
                   <div className="bg-red-100 dark:bg-red-900/40 border border-red-400 dark:border-red-600 text-red-700 dark:text-red-200 px-4 py-3 rounded mb-4">
                     <strong>Error:</strong> {error}
@@ -917,20 +915,20 @@ const ProblemDetail = ({ user }) => {
                     <span>{submitting ? 'Running all test cases…' : 'Executing code…'}</span>
                   </div>
                 ) : output ? (
-                  <div className="space-y-4">
-                    <pre className="whitespace-pre-wrap text-sm font-mono bg-gray-50 dark:bg-gray-900 p-3 rounded border dark:border-gray-600 overflow-x-auto">
+                  <div className="space-y-3 sm:space-y-4">
+                    <pre className="whitespace-pre-wrap text-xs sm:text-sm leading-snug font-mono bg-gray-50 dark:bg-gray-900 p-3 rounded border dark:border-gray-600 overflow-x-auto">
                       {output}
                     </pre>
 
                     {/* Quick view of first 3 test cases to mimic LeetCode-style status visibility, always including the first failing case if it occurs later. */}
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3">
                       {previewItems.map(({ result, testCase, index }) => {
                         const preview = getTestCasePreviewStatus(result);
                         const isHidden = result?.hidden || testCase?.hidden;
                         return (
                           <div
                             key={index}
-                            className={`rounded-lg border px-3 py-2 text-sm flex flex-col gap-1 ${preview.tone}`}
+                            className={`rounded-lg border px-3 py-2 text-xs sm:text-sm flex flex-col gap-1 ${preview.tone}`}
                           >
                             <div className="flex items-center justify-between">
                               <span className="font-semibold">Test Case {index + 1}{isHidden ? ' (Hidden)' : ''}</span>
@@ -966,7 +964,7 @@ const ProblemDetail = ({ user }) => {
                     )}
 
                     {testResults.length > 0 && (
-                      <div className="space-y-3">
+                      <div className="space-y-3 sm:space-y-4">
                         {testResults.map((test) => {
                           const badgeClasses = test.passed
                             ? 'bg-green-100 dark:bg-green-800/30 text-green-800 dark:text-green-200 border-green-200 dark:border-green-500'
@@ -975,7 +973,7 @@ const ProblemDetail = ({ user }) => {
                           return (
                             <div
                               key={test.testCaseNumber}
-                              className={`rounded-lg border px-4 py-3 text-sm ${badgeClasses}`}
+                              className={`rounded-lg border px-3 sm:px-4 py-3 text-xs sm:text-sm ${badgeClasses}`}
                             >
                               <div className="flex items-center justify-between mb-2">
                                 <span className="font-semibold">
@@ -986,22 +984,22 @@ const ProblemDetail = ({ user }) => {
                                 </span>
                               </div>
 
-                              <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+                              <div className="grid grid-cols-1 md:grid-cols-3 gap-2 sm:gap-3 text-xs leading-snug">
                                 <div>
                                   <span className="font-medium text-gray-600 dark:text-gray-300 block mb-1">Input</span>
-                                  <div className="bg-white/60 dark:bg-gray-900 border border-white/40 dark:border-gray-600 rounded p-2 font-mono">
+                                  <div className="bg-white/60 dark:bg-gray-900 border border-white/40 dark:border-gray-600 rounded p-2 font-mono break-words whitespace-pre-wrap">
                                     {test.input || '—'}
                                   </div>
                                 </div>
                                 <div>
                                   <span className="font-medium text-gray-600 dark:text-gray-300 block mb-1">Expected</span>
-                                  <div className="bg-white/60 dark:bg-gray-800 border border-white/40 dark:border-gray-700 rounded p-2 font-mono">
+                                  <div className="bg-white/60 dark:bg-gray-800 border border-white/40 dark:border-gray-700 rounded p-2 font-mono break-words whitespace-pre-wrap">
                                     {test.hidden ? 'Hidden' : (test.expectedOutput || '—')}
                                   </div>
                                 </div>
                                 <div>
                                   <span className="font-medium text-gray-600 dark:text-gray-300 block mb-1">Actual</span>
-                                  <div className="bg-white/60 dark:bg-gray-800 border border-white/40 dark:border-gray-700 rounded p-2 font-mono">
+                                  <div className="bg-white/60 dark:bg-gray-800 border border-white/40 dark:border-gray-700 rounded p-2 font-mono break-words whitespace-pre-wrap">
                                     {test.actualOutput || (test.error ? 'Error' : '—')}
                                   </div>
                                 </div>
@@ -1016,7 +1014,7 @@ const ProblemDetail = ({ user }) => {
                               {test.error && (
                                 <div className="mt-2">
                                   <span className="font-medium text-gray-600 dark:text-gray-300 block mb-1">Error</span>
-                                  <pre className="bg-white/60 dark:bg-gray-900 border border-white/40 dark:border-gray-600 rounded p-2 font-mono whitespace-pre-wrap">
+                                  <pre className="bg-white/60 dark:bg-gray-900 border border-white/40 dark:border-gray-600 rounded p-2 font-mono whitespace-pre-wrap text-xs sm:text-sm leading-snug break-words">
                                     {test.error}
                                   </pre>
                                 </div>
