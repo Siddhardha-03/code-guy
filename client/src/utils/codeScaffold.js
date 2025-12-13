@@ -497,7 +497,6 @@ export const generateCodeTemplate = (problem, language, testCases = []) => {
   const problemTitle = problem?.title || 'Solution';
   const storedFunctionName = typeof problem?.function_name === 'string' ? problem.function_name.trim() : '';
   const functionName = storedFunctionName || sanitizeFunctionName(problemTitle);
-  const langKey = language === 'python' ? 'py' : language === 'javascript' ? 'js' : language === 'typescript' ? 'ts' : language === 'c++' ? 'cpp' : language;
   
   const javaFallbackTypes = getJavaFallbackTypes(problem?.question_type);
   const javaTypesFromTests = getJavaTypeFromTestCases(testCases, javaFallbackTypes);

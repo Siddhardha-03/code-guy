@@ -43,8 +43,6 @@ const ProblemDetail = ({ user }) => {
   const [executing, setExecuting] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [showOutputModal, setShowOutputModal] = useState(false);
-  const [showScaffoldModal, setShowScaffoldModal] = useState(false);
-  const [scaffoldText, setScaffoldText] = useState('');
   
   // UI state
   const [loading, setLoading] = useState(true);
@@ -114,34 +112,6 @@ const ProblemDetail = ({ user }) => {
     }).join('\n\n');
   }, []);
 
-  const fetchScaffolds = useCallback(async () => {
-    try {
-      if (!id) return;
-      if (!user || user.role !== 'admin') {
-        setScaffoldText('This feature is only available for admins.');
-        setShowScaffoldModal(true);
-        return;
-      }
-      const resp = await axios.get(`/api/admin/questions/${id}/scaffold`, {
-        headers: {
-          Authorization: `Bearer ${await user.getIdToken()}`
-        }
-      });
-      const data = resp?.data?.data || {};
-      const parts = [];
-      if (data.java) parts.push(`Java\n\n${data.java}`);
-      if (data.python) parts.push(`Python\n\n${data.python}`);
-      if (data.javascript) parts.push(`JavaScript\n\n${data.javascript}`);
-      if (data.cpp) parts.push(`C++\n\n${data.cpp}`);
-      const text = parts.join('\n\n----------------------------------------\n\n');
-      setScaffoldText(text || 'No scaffold available');
-      setShowScaffoldModal(true);
-    } catch (err) {
-      setScaffoldText(`Failed to fetch scaffold: ${err?.response?.data?.message || err.message}`);
-      setShowScaffoldModal(true);
-    }
-  }, [id, user]);
-
   // Build preview items: always show up to three, but include the first failing/error case even if later.
   const previewItems = useMemo(() => {
     const total = Math.min(3, Math.max(testResults.length || 0, testCases.length || 0, 3));
@@ -162,18 +132,6 @@ const ProblemDetail = ({ user }) => {
 
     return items;
   }, [testCases, testResults]);
-
-  const renderScaffoldButton = () => (
-    <div className="mt-3">
-      <button
-        type="button"
-        onClick={fetchScaffolds}
-        className="px-3 py-2 rounded bg-indigo-600 text-white hover:bg-indigo-700 text-sm"
-      >
-        Generate Scaffold (Java/Python/JS/C++)
-      </button>
-    </div>
-  );
 
   // Track viewport to tailor mobile-specific UI (e.g., test cases tab)
   useEffect(() => {
@@ -218,7 +176,7 @@ const ProblemDetail = ({ user }) => {
     } finally {
       isInitializingRef.current = false;
     }
-  }, [user, id]);
+  }, [id]);
 
   // Fetch user submissions for this problem
   /**
@@ -622,17 +580,6 @@ const ProblemDetail = ({ user }) => {
                     <div className="prose prose-sm max-w-none">
                       <div dangerouslySetInnerHTML={{ __html: problem?.description || 'Loading problem description...' }} />
                     </div>
-                    {user?.role === 'admin' && (
-                      <div className="mt-3">
-                        <button
-                          type="button"
-                          onClick={fetchScaffolds}
-                          className="px-3 py-2 rounded bg-indigo-600 text-white hover:bg-indigo-700 text-sm"
-                        >
-                          Generate Scaffold (Java/Python/JS/C++)
-                        </button>
-                      </div>
-                    )}
                   </div>
               
               {/* Examples */}
@@ -1105,17 +1052,6 @@ const ProblemDetail = ({ user }) => {
         testResults={testResults}
         rawOutput={output}
         executing={executing || submitting}
-      />
-
-      {/* Scaffold Modal */}
-      <OutputModal
-        open={showScaffoldModal}
-        onClose={() => setShowScaffoldModal(false)}
-        mode={'scaffold'}
-        status={'Scaffolds'}
-        summary={scaffoldText}
-        rawOutput={scaffoldText}
-        executing={false}
       />
 
       {/* Solution Video Modal */}
