@@ -331,6 +331,9 @@ const QuestionsManagement = () => {
   const [showVideoModal, setShowVideoModal] = useState(false);
   const [showTestCasesModal, setShowTestCasesModal] = useState(false);
   const [selectedQuestion, setSelectedQuestion] = useState(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [difficultyFilter, setDifficultyFilter] = useState('all');
+  const [typeFilter, setTypeFilter] = useState('all');
 
   useEffect(() => {
     fetchQuestions();
@@ -405,6 +408,27 @@ const QuestionsManagement = () => {
     setEditingQuestion(null);
   };
 
+  // Filter questions based on search and filters
+  const filteredQuestions = questions.filter(question => {
+    // Search filter (title, tags, ID)
+    const searchLower = searchQuery.toLowerCase();
+    const matchesSearch = !searchQuery || 
+      question.title.toLowerCase().includes(searchLower) ||
+      question.id.toString().includes(searchQuery) ||
+      (question.tags && Array.isArray(question.tags) && 
+        question.tags.some(tag => tag.toLowerCase().includes(searchLower)));
+
+    // Difficulty filter
+    const matchesDifficulty = difficultyFilter === 'all' || 
+      question.difficulty === difficultyFilter;
+
+    // Type filter
+    const matchesType = typeFilter === 'all' || 
+      question.question_type === typeFilter;
+
+    return matchesSearch && matchesDifficulty && matchesType;
+  });
+
   if (loading) {
     return (
       <div className="flex justify-center py-8">
@@ -416,7 +440,9 @@ const QuestionsManagement = () => {
   return (
     <div>
       <div className="flex justify-between items-center mb-8">
-        <h2 className="text-3xl font-bold bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent">Questions Management ({questions.length})</h2>
+        <h2 className="text-3xl font-bold bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent">
+          Questions Management ({filteredQuestions.length}/{questions.length})
+        </h2>
           <div className="flex gap-3">
             <button 
               onClick={() => setShowBulkUpload(true)}
@@ -439,6 +465,134 @@ const QuestionsManagement = () => {
               Delete All
             </button>
           </div>
+      </div>
+
+      {/* Search and Filter Section */}
+      <div className="mb-6 card p-6 border-2 border-blue-200 dark:border-blue-700">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {/* Search Input */}
+          <div className="md:col-span-1">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Search Questions
+            </label>
+            <div className="relative">
+              <input
+                type="text"
+                placeholder="Search by title, ID, or tags..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full px-4 py-2 pl-10 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-white"
+              />
+              <svg 
+                className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400"
+                fill="none" 
+                stroke="currentColor" 
+                viewBox="0 0 24 24"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </div>
+          </div>
+
+          {/* Difficulty Filter */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Difficulty Level
+            </label>
+            <select
+              value={difficultyFilter}
+              onChange={(e) => setDifficultyFilter(e.target.value)}
+              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-white"
+            >
+              <option value="all">All Difficulties</option>
+              <option value="Easy">Easy</option>
+              <option value="Medium">Medium</option>
+              <option value="Hard">Hard</option>
+            </select>
+          </div>
+
+          {/* Type Filter */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Question Type
+            </label>
+            <select
+              value={typeFilter}
+              onChange={(e) => setTypeFilter(e.target.value)}
+              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-white"
+            >
+              <option value="all">All Types</option>
+              <option value="Array">Array</option>
+              <option value="String">String</option>
+              <option value="Linked List">Linked List</option>
+              <option value="Binary Tree">Binary Tree</option>
+              <option value="Binary Search Tree">Binary Search Tree</option>
+              <option value="Graph">Graph</option>
+              <option value="Dynamic Programming">Dynamic Programming</option>
+              <option value="Greedy">Greedy</option>
+              <option value="Backtracking">Backtracking</option>
+              <option value="Heap">Heap</option>
+              <option value="Trie">Trie</option>
+              <option value="Hash Table">Hash Table</option>
+              <option value="Stack">Stack</option>
+              <option value="Queue">Queue</option>
+              <option value="Math">Math</option>
+              <option value="Bit Manipulation">Bit Manipulation</option>
+              <option value="Design">Design</option>
+              <option value="Sorting">Sorting</option>
+              <option value="Searching">Searching</option>
+              <option value="Recursion">Recursion</option>
+            </select>
+          </div>
+        </div>
+
+        {/* Active Filters Display */}
+        {(searchQuery || difficultyFilter !== 'all' || typeFilter !== 'all') && (
+          <div className="mt-4 flex flex-wrap items-center gap-2">
+            <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Active Filters:</span>
+            {searchQuery && (
+              <span className="px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 rounded-full text-sm flex items-center gap-2">
+                Search: "{searchQuery}"
+                <button onClick={() => setSearchQuery('')} className="hover:text-blue-900 dark:hover:text-blue-100">
+                  ×
+                </button>
+              </span>
+            )}
+            {difficultyFilter !== 'all' && (
+              <span className="px-3 py-1 bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 rounded-full text-sm flex items-center gap-2">
+                Difficulty: {difficultyFilter}
+                <button onClick={() => setDifficultyFilter('all')} className="hover:text-green-900 dark:hover:text-green-100">
+                  ×
+                </button>
+              </span>
+            )}
+            {typeFilter !== 'all' && (
+              <span className="px-3 py-1 bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-300 rounded-full text-sm flex items-center gap-2">
+                Type: {typeFilter}
+                <button onClick={() => setTypeFilter('all')} className="hover:text-purple-900 dark:hover:text-purple-100">
+                  ×
+                </button>
+              </span>
+            )}
+            <button
+              onClick={() => {
+                setSearchQuery('');
+                setDifficultyFilter('all');
+                setTypeFilter('all');
+              }}
+              className="text-sm text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 font-medium"
+            >
+              Clear All
+            </button>
+          </div>
+        )}
+
+        {/* Results Count */}
+        {filteredQuestions.length === 0 && questions.length > 0 && (
+          <div className="mt-4 text-center text-gray-500 dark:text-gray-400">
+            No questions match your filters. Try adjusting your search criteria.
+          </div>
+        )}
       </div>
       
       {error && (
@@ -467,10 +621,18 @@ const QuestionsManagement = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-              {questions.map((question) => (
-                <tr key={question.id} className="transition-colors">
+              {filteredQuestions.length === 0 ? (
+                <tr>
+                  <td colSpan="4" className="px-6 py-8 text-center text-gray-500 dark:text-gray-400">
+                    {questions.length === 0 ? 'No questions available.' : 'No questions match your filters.'}
+                  </td>
+                </tr>
+              ) : (
+                filteredQuestions.map((question) => (
+                <tr key={question.id} className="transition-colors hover:bg-gray-50 dark:hover:bg-gray-800/50">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm font-semibold text-gray-900 dark:text-gray-100">{question.title}</div>
+                    <div className="text-xs text-gray-500 dark:text-gray-400">ID: {question.id}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span className={`px-3 py-1 inline-flex text-xs leading-5 font-bold rounded-full bg-transparent border-2
@@ -525,7 +687,8 @@ const QuestionsManagement = () => {
                     </div>
                   </td>
                 </tr>
-              ))}
+              ))
+              )}
             </tbody>
           </table>
         </div>
