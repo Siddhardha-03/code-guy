@@ -20,16 +20,19 @@ function parseExcelFile(buffer) {
 function validateQuestionRow(row, rowIndex) {
   const errors = [];
   
-  // Required fields
-  if (!row.title || !row.title.trim()) {
+  // Required fields - convert to string first
+  const title = String(row.title || '').trim();
+  if (!title) {
     errors.push(`Row ${rowIndex}: Title is required`);
   }
   
-  if (!row.description || !row.description.trim()) {
+  const description = String(row.description || '').trim();
+  if (!description) {
     errors.push(`Row ${rowIndex}: Description is required`);
   }
   
-  if (!row.difficulty || !['Easy', 'Medium', 'Hard'].includes(row.difficulty)) {
+  const difficulty = String(row.difficulty || '').trim();
+  if (!difficulty || !['Easy', 'Medium', 'Hard'].includes(difficulty)) {
     errors.push(`Row ${rowIndex}: Difficulty must be Easy, Medium, or Hard`);
   }
   
@@ -39,22 +42,19 @@ function validateQuestionRow(row, rowIndex) {
   const testCaseHidden = [];
   
   for (let i = 1; i <= 10; i++) {
-    if (row[`testcase_${i}_input`]) {
-      testCaseInputs.push(row[`testcase_${i}_input`]);
-      testCaseOutputs.push(row[`testcase_${i}_output`] || '');
+    const input = String(row[`testcase_${i}_input`] || '').trim();
+    const output = String(row[`testcase_${i}_output`] || '').trim();
+    
+    // Only add test case if BOTH input and output exist
+    if (input && output) {
+      testCaseInputs.push(input);
+      testCaseOutputs.push(output);
       testCaseHidden.push(row[`testcase_${i}_hidden`] === 'true' || row[`testcase_${i}_hidden`] === true || row[`testcase_${i}_hidden`] === 1);
     }
   }
   
   if (testCaseInputs.length === 0) {
     errors.push(`Row ${rowIndex}: At least one test case is required`);
-  }
-  
-  // Check for matching outputs
-  for (let i = 0; i < testCaseInputs.length; i++) {
-    if (!testCaseOutputs[i] || !testCaseOutputs[i].trim()) {
-      errors.push(`Row ${rowIndex}: Test case ${i + 1} is missing expected output`);
-    }
   }
   
   return {
@@ -72,17 +72,17 @@ function validateQuestionRow(row, rowIndex) {
  * Transform row data into question object
  */
 function transformRowToQuestion(row) {
-  // Parse tags
+  // Parse tags - ensure string conversion
   let tags = { tags: [] };
   if (row.tags) {
-    const tagList = row.tags.split(',').map(t => t.trim()).filter(t => t);
+    const tagList = String(row.tags).split(',').map(t => String(t).trim()).filter(t => t);
     tags = { tags: tagList };
   }
   
-  // Parse languages
+  // Parse languages - ensure string conversion
   let languages = { languages: ['javascript', 'python', 'java', 'cpp'] };
   if (row.languages) {
-    const langList = row.languages.split(',').map(l => l.trim()).filter(l => l);
+    const langList = String(row.languages).split(',').map(l => String(l).trim()).filter(l => l);
     languages = { languages: langList };
   }
   
@@ -90,7 +90,8 @@ function transformRowToQuestion(row) {
   let parameterSchema = { params: [], returnType: '' };
   if (row.parameter_schema) {
     try {
-      parameterSchema = JSON.parse(row.parameter_schema);
+      const schemaStr = typeof row.parameter_schema === 'string' ? row.parameter_schema : String(row.parameter_schema);
+      parameterSchema = JSON.parse(schemaStr);
     } catch (e) {
       // Use default if parsing fails
     }
@@ -100,27 +101,28 @@ function transformRowToQuestion(row) {
   let examples = [];
   if (row.examples) {
     try {
-      examples = JSON.parse(row.examples);
+      const examplesStr = typeof row.examples === 'string' ? row.examples : String(row.examples);
+      examples = JSON.parse(examplesStr);
     } catch (e) {
       // Use empty array if parsing fails
     }
   }
   
   return {
-    title: row.title.trim(),
-    function_name: row.function_name?.trim() || '',
-    description: row.description.trim(),
-    difficulty: row.difficulty,
-    question_type: row.question_type?.trim() || '',
+    title: String(row.title || '').trim(),
+    function_name: String(row.function_name || '').trim(),
+    description: String(row.description || '').trim(),
+    difficulty: String(row.difficulty || '').trim(),
+    question_type: String(row.question_type || '').trim(),
     tags,
     language_supported: languages,
     parameter_schema: parameterSchema,
     examples,
-    leetcode_url: row.leetcode_url?.trim() || '',
-    geeksforgeeks_url: row.geeksforgeeks_url?.trim() || '',
-    other_platform_url: row.other_platform_url?.trim() || '',
-    other_platform_name: row.other_platform_name?.trim() || '',
-    solution_video_url: row.solution_video_url?.trim() || ''
+    leetcode_url: String(row.leetcode_url || '').trim(),
+    geeksforgeeks_url: String(row.geeksforgeeks_url || '').trim(),
+    other_platform_url: String(row.other_platform_url || '').trim(),
+    other_platform_name: String(row.other_platform_name || '').trim(),
+    solution_video_url: String(row.solution_video_url || '').trim()
   };
 }
 
@@ -171,7 +173,12 @@ async function bulkInsertQuestions(db, questions, testCasesMap) {
         for (const testCase of testCases) {
           await connection.execute(
             'INSERT INTO test_cases (question_id, input, expected_output, hidden) VALUES (?, ?, ?, ?)',
-            [questionId, testCase.input, testCase.expected_output, testCase.hidden ? 1 : 0]
+            [
+              questionId,
+              String(testCase.input || ''),
+              String(testCase.expected_output || ''),
+              testCase.hidden ? 1 : 0
+            ]
           );
         }
         

@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { verifyFirebaseToken, isAdmin } = require('../middlewares/authFirebase');
+const { generateScaffolds } = require('../utils/scaffoldGenerator');
 
 /**
  * @route   GET /api/questions

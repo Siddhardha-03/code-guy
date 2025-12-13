@@ -1,0 +1,6308 @@
+1. Two Sum
+URL: https://leetcode.com/problems/two-sum/
+
+Tags: Array, Hash Table
+
+Difficulty: Easy
+
+Description: Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.
+
+Parameters:
+
+nums: List[int]
+
+target: int
+
+Return Type: List[int]
+
+Test Cases:
+
+Input: nums = [2,7,11,15], target = 9 -> Output: [0,1]
+
+Input: nums = [3,2,4], target = 6 -> Output: [1,2]
+
+Input: nums = [3,3], target = 6 -> Output: [0,1]
+
+2. Best Time to Buy and Sell Stock
+URL: https://leetcode.com/problems/best-time-to-buy-and-sell-stock/
+
+Tags: Array, Dynamic Programming
+
+Difficulty: Easy
+
+Description: You are given an array prices where prices[i] is the price of a given stock on the ith day. Maximize profit by buying one day and selling another later.
+
+Parameters:
+
+prices: List[int]
+
+Return Type: int
+
+Test Cases:
+
+Input: prices = [7,1,5,3,6,4] -> Output: 5
+
+Input: prices = [7,6,4,3,1] -> Output: 0
+
+Input: prices = [2,4,1] -> Output: 2
+
+3. Contains Duplicate
+URL: https://leetcode.com/problems/contains-duplicate/
+
+Tags: Array, Hash Table
+
+Difficulty: Easy
+
+Description: Given an integer array nums, return true if any value appears at least twice in the array, and false if every element is distinct.
+
+Parameters:
+
+nums: List[int]
+
+Return Type: bool
+
+Test Cases:
+
+Input: nums = [1,2,3,1] -> Output: true
+
+Input: nums = [1,2,3,4] -> Output: false
+
+Input: nums = [1,1,1,3,3,4,3,2,4,2] -> Output: true
+
+4. Product of Array Except Self
+URL: https://leetcode.com/problems/product-of-array-except-self/
+
+Tags: Array, Prefix Sum
+
+Difficulty: Medium
+
+Description: Given an integer array nums, return an array such that each element at index i is the product of all the elements of nums except nums[i].
+
+Parameters:
+
+nums: List[int]
+
+Return Type: List[int]
+
+Test Cases:
+
+Input: nums = [1,2,3,4] -> Output: [24,12,8,6]
+
+Input: nums = [-1,1,0,-3,3] -> Output: [0,0,9,0,0]
+
+Input: nums = [0,0] -> Output: [0,0]
+
+5. Maximum Subarray
+URL: https://leetcode.com/problems/maximum-subarray/
+
+Tags: Array, Divide and Conquer, Dynamic Programming
+
+Difficulty: Medium
+
+Description: Given an integer array nums, find the contiguous subarray (containing at least one number) which has the largest sum and return its sum.
+
+Parameters:
+
+nums: List[int]
+
+Return Type: int
+
+Test Cases:
+
+Input: nums = [-2,1,-3,4,-1,2,1,-5,4] -> Output: 6
+
+Input: nums = [1] -> Output: 1
+
+Input: nums = [5,4,-1,7,8] -> Output: 23
+
+6. Maximum Product Subarray
+URL: https://leetcode.com/problems/maximum-product-subarray/
+
+Tags: Array, Dynamic Programming
+
+Difficulty: Medium
+
+Description: Given an integer array nums, find a contiguous non-empty subarray within the array that has the largest product, and return the product.
+
+Parameters:
+
+nums: List[int]
+
+Return Type: int
+
+Test Cases:
+
+Input: nums = [2,3,-2,4] -> Output: 6
+
+Input: nums = [-2,0,-1] -> Output: 0
+
+Input: nums = [-2,3,-4] -> Output: 24
+
+7. Find Minimum in Rotated Sorted Array
+URL: https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/
+
+Tags: Array, Binary Search
+
+Difficulty: Medium
+
+Description: Given the sorted rotated array of unique elements, return the minimum element of this array.
+
+Parameters:
+
+nums: List[int]
+
+Return Type: int
+
+Test Cases:
+
+Input: nums = [3,4,5,1,2] -> Output: 1
+
+Input: nums = [4,5,6,7,0,1,2] -> Output: 0
+
+Input: nums = [11,13,15,17] -> Output: 11
+
+8. Search in Rotated Sorted Array
+URL: https://leetcode.com/problems/search-in-rotated-sorted-array/
+
+Tags: Array, Binary Search
+
+Difficulty: Medium
+
+Description: Given the array nums after the rotation and an integer target, return the index of target if it is in nums, or -1 if it is not in nums.
+
+Parameters:
+
+nums: List[int]
+
+target: int
+
+Return Type: int
+
+Test Cases:
+
+Input: nums = [4,5,6,7,0,1,2], target = 0 -> Output: 4
+
+Input: nums = [4,5,6,7,0,1,2], target = 3 -> Output: -1
+
+Input: nums = [1], target = 0 -> Output: -1
+
+9. 3Sum
+URL: https://leetcode.com/problems/3sum/
+
+Tags: Array, Two Pointers, Sorting
+
+Difficulty: Medium
+
+Description: Given an integer array nums, return all the triplets [nums[i], nums[j], nums[k]] such that i != j, i != k, j != k, and nums[i] + nums[j] + nums[k] == 0.
+
+Parameters:
+
+nums: List[int]
+
+Return Type: List[List[int]]
+
+Test Cases:
+
+Input: nums = [-1,0,1,2,-1,-4] -> Output: [[-1,-1,2],[-1,0,1]]
+
+Input: nums = [0,1,1] -> Output: []
+
+Input: nums = [0,0,0] -> Output: [[0,0,0]]
+
+10. Container With Most Water
+URL: https://leetcode.com/problems/container-with-most-water/
+
+Tags: Array, Two Pointers, Greedy
+
+Difficulty: Medium
+
+Description: Find two lines that together with the x-axis form a container, such that the container contains the most water.
+
+Parameters:
+
+height: List[int]
+
+Return Type: int
+
+Test Cases:
+
+Input: height = [1,8,6,2,5,4,8,3,7] -> Output: 49
+
+Input: height = [1,1] -> Output: 1
+
+Input: height = [4,3,2,1,4] -> Output: 16
+
+11. Sliding Window Maximum
+URL: https://leetcode.com/problems/sliding-window-maximum/
+
+Tags: Array, Sliding Window, Heap
+
+Difficulty: Hard
+
+Description: Return the max sliding window of size k moving from left to right.
+
+Parameters:
+
+nums: List[int]
+
+k: int
+
+Return Type: List[int]
+
+Test Cases:
+
+Input: nums = [1,3,-1,-3,5,3,6,7], k = 3 -> Output: [3,3,5,5,6,7]
+
+Input: nums = [1], k = 1 -> Output: [1]
+
+Input: nums = [9,11], k = 2 -> Output: [11]
+
+12. Minimum Window Substring
+URL: https://leetcode.com/problems/minimum-window-substring/
+
+Tags: String, Sliding Window, Hash Table
+
+Difficulty: Hard
+
+Description: Return the minimum window substring of s such that every character in t (including duplicates) is included in the window.
+
+Parameters:
+
+s: str
+
+t: str
+
+Return Type: str
+
+Test Cases:
+
+Input: s = "ADOBECODEBANC", t = "ABC" -> Output: "BANC"
+
+Input: s = "a", t = "a" -> Output: "a"
+
+Input: s = "a", t = "aa" -> Output: ""
+
+13. Longest Substring Without Repeating Characters
+URL: https://leetcode.com/problems/longest-substring-without-repeating-characters/
+
+Tags: String, Sliding Window, Hash Table
+
+Difficulty: Medium
+
+Description: Given a string s, find the length of the longest substring without repeating characters.
+
+Parameters:
+
+s: str
+
+Return Type: int
+
+Test Cases:
+
+Input: s = "abcabcbb" -> Output: 3
+
+Input: s = "bbbbb" -> Output: 1
+
+Input: s = "pwwkew" -> Output: 3
+
+14. Longest Repeating Character Replacement
+URL: https://leetcode.com/problems/longest-repeating-character-replacement/
+
+Tags: String, Sliding Window
+
+Difficulty: Medium
+
+Description: You can replace at most k characters. Return the length of the longest substring containing the same letter you can get.
+
+Parameters:
+
+s: str
+
+k: int
+
+Return Type: int
+
+Test Cases:
+
+Input: s = "ABAB", k = 2 -> Output: 4
+
+Input: s = "AABABBA", k = 1 -> Output: 4
+
+Input: s = "ABCD", k = 0 -> Output: 1
+
+15. Valid Anagram
+URL: https://leetcode.com/problems/valid-anagram/
+
+Tags: String, Hash Table, Sorting
+
+Difficulty: Easy
+
+Description: Return true if t is an anagram of s, and false otherwise.
+
+Parameters:
+
+s: str
+
+t: str
+
+Return Type: bool
+
+Test Cases:
+
+Input: s = "anagram", t = "nagaram" -> Output: true
+
+Input: s = "rat", t = "car" -> Output: false
+
+Input: s = "a", t = "ab" -> Output: false
+
+16. Group Anagrams
+URL: https://leetcode.com/problems/group-anagrams/
+
+Tags: String, Hash Table, Sorting
+
+Difficulty: Medium
+
+Description: Given an array of strings strs, group the anagrams together.
+
+Parameters:
+
+strs: List[str]
+
+Return Type: List[List[str]]
+
+Test Cases:
+
+Input: strs = ["eat","tea","tan","ate","nat","bat"] -> Output: [["bat"],["nat","tan"],["ate","eat","tea"]]
+
+Input: strs = [""] -> Output: [[""]]
+
+Input: strs = ["a"] -> Output: [["a"]]
+
+17. Valid Parentheses
+URL: https://leetcode.com/problems/valid-parentheses/
+
+Tags: String, Stack
+
+Difficulty: Easy
+
+Description: Determine if the input string containing '(', ')', '{', '}', '[' and ']' is valid.
+
+Parameters:
+
+s: str
+
+Return Type: bool
+
+Test Cases:
+
+Input: s = "()" -> Output: true
+
+Input: s = "()[]{}" -> Output: true
+
+Input: s = "(]" -> Output: false
+
+18. Valid Palindrome
+URL: https://leetcode.com/problems/valid-palindrome/
+
+Tags: String, Two Pointers
+
+Difficulty: Easy
+
+Description: Given a string s, return true if it is a palindrome after removing non-alphanumeric characters and converting to lowercase.
+
+Parameters:
+
+s: str
+
+Return Type: bool
+
+Test Cases:
+
+Input: s = "A man, a plan, a canal: Panama" -> Output: true
+
+Input: s = "race a car" -> Output: false
+
+Input: s = " " -> Output: true
+
+19. Longest Palindromic Substring
+URL: https://leetcode.com/problems/longest-palindromic-substring/
+
+Tags: String, Dynamic Programming
+
+Difficulty: Medium
+
+Description: Given a string s, return the longest palindromic substring in s.
+
+Parameters:
+
+s: str
+
+Return Type: str
+
+Test Cases:
+
+Input: s = "babad" -> Output: "bab" (or "aba")
+
+Input: s = "cbbd" -> Output: "bb"
+
+Input: s = "a" -> Output: "a"
+
+20. Palindromic Substrings
+URL: https://leetcode.com/problems/palindromic-substrings/
+
+Tags: String, Dynamic Programming
+
+Difficulty: Medium
+
+Description: Given a string s, return the number of palindromic substrings in it.
+
+Parameters:
+
+s: str
+
+Return Type: int
+
+Test Cases:
+
+Input: s = "abc" -> Output: 3
+
+Input: s = "aaa" -> Output: 6
+
+Input: s = "abacaba" -> Output: 10
+
+
+
+
+
+21. Encode and Decode Strings
+URL: https://leetcode.com/problems/encode-and-decode-strings/ (Note: Often Premium on LeetCode; standard on LintCode)
+
+Tags: String, Array, Design
+
+Difficulty: Medium
+
+Description: Design an algorithm to encode a list of strings to a string. The encoded string is then sent over the network and is decoded back to the original list of strings.
+
+Parameters:
+
+strs: List[str] (for encode)
+
+s: str (for decode)
+
+Return Type: str (encode), List[str] (decode)
+
+Test Cases:
+
+Input: strs = ["lint","code","love","you"] -> Output: ["lint","code","love","you"]
+
+Input: strs = ["we", "say", ":", "yes"] -> Output: ["we", "say", ":", "yes"]
+
+Input: strs = [""] -> Output: [""]
+
+22. Top K Frequent Elements
+URL: https://leetcode.com/problems/top-k-frequent-elements/
+
+Tags: Array, Hash Table, Heap (Priority Queue), Sorting
+
+Difficulty: Medium
+
+Description: Given an integer array nums and an integer k, return the k most frequent elements.
+
+Parameters:
+
+nums: List[int]
+
+k: int
+
+Return Type: List[int]
+
+Test Cases:
+
+Input: nums = [1,1,1,2,2,3], k = 2 -> Output: [1,2]
+
+Input: nums = [1], k = 1 -> Output: [1]
+
+Input: nums = [4,1,-1,2,-1,2,3], k = 2 -> Output: [-1,2]
+
+23. Climbing Stairs
+URL: https://leetcode.com/problems/climbing-stairs/
+
+Tags: Dynamic Programming, Memoization
+
+Difficulty: Easy
+
+Description: You are climbing a staircase. It takes n steps to reach the top. Each time you can either climb 1 or 2 steps. In how many distinct ways can you climb to the top?
+
+Parameters:
+
+n: int
+
+Return Type: int
+
+Test Cases:
+
+Input: n = 2 -> Output: 2
+
+Input: n = 3 -> Output: 3
+
+Input: n = 45 -> Output: 1836311903
+
+24. Coin Change
+URL: https://leetcode.com/problems/coin-change/
+
+Tags: Dynamic Programming, Breadth-First Search
+
+Difficulty: Medium
+
+Description: Return the fewest number of coins that you need to make up the given amount. If that amount of money cannot be made up by any combination of the coins, return -1.
+
+Parameters:
+
+coins: List[int]
+
+amount: int
+
+Return Type: int
+
+Test Cases:
+
+Input: coins = [1,2,5], amount = 11 -> Output: 3
+
+Input: coins = [2], amount = 3 -> Output: -1
+
+Input: coins = [1], amount = 0 -> Output: 0
+
+25. Longest Increasing Subsequence
+URL: https://leetcode.com/problems/longest-increasing-subsequence/
+
+Tags: Array, Binary Search, Dynamic Programming
+
+Difficulty: Medium
+
+Description: Given an integer array nums, return the length of the longest strictly increasing subsequence.
+
+Parameters:
+
+nums: List[int]
+
+Return Type: int
+
+Test Cases:
+
+Input: nums = [10,9,2,5,3,7,101,18] -> Output: 4
+
+Input: nums = [0,1,0,3,2,3] -> Output: 4
+
+Input: nums = [7,7,7,7,7,7,7] -> Output: 1
+
+26. Longest Common Subsequence
+URL: https://leetcode.com/problems/longest-common-subsequence/
+
+Tags: String, Dynamic Programming
+
+Difficulty: Medium
+
+Description: Given two strings text1 and text2, return the length of their longest common subsequence. If there is no common subsequence, return 0.
+
+Parameters:
+
+text1: str
+
+text2: str
+
+Return Type: int
+
+Test Cases:
+
+Input: text1 = "abcde", text2 = "ace" -> Output: 3
+
+Input: text1 = "abc", text2 = "abc" -> Output: 3
+
+Input: text1 = "abc", text2 = "def" -> Output: 0
+
+27. Word Break
+URL: https://leetcode.com/problems/word-break/
+
+Tags: Hash Table, String, Dynamic Programming, Trie
+
+Difficulty: Medium
+
+Description: Given a string s and a dictionary of strings wordDict, return true if s can be segmented into a space-separated sequence of one or more dictionary words.
+
+Parameters:
+
+s: str
+
+wordDict: List[str]
+
+Return Type: bool
+
+Test Cases:
+
+Input: s = "leetcode", wordDict = ["leet","code"] -> Output: true
+
+Input: s = "applepenapple", wordDict = ["apple","pen"] -> Output: true
+
+Input: s = "catsandog", wordDict = ["cats","dog","sand","and","cat"] -> Output: false
+
+28. Combination Sum
+URL: https://leetcode.com/problems/combination-sum/
+
+Tags: Array, Backtracking
+
+Difficulty: Medium
+
+Description: Given an array of distinct integers candidates and a target integer target, return a list of all unique combinations of candidates where the chosen numbers sum to target.
+
+Parameters:
+
+candidates: List[int]
+
+target: int
+
+Return Type: List[List[int]]
+
+Test Cases:
+
+Input: candidates = [2,3,6,7], target = 7 -> Output: [[2,2,3],[7]]
+
+Input: candidates = [2,3,5], target = 8 -> Output: [[2,2,2,2],[2,3,3],[3,5]]
+
+Input: candidates = [2], target = 1 -> Output: []
+
+29. House Robber
+URL: https://leetcode.com/problems/house-robber/
+
+Tags: Array, Dynamic Programming
+
+Difficulty: Medium
+
+Description: You are a robber planning to rob houses along a street. No adjacent houses can be robbed. Return the max money you can rob.
+
+Parameters:
+
+nums: List[int]
+
+Return Type: int
+
+Test Cases:
+
+Input: nums = [1,2,3,1] -> Output: 4
+
+Input: nums = [2,7,9,3,1] -> Output: 12
+
+Input: nums = [0] -> Output: 0
+
+30. House Robber II
+URL: https://leetcode.com/problems/house-robber-ii/
+
+Tags: Array, Dynamic Programming
+
+Difficulty: Medium
+
+Description: Same as House Robber, but houses are arranged in a circle (first and last are adjacent).
+
+Parameters:
+
+nums: List[int]
+
+Return Type: int
+
+Test Cases:
+
+Input: nums = [2,3,2] -> Output: 3
+
+Input: nums = [1,2,3,1] -> Output: 4
+
+Input: nums = [1,2,3] -> Output: 3
+
+31. Decode Ways
+URL: https://leetcode.com/problems/decode-ways/
+
+Tags: String, Dynamic Programming
+
+Difficulty: Medium
+
+Description: Given a string s containing only digits, return the number of ways to decode it based on mapping 'A'->1, 'B'->2... 'Z'->26.
+
+Parameters:
+
+s: str
+
+Return Type: int
+
+Test Cases:
+
+Input: s = "12" -> Output: 2
+
+Input: s = "226" -> Output: 3
+
+Input: s = "06" -> Output: 0
+
+32. Unique Paths
+URL: https://leetcode.com/problems/unique-paths/
+
+Tags: Math, Dynamic Programming, Combinatorics
+
+Difficulty: Medium
+
+Description: There is a robot on an m x n grid. Return the number of possible unique paths from top-left to bottom-right moving only down or right.
+
+Parameters:
+
+m: int
+
+n: int
+
+Return Type: int
+
+Test Cases:
+
+Input: m = 3, n = 7 -> Output: 28
+
+Input: m = 3, n = 2 -> Output: 3
+
+Input: m = 1, n = 1 -> Output: 1
+
+33. Jump Game
+URL: https://leetcode.com/problems/jump-game/
+
+Tags: Array, Dynamic Programming, Greedy
+
+Difficulty: Medium
+
+Description: You are given an integer array nums. Each element represents your maximum jump length. Return true if you can reach the last index.
+
+Parameters:
+
+nums: List[int]
+
+Return Type: bool
+
+Test Cases:
+
+Input: nums = [2,3,1,1,4] -> Output: true
+
+Input: nums = [3,2,1,0,4] -> Output: false
+
+Input: nums = [0] -> Output: true
+
+34. Clone Graph
+URL: https://leetcode.com/problems/clone-graph/
+
+Tags: Hash Table, Depth-First Search, Breadth-First Search, Graph
+
+Difficulty: Medium
+
+Description: Return a deep copy (clone) of the graph.
+
+Parameters:
+
+node: Node (often represented as adjList: List[List[int]])
+
+Return Type: Node
+
+Test Cases:
+
+Input: adjList = [[2,4],[1,3],[2,4],[1,3]] -> Output: [[2,4],[1,3],[2,4],[1,3]] (Deep copy)
+
+Input: adjList = [[]] -> Output: [[]]
+
+Input: adjList = [] -> Output: []
+
+35. Course Schedule
+URL: https://leetcode.com/problems/course-schedule/
+
+Tags: Depth-First Search, Breadth-First Search, Graph, Topological Sort
+
+Difficulty: Medium
+
+Description: Return true if you can finish all courses given numCourses and prerequisites.
+
+Parameters:
+
+numCourses: int
+
+prerequisites: List[List[int]]
+
+Return Type: bool
+
+Test Cases:
+
+Input: numCourses = 2, prerequisites = [[1,0]] -> Output: true
+
+Input: numCourses = 2, prerequisites = [[1,0],[0,1]] -> Output: false
+
+Input: numCourses = 1, prerequisites = [] -> Output: true
+
+36. Pacific Atlantic Water Flow
+URL: https://leetcode.com/problems/pacific-atlantic-water-flow/
+
+Tags: Array, Depth-First Search, Breadth-First Search, Matrix
+
+Difficulty: Medium
+
+Description: Find the list of grid coordinates where water can flow to both the Pacific and Atlantic oceans.
+
+Parameters:
+
+heights: List[List[int]]
+
+Return Type: List[List[int]]
+
+Test Cases:
+
+Input: heights = [[1,2,2,3,5],[3,2,3,4,4],[2,4,5,3,1],[6,7,1,4,5],[5,1,1,2,4]] -> Output: [[0,4],[1,3],[1,4],[2,2],[3,0],[3,1],[4,0]]
+
+Input: heights = [[1]] -> Output: [[0,0]]
+
+Input: heights = [[2,1],[1,2]] -> Output: [[0,0],[0,1],[1,0],[1,1]]
+
+37. Number of Islands
+URL: https://leetcode.com/problems/number-of-islands/
+
+Tags: Array, Depth-First Search, Breadth-First Search, Union Find, Matrix
+
+Difficulty: Medium
+
+Description: Return the number of islands in a binary grid.
+
+Parameters:
+
+grid: List[List[str]]
+
+Return Type: int
+
+Test Cases:
+
+Input:
+
+grid = [
+  ["1","1","1","1","0"],
+  ["1","1","0","1","0"],
+  ["1","1","0","0","0"],
+  ["0","0","0","0","0"]
+]
+-> Output: 1
+
+Input:
+
+grid = [
+  ["1","1","0","0","0"],
+  ["1","1","0","0","0"],
+  ["0","0","1","0","0"],
+  ["0","0","0","1","1"]
+]
+-> Output: 3
+
+Input: grid = [["0"]] -> Output: 0
+
+38. Longest Consecutive Sequence
+URL: https://leetcode.com/problems/longest-consecutive-sequence/
+
+Tags: Array, Hash Table, Union Find
+
+Difficulty: Medium
+
+Description: Return the length of the longest consecutive elements sequence in an unsorted array. Algorithm must run in O(n).
+
+Parameters:
+
+nums: List[int]
+
+Return Type: int
+
+Test Cases:
+
+Input: nums = [100,4,200,1,3,2] -> Output: 4
+
+Input: nums = [0,3,7,2,5,8,4,6,0,1] -> Output: 9
+
+Input: nums = [] -> Output: 0
+
+39. Alien Dictionary
+URL: https://leetcode.com/problems/alien-dictionary/ (Premium)
+
+Tags: Array, String, Depth-First Search, Breadth-First Search, Graph, Topological Sort
+
+Difficulty: Hard
+
+Description: Given a list of strings words from the alien language's dictionary, determine the order of characters.
+
+Parameters:
+
+words: List[str]
+
+Return Type: str
+
+Test Cases:
+
+Input: words = ["wrt","wrf","er","ett","rftt"] -> Output: "wertf"
+
+Input: words = ["z","x"] -> Output: "zx"
+
+Input: words = ["z","x","z"] -> Output: ""
+
+40. Graph Valid Tree
+URL: https://leetcode.com/problems/graph-valid-tree/ (Premium)
+
+Tags: Depth-First Search, Breadth-First Search, Union Find, Graph
+
+Difficulty: Medium
+
+Description: Check whether given edges make up a valid tree (fully connected, no cycles).
+
+Parameters:
+
+n: int
+
+edges: List[List[int]]
+
+Return Type: bool
+
+Test Cases:
+
+Input: n = 5, edges = [[0,1],[0,2],[0,3],[1,4]] -> Output: true
+
+Input: n = 5, edges = [[0,1],[1,2],[2,3],[1,3],[1,4]] -> Output: false
+
+Input: n = 4, edges = [[0,1],[2,3]] -> Output: false
+
+
+
+Here is Batch 3 (Questions 41–60) from the Full 300-Question Set.
+
+Batch 3: Questions 41–60
+41. Number of Connected Components in an Undirected Graph
+URL: https://leetcode.com/problems/number-of-connected-components-in-an-undirected-graph/ (Premium)
+
+Tags: Depth-First Search, Breadth-First Search, Union Find, Graph
+
+Difficulty: Medium
+
+Description: You have a graph of n nodes. Return the number of connected components in the graph.
+
+Parameters:
+
+n: int
+
+edges: List[List[int]]
+
+Return Type: int
+
+Test Cases:
+
+Input: n = 5, edges = [[0,1],[1,2],[3,4]] -> Output: 2
+
+Input: n = 5, edges = [[0,1],[1,2],[2,3],[3,4]] -> Output: 1
+
+Input: n = 2, edges = [] -> Output: 2
+
+42. Insert Interval
+URL: https://leetcode.com/problems/insert-interval/
+
+Tags: Array
+
+Difficulty: Medium
+
+Description: Insert newInterval into intervals (sorted by start time) such that the result is still sorted and non-overlapping.
+
+Parameters:
+
+intervals: List[List[int]]
+
+newInterval: List[int]
+
+Return Type: List[List[int]]
+
+Test Cases:
+
+Input: intervals = [[1,3],[6,9]], newInterval = [2,5] -> Output: [[1,5],[6,9]]
+
+Input: intervals = [[1,2],[3,5],[6,7],[8,10],[12,16]], newInterval = [4,8] -> Output: [[1,2],[3,10],[12,16]]
+
+Input: intervals = [], newInterval = [5,7] -> Output: [[5,7]]
+
+43. Merge Intervals
+URL: https://leetcode.com/problems/merge-intervals/
+
+Tags: Array, Sorting
+
+Difficulty: Medium
+
+Description: Given an array of intervals, merge all overlapping intervals.
+
+Parameters:
+
+intervals: List[List[int]]
+
+Return Type: List[List[int]]
+
+Test Cases:
+
+Input: intervals = [[1,3],[2,6],[8,10],[15,18]] -> Output: [[1,6],[8,10],[15,18]]
+
+Input: intervals = [[1,4],[4,5]] -> Output: [[1,5]]
+
+Input: intervals = [[1,4],[0,4]] -> Output: [[0,4]]
+
+44. Non-overlapping Intervals
+URL: https://leetcode.com/problems/non-overlapping-intervals/
+
+Tags: Array, Dynamic Programming, Greedy, Sorting
+
+Difficulty: Medium
+
+Description: Return the minimum number of intervals you need to remove to make the rest of the intervals non-overlapping.
+
+Parameters:
+
+intervals: List[List[int]]
+
+Return Type: int
+
+Test Cases:
+
+Input: intervals = [[1,2],[2,3],[3,4],[1,3]] -> Output: 1
+
+Input: intervals = [[1,2],[1,2],[1,2]] -> Output: 2
+
+Input: intervals = [[1,2],[2,3]] -> Output: 0
+
+45. Meeting Rooms
+URL: https://leetcode.com/problems/meeting-rooms/ (Premium)
+
+Tags: Array, Sorting
+
+Difficulty: Easy
+
+Description: Determine if a person could attend all meetings.
+
+Parameters:
+
+intervals: List[List[int]]
+
+Return Type: bool
+
+Test Cases:
+
+Input: intervals = [[0,30],[5,10],[15,20]] -> Output: false
+
+Input: intervals = [[7,10],[2,4]] -> Output: true
+
+Input: intervals = [[1,2],[2,3]] -> Output: true
+
+46. Meeting Rooms II
+URL: https://leetcode.com/problems/meeting-rooms-ii/ (Premium)
+
+Tags: Array, Two Pointers, Greedy, Sorting, Heap
+
+Difficulty: Medium
+
+Description: Find the minimum number of conference rooms required.
+
+Parameters:
+
+intervals: List[List[int]]
+
+Return Type: int
+
+Test Cases:
+
+Input: intervals = [[0,30],[5,10],[15,20]] -> Output: 2
+
+Input: intervals = [[7,10],[2,4]] -> Output: 1
+
+Input: intervals = [[1,5],[8,9],[8,9]] -> Output: 2
+
+47. Reverse Linked List
+URL: https://leetcode.com/problems/reverse-linked-list/
+
+Tags: Linked List, Recursion
+
+Difficulty: Easy
+
+Description: Given the head of a singly linked list, reverse the list, and return the reversed list.
+
+Parameters:
+
+head: ListNode (Input often shown as array for convenience)
+
+Return Type: ListNode
+
+Test Cases:
+
+Input: head = [1,2,3,4,5] -> Output: [5,4,3,2,1]
+
+Input: head = [1,2] -> Output: [2,1]
+
+Input: head = [] -> Output: []
+
+48. Linked List Cycle
+URL: https://leetcode.com/problems/linked-list-cycle/
+
+Tags: Linked List, Two Pointers, Hash Table
+
+Difficulty: Easy
+
+Description: Determine if the linked list has a cycle in it.
+
+Parameters:
+
+head: ListNode
+
+Return Type: bool
+
+Test Cases:
+
+Input: head = [3,2,0,-4], pos = 1 -> Output: true
+
+Input: head = [1,2], pos = 0 -> Output: true
+
+Input: head = [1], pos = -1 -> Output: false
+
+49. Merge Two Sorted Lists
+URL: https://leetcode.com/problems/merge-two-sorted-lists/
+
+Tags: Linked List, Recursion
+
+Difficulty: Easy
+
+Description: Merge two sorted linked lists list1 and list2 into one sorted list.
+
+Parameters:
+
+list1: ListNode
+
+list2: ListNode
+
+Return Type: ListNode
+
+Test Cases:
+
+Input: list1 = [1,2,4], list2 = [1,3,4] -> Output: [1,1,2,3,4,4]
+
+Input: list1 = [], list2 = [] -> Output: []
+
+Input: list1 = [], list2 = [0] -> Output: [0]
+
+50. Merge k Sorted Lists
+URL: https://leetcode.com/problems/merge-k-sorted-lists/
+
+Tags: Linked List, Divide and Conquer, Heap, Merge Sort
+
+Difficulty: Hard
+
+Description: Merge k sorted linked lists into one sorted linked list and return it.
+
+Parameters:
+
+lists: List[ListNode]
+
+Return Type: ListNode
+
+Test Cases:
+
+Input: lists = [[1,4,5],[1,3,4],[2,6]] -> Output: [1,1,2,3,4,4,5,6]
+
+Input: lists = [] -> Output: []
+
+Input: lists = [[]] -> Output: []
+
+51. Remove Nth Node From End of List
+URL: https://leetcode.com/problems/remove-nth-node-from-end-of-list/
+
+Tags: Linked List, Two Pointers
+
+Difficulty: Medium
+
+Description: Remove the n-th node from the end of the list and return its head.
+
+Parameters:
+
+head: ListNode
+
+n: int
+
+Return Type: ListNode
+
+Test Cases:
+
+Input: head = [1,2,3,4,5], n = 2 -> Output: [1,2,3,5]
+
+Input: head = [1], n = 1 -> Output: []
+
+Input: head = [1,2], n = 1 -> Output: [1]
+
+52. Reorder List
+URL: https://leetcode.com/problems/reorder-list/
+
+Tags: Linked List, Two Pointers, Stack, Recursion
+
+Difficulty: Medium
+
+Description: Reorder the list to L0 -> Ln -> L1 -> Ln-1...
+
+Parameters:
+
+head: ListNode
+
+Return Type: None (Do not return anything, modify head in-place instead)
+
+Test Cases:
+
+Input: head = [1,2,3,4] -> Output: [1,4,2,3]
+
+Input: head = [1,2,3,4,5] -> Output: [1,5,2,4,3]
+
+Input: head = [1] -> Output: [1]
+
+53. Set Matrix Zeroes
+URL: https://leetcode.com/problems/set-matrix-zeroes/
+
+Tags: Array, Hash Table, Matrix
+
+Difficulty: Medium
+
+Description: If an element is 0, set its entire row and column to 0's. Do it in-place.
+
+Parameters:
+
+matrix: List[List[int]]
+
+Return Type: None
+
+Test Cases:
+
+Input: matrix = [[1,1,1],[1,0,1],[1,1,1]] -> Output: [[1,0,1],[0,0,0],[1,0,1]]
+
+Input: matrix = [[0,1,2,0],[3,4,5,2],[1,3,1,5]] -> Output: [[0,0,0,0],[0,4,5,0],[0,3,1,0]]
+
+Input: matrix = [[1]] -> Output: [[1]]
+
+54. Spiral Matrix
+URL: https://leetcode.com/problems/spiral-matrix/
+
+Tags: Array, Matrix, Simulation
+
+Difficulty: Medium
+
+Description: Return all elements of the matrix in spiral order.
+
+Parameters:
+
+matrix: List[List[int]]
+
+Return Type: List[int]
+
+Test Cases:
+
+Input: matrix = [[1,2,3],[4,5,6],[7,8,9]] -> Output: [1,2,3,6,9,8,7,4,5]
+
+Input: matrix = [[1,2,3,4],[5,6,7,8],[9,10,11,12]] -> Output: [1,2,3,4,8,12,11,10,9,5,6,7]
+
+Input: matrix = [[1]] -> Output: [1]
+
+55. Rotate Image
+URL: https://leetcode.com/problems/rotate-image/
+
+Tags: Array, Math, Matrix
+
+Difficulty: Medium
+
+Description: Rotate the image by 90 degrees (clockwise) in-place.
+
+Parameters:
+
+matrix: List[List[int]]
+
+Return Type: None
+
+Test Cases:
+
+Input: matrix = [[1,2,3],[4,5,6],[7,8,9]] -> Output: [[7,4,1],[8,5,2],[9,6,3]]
+
+Input: matrix = [[5,1,9,11],[2,4,8,10],[13,3,6,7],[15,14,12,16]] -> Output: [[15,13,2,5],[14,3,4,1],[12,6,8,9],[16,7,10,11]]
+
+Input: matrix = [[1]] -> Output: [[1]]
+
+56. Word Search
+URL: https://leetcode.com/problems/word-search/
+
+Tags: Array, Backtracking, Matrix
+
+Difficulty: Medium
+
+Description: Return true if word exists in the grid.
+
+Parameters:
+
+board: List[List[str]]
+
+word: str
+
+Return Type: bool
+
+Test Cases:
+
+Input: board = [["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]], word = "ABCCED" -> Output: true
+
+Input: board = [["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]], word = "SEE" -> Output: true
+
+Input: board = [["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]], word = "ABCB" -> Output: false
+
+57. Find Median from Data Stream
+URL: https://leetcode.com/problems/find-median-from-data-stream/
+
+Tags: Two Pointers, Design, Sorting, Heap, Data Stream
+
+Difficulty: Hard
+
+Description: Implement a class MedianFinder to add integers and find the median.
+
+Parameters:
+
+Class Methods: addNum(int), findMedian()
+
+Return Type: float (for findMedian)
+
+Test Cases:
+
+Input: [addNum(1), addNum(2), findMedian(), addNum(3), findMedian()] -> Output: [null, null, 1.5, null, 2.0]
+
+Input: [addNum(-1), findMedian()] -> Output: [null, -1.0]
+
+Input: [addNum(100), addNum(20), findMedian()] -> Output: [null, null, 60.0]
+
+58. Maximum Depth of Binary Tree
+URL: https://leetcode.com/problems/maximum-depth-of-binary-tree/
+
+Tags: Tree, Depth-First Search, Breadth-First Search, Binary Tree
+
+Difficulty: Easy
+
+Description: Return the maximum depth of a binary tree.
+
+Parameters:
+
+root: TreeNode
+
+Return Type: int
+
+Test Cases:
+
+Input: root = [3,9,20,null,null,15,7] -> Output: 3
+
+Input: root = [1,null,2] -> Output: 2
+
+Input: root = [] -> Output: 0
+
+59. Same Tree
+URL: https://leetcode.com/problems/same-tree/
+
+Tags: Tree, Depth-First Search, Breadth-First Search, Binary Tree
+
+Difficulty: Easy
+
+Description: Check if two binary trees are structurally identical and have the same node values.
+
+Parameters:
+
+p: TreeNode
+
+q: TreeNode
+
+Return Type: bool
+
+Test Cases:
+
+Input: p = [1,2,3], q = [1,2,3] -> Output: true
+
+Input: p = [1,2], q = [1,null,2] -> Output: false
+
+Input: p = [1,2,1], q = [1,1,2] -> Output: false
+
+60. Invert Binary Tree
+URL: https://leetcode.com/problems/invert-binary-tree/
+
+Tags: Tree, Depth-First Search, Breadth-First Search, Binary Tree
+
+Difficulty: Easy
+
+Description: Invert a binary tree (swap left and right children).
+
+Parameters:
+
+root: TreeNode
+
+Return Type: TreeNode
+
+Test Cases:
+
+Input: root = [4,2,7,1,3,6,9] -> Output: [4,7,2,9,6,3,1]
+
+Input: root = [2,1,3] -> Output: [2,3,1]
+
+Input: root = [] -> Output: []
+
+
+61. Binary Tree Maximum Path Sum
+URL: https://leetcode.com/problems/binary-tree-maximum-path-sum/
+
+Tags: Tree, Depth-First Search, Recursion, Dynamic Programming
+
+Difficulty: Hard
+
+Description: A path in a binary tree is a sequence of adjacent nodes. Given the root of a binary tree, return the maximum path sum of any non-empty path.
+
+Parameters:
+
+root: TreeNode
+
+Return Type: int
+
+Test Cases:
+
+Input: root = [1,2,3] -> Output: 6
+
+Input: root = [-10,9,20,null,null,15,7] -> Output: 42
+
+Input: root = [-3] -> Output: -3
+
+62. Binary Tree Level Order Traversal
+URL: https://leetcode.com/problems/binary-tree-level-order-traversal/
+
+Tags: Tree, Breadth-First Search
+
+Difficulty: Medium
+
+Description: Return the level order traversal of the nodes' values (from left to right, level by level).
+
+Parameters:
+
+root: TreeNode
+
+Return Type: List[List[int]]
+
+Test Cases:
+
+Input: root = [3,9,20,null,null,15,7] -> Output: [[3],[9,20],[15,7]]
+
+Input: root = [1] -> Output: [[1]]
+
+Input: root = [] -> Output: []
+
+63. Serialize and Deserialize Binary Tree
+URL: https://leetcode.com/problems/serialize-and-deserialize-binary-tree/
+
+Tags: Tree, Depth-First Search, Breadth-First Search, String, Design
+
+Difficulty: Hard
+
+Description: Design an algorithm to serialize a binary tree to a string and deserialize that string back to a binary tree.
+
+Parameters:
+
+root: TreeNode (for serialize)
+
+data: str (for deserialize)
+
+Return Type: str (serialize), TreeNode (deserialize)
+
+Test Cases:
+
+Input: root = [1,2,3,null,null,4,5] -> Output: [1,2,3,null,null,4,5] (after cycle)
+
+Input: root = [] -> Output: []
+
+Input: root = [1] -> Output: [1]
+
+64. Subtree of Another Tree
+URL: https://leetcode.com/problems/subtree-of-another-tree/
+
+Tags: Tree, Depth-First Search, String Matching, Hash Function
+
+Difficulty: Easy
+
+Description: Check if tree subRoot is a subtree of tree root.
+
+Parameters:
+
+root: TreeNode
+
+subRoot: TreeNode
+
+Return Type: bool
+
+Test Cases:
+
+Input: root = [3,4,5,1,2], subRoot = [4,1,2] -> Output: true
+
+Input: root = [3,4,5,1,2,null,null,null,null,0], subRoot = [4,1,2] -> Output: false
+
+Input: root = [1], subRoot = [1] -> Output: true
+
+65. Construct Binary Tree from Preorder and Inorder Traversal
+URL: https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/
+
+Tags: Tree, Array, Hash Table, Divide and Conquer
+
+Difficulty: Medium
+
+Description: Given preorder and inorder traversal arrays, construct and return the binary tree.
+
+Parameters:
+
+preorder: List[int]
+
+inorder: List[int]
+
+Return Type: TreeNode
+
+Test Cases:
+
+Input: preorder = [3,9,20,15,7], inorder = [9,3,15,20,7] -> Output: [3,9,20,null,null,15,7]
+
+Input: preorder = [-1], inorder = [-1] -> Output: [-1]
+
+Input: preorder = [1,2], inorder = [2,1] -> Output: [1,2]
+
+66. Validate Binary Search Tree
+URL: https://leetcode.com/problems/validate-binary-search-tree/
+
+Tags: Tree, Depth-First Search, Binary Search Tree
+
+Difficulty: Medium
+
+Description: Determine if a binary tree is a valid BST.
+
+Parameters:
+
+root: TreeNode
+
+Return Type: bool
+
+Test Cases:
+
+Input: root = [2,1,3] -> Output: true
+
+Input: root = [5,1,4,null,null,3,6] -> Output: false
+
+Input: root = [2,2,2] -> Output: false
+
+67. Kth Smallest Element in a BST
+URL: https://leetcode.com/problems/kth-smallest-element-in-a-bst/
+
+Tags: Tree, Depth-First Search, Binary Search Tree
+
+Difficulty: Medium
+
+Description: Return the kth smallest value (1-indexed) in a BST.
+
+Parameters:
+
+root: TreeNode
+
+k: int
+
+Return Type: int
+
+Test Cases:
+
+Input: root = [3,1,4,null,2], k = 1 -> Output: 1
+
+Input: root = [5,3,6,2,4,null,null,1], k = 3 -> Output: 3
+
+Input: root = [1], k = 1 -> Output: 1
+
+68. Lowest Common Ancestor of a BST
+URL: https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/
+
+Tags: Tree, Depth-First Search, Binary Search Tree
+
+Difficulty: Medium
+
+Description: Find the lowest common ancestor (LCA) node of two given nodes in a BST.
+
+Parameters:
+
+root: TreeNode
+
+p: TreeNode
+
+q: TreeNode
+
+Return Type: TreeNode
+
+Test Cases:
+
+Input: root = [6,2,8,0,4,7,9,null,null,3,5], p = 2, q = 8 -> Output: 6
+
+Input: root = [6,2,8...], p = 2, q = 4 -> Output: 2
+
+Input: root = [2,1], p = 2, q = 1 -> Output: 2
+
+69. Implement Trie (Prefix Tree)
+URL: https://leetcode.com/problems/implement-trie-prefix-tree/
+
+Tags: Design, Trie, Hash Table, String
+
+Difficulty: Medium
+
+Description: Implement a Trie with insert, search, and startsWith.
+
+Parameters:
+
+Class Methods: insert(str), search(str), startsWith(str)
+
+Return Type: void / bool
+
+Test Cases:
+
+Input: [insert("apple"), search("apple")] -> Output: [null, true]
+
+Input: [insert("apple"), search("app")] -> Output: [null, false]
+
+Input: [insert("apple"), startsWith("app")] -> Output: [null, true]
+
+70. Design Add and Search Words Data Structure
+URL: https://leetcode.com/problems/design-add-and-search-words-data-structure/
+
+Tags: Depth-First Search, Design, Trie, String
+
+Difficulty: Medium
+
+Description: Design a data structure that supports adding new words and searching (with '.' wildcard).
+
+Parameters:
+
+Class Methods: addWord(str), search(str)
+
+Return Type: void / bool
+
+Test Cases:
+
+Input: [addWord("bad"), search("bad")] -> Output: [null, true]
+
+Input: [addWord("bad"), search(".ad")] -> Output: [null, true]
+
+Input: [search("a")] -> Output: [false]
+
+71. Word Search II
+URL: https://leetcode.com/problems/word-search-ii/
+
+Tags: Array, String, Backtracking, Trie, Matrix
+
+Difficulty: Hard
+
+Description: Given an m x n board of characters and a list of strings words, return all words on the board.
+
+Parameters:
+
+board: List[List[str]]
+
+words: List[str]
+
+Return Type: List[str]
+
+Test Cases:
+
+Input: board = [["o","a","a","n"],["e","t","a","e"],["i","h","k","r"],["i","f","l","v"]], words = ["oath","pea","eat","rain"] -> Output: ["eat","oath"]
+
+Input: board = [["a","b"],["c","d"]], words = ["abcb"] -> Output: []
+
+Input: board = [["a"]], words = ["a"] -> Output: ["a"]
+
+72. Merge Sorted Array
+URL: https://leetcode.com/problems/merge-sorted-array/
+
+Tags: Array, Two Pointers, Sorting
+
+Difficulty: Easy
+
+Description: Merge nums2 into nums1 as one sorted array. nums1 has space for m + n elements.
+
+Parameters:
+
+nums1: List[int]
+
+m: int
+
+nums2: List[int]
+
+n: int
+
+Return Type: None
+
+Test Cases:
+
+Input: nums1 = [1,2,3,0,0,0], m = 3, nums2 = [2,5,6], n = 3 -> Output: [1,2,2,3,5,6]
+
+Input: nums1 = [1], m = 1, nums2 = [], n = 0 -> Output: [1]
+
+Input: nums1 = [0], m = 0, nums2 = [1], n = 1 -> Output: [1]
+
+73. Valid Palindrome II
+URL: https://leetcode.com/problems/valid-palindrome-ii/
+
+Tags: Two Pointers, String, Greedy
+
+Difficulty: Easy
+
+Description: Return true if s can be a palindrome after deleting at most one character.
+
+Parameters:
+
+s: str
+
+Return Type: bool
+
+Test Cases:
+
+Input: s = "aba" -> Output: true
+
+Input: s = "abca" -> Output: true
+
+Input: s = "abc" -> Output: false
+
+74. Diameter of Binary Tree
+URL: https://leetcode.com/problems/diameter-of-binary-tree/
+
+Tags: Tree, Depth-First Search, Binary Tree
+
+Difficulty: Easy
+
+Description: Return the length of the longest path between any two nodes in a tree.
+
+Parameters:
+
+root: TreeNode
+
+Return Type: int
+
+Test Cases:
+
+Input: root = [1,2,3,4,5] -> Output: 3
+
+Input: root = [1,2] -> Output: 1
+
+Input: root = [] -> Output: 0
+
+75. Add Two Numbers
+URL: https://leetcode.com/problems/add-two-numbers/
+
+Tags: Linked List, Math, Recursion
+
+Difficulty: Medium
+
+Description: Add two numbers represented by linked lists (digits in reverse order) and return the sum as a linked list.
+
+Parameters:
+
+l1: ListNode
+
+l2: ListNode
+
+Return Type: ListNode
+
+Test Cases:
+
+Input: l1 = [2,4,3], l2 = [5,6,4] -> Output: [7,0,8]
+
+Input: l1 = [0], l2 = [0] -> Output: [0]
+
+Input: l1 = [9,9,9,9,9,9,9], l2 = [9,9,9,9] -> Output: [8,9,9,9,0,0,0,1]
+
+76. Symmetric Tree
+URL: https://leetcode.com/problems/symmetric-tree/
+
+Tags: Tree, Depth-First Search, Breadth-First Search, Binary Tree
+
+Difficulty: Easy
+
+Description: Check whether a binary tree is a mirror of itself (symmetric around center).
+
+Parameters:
+
+root: TreeNode
+
+Return Type: bool
+
+Test Cases:
+
+Input: root = [1,2,2,3,4,4,3] -> Output: true
+
+Input: root = [1,2,2,null,3,null,3] -> Output: false
+
+Input: root = [1] -> Output: true
+
+77. Convert Sorted Array to Binary Search Tree
+URL: https://leetcode.com/problems/convert-sorted-array-to-binary-search-tree/
+
+Tags: Array, Divide and Conquer, Tree, Binary Search Tree
+
+Difficulty: Easy
+
+Description: Convert sorted array to a height-balanced BST.
+
+Parameters:
+
+nums: List[int]
+
+Return Type: TreeNode
+
+Test Cases:
+
+Input: nums = [-10,-3,0,5,9] -> Output: [0,-3,9,-10,null,5]
+
+Input: nums = [1,3] -> Output: [3,1]
+
+Input: nums = [] -> Output: []
+
+78. Balanced Binary Tree
+URL: https://leetcode.com/problems/balanced-binary-tree/
+
+Tags: Tree, Depth-First Search, Binary Tree
+
+Difficulty: Easy
+
+Description: Determine if a binary tree is height-balanced (depth of subtrees differ by no more than 1).
+
+Parameters:
+
+root: TreeNode
+
+Return Type: bool
+
+Test Cases:
+
+Input: root = [3,9,20,null,null,15,7] -> Output: true
+
+Input: root = [1,2,2,3,3,null,null,4,4] -> Output: false
+
+Input: root = [] -> Output: true
+
+79. Path Sum
+URL: https://leetcode.com/problems/path-sum/
+
+Tags: Tree, Depth-First Search, Breadth-First Search, Binary Tree
+
+Difficulty: Easy
+
+Description: Return true if the tree has a root-to-leaf path summing to targetSum.
+
+Parameters:
+
+root: TreeNode
+
+targetSum: int
+
+Return Type: bool
+
+Test Cases:
+
+Input: root = [5,4,8...], targetSum = 22 -> Output: true
+
+Input: root = [1,2,3], targetSum = 5 -> Output: false
+
+Input: root = [], targetSum = 0 -> Output: false
+
+80. Min Stack
+URL: https://leetcode.com/problems/min-stack/
+
+Tags: Stack, Design
+
+Difficulty: Medium
+
+Description: Design a stack that supports push, pop, top, and retrieving the minimum element in constant time.
+
+Parameters:
+
+Class Methods: push(int), pop(), top(), getMin()
+
+Return Type: void / int
+
+Test Cases:
+
+Input: [push(-2), push(0), push(-3), getMin()] -> Output: [null, null, null, -3]
+
+Input: [pop(), top(), getMin()] (after above) -> Output: [null, 0, -2]
+
+Input: [push(2147483647), getMin()] -> Output: [null, 2147483647]
+
+
+
+
+81. Evaluate Reverse Polish Notation
+URL: https://leetcode.com/problems/evaluate-reverse-polish-notation/
+
+Tags: Array, Math, Stack
+
+Difficulty: Medium
+
+Description: Evaluate the value of an arithmetic expression in Reverse Polish Notation. Valid operators are +, -, *, and /.
+
+Parameters:
+
+tokens: List[str]
+
+Return Type: int
+
+Test Cases:
+
+Input: tokens = ["2","1","+","3","*"] -> Output: 9
+
+Input: tokens = ["4","13","5","/","+"] -> Output: 6
+
+Input: tokens = ["10","6","9","3","+","-11","*","/","*","17","+","5","+"] -> Output: 22
+
+82. Daily Temperatures
+URL: https://leetcode.com/problems/daily-temperatures/
+
+Tags: Array, Stack, Monotonic Stack
+
+Difficulty: Medium
+
+Description: Given an array of integers temperatures, return an array answer such that answer[i] is the number of days you have to wait after the ith day to get a warmer temperature.
+
+Parameters:
+
+temperatures: List[int]
+
+Return Type: List[int]
+
+Test Cases:
+
+Input: temperatures = [73,74,75,71,69,72,76,73] -> Output: [1,1,4,2,1,1,0,0]
+
+Input: temperatures = [30,40,50,60] -> Output: [1,1,1,0]
+
+Input: temperatures = [30,60,90] -> Output: [1,1,0]
+
+83. Car Fleet
+URL: https://leetcode.com/problems/car-fleet/
+
+Tags: Array, Stack, Sorting, Monotonic Stack
+
+Difficulty: Medium
+
+Description: Calculate how many car fleets will arrive at the destination. A fleet is formed when a faster car catches up to a slower one.
+
+Parameters:
+
+target: int
+
+position: List[int]
+
+speed: List[int]
+
+Return Type: int
+
+Test Cases:
+
+Input: target = 12, position = [10,8,0,5,3], speed = [2,4,1,1,3] -> Output: 3
+
+Input: target = 10, position = [3], speed = [3] -> Output: 1
+
+Input: target = 100, position = [0,2,4], speed = [4,2,1] -> Output: 1
+
+84. Largest Rectangle in Histogram
+URL: https://leetcode.com/problems/largest-rectangle-in-histogram/
+
+Tags: Array, Stack, Monotonic Stack
+
+Difficulty: Hard
+
+Description: Given an array of integers heights representing the histogram's bar height where the width of each bar is 1, return the area of the largest rectangle in the histogram.
+
+Parameters:
+
+heights: List[int]
+
+Return Type: int
+
+Test Cases:
+
+Input: heights = [2,1,5,6,2,3] -> Output: 10
+
+Input: heights = [2,4] -> Output: 4
+
+Input: heights = [2,1,2] -> Output: 3
+
+85. Binary Search
+URL: https://leetcode.com/problems/binary-search/
+
+Tags: Array, Binary Search
+
+Difficulty: Easy
+
+Description: Given a sorted array nums and a target, write a function to search target in nums. Return index or -1.
+
+Parameters:
+
+nums: List[int]
+
+target: int
+
+Return Type: int
+
+Test Cases:
+
+Input: nums = [-1,0,3,5,9,12], target = 9 -> Output: 4
+
+Input: nums = [-1,0,3,5,9,12], target = 2 -> Output: -1
+
+Input: nums = [5], target = 5 -> Output: 0
+
+86. Search a 2D Matrix
+URL: https://leetcode.com/problems/search-a-2d-matrix/
+
+Tags: Array, Binary Search, Matrix
+
+Difficulty: Medium
+
+Description: Search for a value in an m x n matrix. Integers in each row are sorted left to right. The first integer of each row is greater than the last of the previous.
+
+Parameters:
+
+matrix: List[List[int]]
+
+target: int
+
+Return Type: bool
+
+Test Cases:
+
+Input: matrix = [[1,3,5,7],[10,11,16,20],[23,30,34,60]], target = 3 -> Output: true
+
+Input: matrix = [[1,3,5,7],[10,11,16,20],[23,30,34,60]], target = 13 -> Output: false
+
+Input: matrix = [[1]], target = 0 -> Output: false
+
+87. Koko Eating Bananas
+URL: https://leetcode.com/problems/koko-eating-bananas/
+
+Tags: Array, Binary Search
+
+Difficulty: Medium
+
+Description: Return the minimum integer k (eating speed) such that Koko can eat all the bananas within h hours.
+
+Parameters:
+
+piles: List[int]
+
+h: int
+
+Return Type: int
+
+Test Cases:
+
+Input: piles = [3,6,7,11], h = 8 -> Output: 4
+
+Input: piles = [30,11,23,4,20], h = 5 -> Output: 30
+
+Input: piles = [30,11,23,4,20], h = 6 -> Output: 23
+
+88. Find Minimum in Rotated Sorted Array II
+URL: https://leetcode.com/problems/find-minimum-in-rotated-sorted-array-ii/
+
+Tags: Array, Binary Search
+
+Difficulty: Hard
+
+Description: Suppose an array sorted in ascending order is rotated. It may contain duplicates. Return the minimum element.
+
+Parameters:
+
+nums: List[int]
+
+Return Type: int
+
+Test Cases:
+
+Input: nums = [1,3,5] -> Output: 1
+
+Input: nums = [2,2,2,0,1] -> Output: 0
+
+Input: nums = [2,2,2,2,2] -> Output: 2
+
+89. Time Based Key-Value Store
+URL: https://leetcode.com/problems/time-based-key-value-store/
+
+Tags: Hash Table, String, Binary Search, Design
+
+Difficulty: Medium
+
+Description: Design a data structure that can store multiple values for the same key at different time stamps and retrieve the key's value at a certain timestamp.
+
+Parameters:
+
+Class Methods: set(key: str, value: str, timestamp: int), get(key: str, timestamp: int)
+
+Return Type: void / str
+
+Test Cases:
+
+Input: [set("foo", "bar", 1), get("foo", 1)] -> Output: [null, "bar"]
+
+Input: [get("foo", 3)] (after above) -> Output: ["bar"]
+
+Input: [set("foo", "bar2", 4), get("foo", 4)] -> Output: [null, "bar2"]
+
+90. Median of Two Sorted Arrays
+URL: https://leetcode.com/problems/median-of-two-sorted-arrays/
+
+Tags: Array, Binary Search, Divide and Conquer
+
+Difficulty: Hard
+
+Description: Given two sorted arrays nums1 and nums2, return the median of the two sorted arrays. The overall run time complexity should be O(log (m+n)).
+
+Parameters:
+
+nums1: List[int]
+
+nums2: List[int]
+
+Return Type: float
+
+Test Cases:
+
+Input: nums1 = [1,3], nums2 = [2] -> Output: 2.00000
+
+Input: nums1 = [1,2], nums2 = [3,4] -> Output: 2.50000
+
+Input: nums1 = [], nums2 = [1] -> Output: 1.00000
+
+91. Permutation in String
+URL: https://leetcode.com/problems/permutation-in-string/
+
+Tags: Hash Table, Two Pointers, String, Sliding Window
+
+Difficulty: Medium
+
+Description: Given two strings s1 and s2, return true if s2 contains a permutation of s1.
+
+Parameters:
+
+s1: str
+
+s2: str
+
+Return Type: bool
+
+Test Cases:
+
+Input: s1 = "ab", s2 = "eidbaooo" -> Output: true
+
+Input: s1 = "ab", s2 = "eidboaoo" -> Output: false
+
+Input: s1 = "abc", s2 = "bbbca" -> Output: true
+
+92. Minimum Size Subarray Sum
+URL: https://leetcode.com/problems/minimum-size-subarray-sum/
+
+Tags: Array, Binary Search, Sliding Window, Prefix Sum
+
+Difficulty: Medium
+
+Description: Return the minimal length of a subarray whose sum is greater than or equal to target. If there is no such subarray, return 0.
+
+Parameters:
+
+target: int
+
+nums: List[int]
+
+Return Type: int
+
+Test Cases:
+
+Input: target = 7, nums = [2,3,1,2,4,3] -> Output: 2
+
+Input: target = 4, nums = [1,4,4] -> Output: 1
+
+Input: target = 11, nums = [1,1,1,1,1,1,1,1] -> Output: 0
+
+93. Subsets
+URL: https://leetcode.com/problems/subsets/
+
+Tags: Array, Backtracking, Bit Manipulation
+
+Difficulty: Medium
+
+Description: Given an integer array nums of unique elements, return all possible subsets (the power set).
+
+Parameters:
+
+nums: List[int]
+
+Return Type: List[List[int]]
+
+Test Cases:
+
+Input: nums = [1,2,3] -> Output: [[],[1],[2],[1,2],[3],[1,3],[2,3],[1,2,3]]
+
+Input: nums = [0] -> Output: [[],[0]]
+
+Input: nums = [] -> Output: [[]]
+
+94. Subsets II
+URL: https://leetcode.com/problems/subsets-ii/
+
+Tags: Array, Backtracking, Bit Manipulation
+
+Difficulty: Medium
+
+Description: Given an integer array nums that may contain duplicates, return all possible subsets. The solution set must not contain duplicate subsets.
+
+Parameters:
+
+nums: List[int]
+
+Return Type: List[List[int]]
+
+Test Cases:
+
+Input: nums = [1,2,2] -> Output: [[],[1],[1,2],[1,2,2],[2],[2,2]]
+
+Input: nums = [0] -> Output: [[],[0]]
+
+Input: nums = [4,4,4,1,4] -> Output: (Combinations of 1s and 4s)
+
+95. Permutations
+URL: https://leetcode.com/problems/permutations/
+
+Tags: Array, Backtracking
+
+Difficulty: Medium
+
+Description: Given an array nums of distinct integers, return all the possible permutations.
+
+Parameters:
+
+nums: List[int]
+
+Return Type: List[List[int]]
+
+Test Cases:
+
+Input: nums = [1,2,3] -> Output: [[1,2,3],[1,3,2],[2,1,3],[2,3,1],[3,1,2],[3,2,1]]
+
+Input: nums = [0,1] -> Output: [[0,1],[1,0]]
+
+Input: nums = [1] -> Output: [[1]]
+
+96. Permutations II
+URL: https://leetcode.com/problems/permutations-ii/
+
+Tags: Array, Backtracking
+
+Difficulty: Medium
+
+Description: Given a collection of numbers that might contain duplicates, return all possible unique permutations.
+
+Parameters:
+
+nums: List[int]
+
+Return Type: List[List[int]]
+
+Test Cases:
+
+Input: nums = [1,1,2] -> Output: [[1,1,2],[1,2,1],[2,1,1]]
+
+Input: nums = [1,2,3] -> Output: [[1,2,3],[1,3,2],[2,1,3]...]
+
+Input: nums = [1,1,1] -> Output: [[1,1,1]]
+
+97. Combination Sum II
+URL: https://leetcode.com/problems/combination-sum-ii/
+
+Tags: Array, Backtracking
+
+Difficulty: Medium
+
+Description: Find all unique combinations in candidates where the candidate numbers sum to target. Each number in candidates may only be used once.
+
+Parameters:
+
+candidates: List[int]
+
+target: int
+
+Return Type: List[List[int]]
+
+Test Cases:
+
+Input: candidates = [10,1,2,7,6,1,5], target = 8 -> Output: [[1,1,6],[1,2,5],[1,7],[2,6]]
+
+Input: candidates = [2,5,2,1,2], target = 5 -> Output: [[1,2,2],[5]]
+
+Input: candidates = [1,1], target = 1 -> Output: [[1]]
+
+98. Palindrome Partitioning
+URL: https://leetcode.com/problems/palindrome-partitioning/
+
+Tags: String, Dynamic Programming, Backtracking
+
+Difficulty: Medium
+
+Description: Partition s such that every substring of the partition is a palindrome. Return all possible palindrome partitioning of s.
+
+Parameters:
+
+s: str
+
+Return Type: List[List[str]]
+
+Test Cases:
+
+Input: s = "aab" -> Output: [["a","a","b"],["aa","b"]]
+
+Input: s = "a" -> Output: [["a"]]
+
+Input: s = "ab" -> Output: [["a","b"]]
+
+99. Letter Combinations of a Phone Number
+URL: https://leetcode.com/problems/letter-combinations-of-a-phone-number/
+
+Tags: Hash Table, String, Backtracking
+
+Difficulty: Medium
+
+Description: Given a string containing digits from 2-9 inclusive, return all possible letter combinations that the number could represent.
+
+Parameters:
+
+digits: str
+
+Return Type: List[str]
+
+Test Cases:
+
+Input: digits = "23" -> Output: ["ad","ae","af","bd","be","bf","cd","ce","cf"]
+
+Input: digits = "" -> Output: []
+
+Input: digits = "2" -> Output: ["a","b","c"]
+
+100. N-Queens
+URL: https://leetcode.com/problems/n-queens/
+
+Tags: Array, Backtracking
+
+Difficulty: Hard
+
+Description: Place n queens on an n x n chessboard such that no two queens attack each other. Return all distinct solutions.
+
+Parameters:
+
+n: int
+
+Return Type: List[List[str]]
+
+Test Cases:
+
+Input: n = 4 -> Output: [[".Q..","...Q","Q...","..Q."],["..Q.","Q...","...Q",".Q.."]]
+
+Input: n = 1 -> Output: [["Q"]]
+
+Input: n = 2 -> Output: []
+
+
+
+101. Redundant Connection
+URL: https://leetcode.com/problems/redundant-connection/
+
+Tags: Depth-First Search, Breadth-First Search, Union Find, Graph
+
+Difficulty: Medium
+
+Description: In this problem, a tree is an undirected graph that is connected and has no cycles. You are given a graph that started as a tree with n nodes labeled from 1 to n, with one additional edge added. Return an edge that can be removed so that the resulting graph is a tree of n nodes.
+
+Parameters:
+
+edges: List[List[int]]
+
+Return Type: List[int]
+
+Test Cases:
+
+Input: edges = [[1,2],[1,3],[2,3]] -> Output: [2,3]
+
+Input: edges = [[1,2],[2,3],[3,4],[1,4],[1,5]] -> Output: [1,4]
+
+Input: edges = [[1,2],[2,3],[1,3]] -> Output: [1,3]
+
+102. Word Ladder
+URL: https://leetcode.com/problems/word-ladder/
+
+Tags: Hash Table, String, Breadth-First Search
+
+Difficulty: Hard
+
+Description: A transformation sequence from beginWord to endWord using a dictionary wordList is a sequence of words where every adjacent pair differs by a single letter. Return the number of words in the shortest transformation sequence from beginWord to endWord, or 0 if no such sequence exists.
+
+Parameters:
+
+beginWord: str
+
+endWord: str
+
+wordList: List[str]
+
+Return Type: int
+
+Test Cases:
+
+Input: beginWord = "hit", endWord = "cog", wordList = ["hot","dot","dog","lot","log","cog"] -> Output: 5
+
+Input: beginWord = "hit", endWord = "cog", wordList = ["hot","dot","dog","lot","log"] -> Output: 0
+
+Input: beginWord = "a", endWord = "c", wordList = ["a","b","c"] -> Output: 2
+
+103. Cheapest Flights Within K Stops
+URL: https://leetcode.com/problems/cheapest-flights-within-k-stops/
+
+Tags: Dynamic Programming, Depth-First Search, Breadth-First Search, Graph, Heap (Priority Queue), Shortest Path
+
+Difficulty: Medium
+
+Description: There are n cities connected by some number of flights. You are given an array flights where flights[i] = [from, to, price]. Return the cheapest price from src to dst with at most k stops.
+
+Parameters:
+
+n: int
+
+flights: List[List[int]]
+
+src: int
+
+dst: int
+
+k: int
+
+Return Type: int
+
+Test Cases:
+
+Input: n = 4, flights = [[0,1,100],[1,2,100],[2,0,100],[1,3,600],[2,3,200]], src = 0, dst = 3, k = 1 -> Output: 700
+
+Input: n = 3, flights = [[0,1,100],[1,2,100],[0,2,500]], src = 0, dst = 2, k = 1 -> Output: 200
+
+Input: n = 3, flights = [[0,1,100],[1,2,100],[0,2,500]], src = 0, dst = 2, k = 0 -> Output: 500
+
+104. Network Delay Time
+URL: https://leetcode.com/problems/network-delay-time/
+
+Tags: Depth-First Search, Breadth-First Search, Graph, Heap (Priority Queue), Shortest Path
+
+Difficulty: Medium
+
+Description: You are given a network of n nodes, labeled from 1 to n. You are also given times, a list of travel times as directed edges (u, v, w). Return the time it takes for all n nodes to receive the signal sent from node k.
+
+Parameters:
+
+times: List[List[int]]
+
+n: int
+
+k: int
+
+Return Type: int
+
+Test Cases:
+
+Input: times = [[2,1,1],[2,3,1],[3,4,1]], n = 4, k = 2 -> Output: 2
+
+Input: times = [[1,2,1]], n = 2, k = 1 -> Output: 1
+
+Input: times = [[1,2,1]], n = 2, k = 2 -> Output: -1
+
+105. Min Cost to Connect All Points
+URL: https://leetcode.com/problems/min-cost-to-connect-all-points/
+
+Tags: Array, Union Find, Graph, Minimum Spanning Tree
+
+Difficulty: Medium
+
+Description: You are given an array points. The cost of connecting two points is the Manhattan distance between them. Return the minimum cost to make all points connected.
+
+Parameters:
+
+points: List[List[int]]
+
+Return Type: int
+
+Test Cases:
+
+Input: points = [[0,0],[2,2],[3,10],[5,2],[7,0]] -> Output: 20
+
+Input: points = [[3,12],[-2,5],[-4,1]] -> Output: 18
+
+Input: points = [[0,0],[1,1],[1,0],[-1,1]] -> Output: 4
+
+106. Swim in Rising Water
+URL: https://leetcode.com/problems/swim-in-rising-water/
+
+Tags: Array, Binary Search, Depth-First Search, Breadth-First Search, Union Find, Heap, Matrix
+
+Difficulty: Hard
+
+Description: You are given an n x n integer matrix grid where each value represents the elevation. Rain falls, and water depth increases over time. Return the least time t such that you can reach the bottom right square from the top left square.
+
+Parameters:
+
+grid: List[List[int]]
+
+Return Type: int
+
+Test Cases:
+
+Input: grid = [[0,2],[1,3]] -> Output: 3
+
+Input: grid = [[0,1,2,3,4],[24,23,22,21,5],[12,13,14,15,16],[11,17,18,19,20],[10,9,8,7,6]] -> Output: 16
+
+Input: grid = [[3]] -> Output: 3
+
+107. Reconstruct Itinerary
+URL: https://leetcode.com/problems/reconstruct-itinerary/
+
+Tags: Depth-First Search, Graph, Eulerian Circuit
+
+Difficulty: Hard
+
+Description: Given a list of airline tickets, reconstruct the itinerary in order. The itinerary must begin with "JFK". If there are multiple valid itineraries, return the one with the smallest lexical order.
+
+Parameters:
+
+tickets: List[List[str]]
+
+Return Type: List[str]
+
+Test Cases:
+
+Input: tickets = [["MUC","LHR"],["JFK","MUC"],["SFO","SJC"],["LHR","SFO"]] -> Output: ["JFK","MUC","LHR","SFO","SJC"]
+
+Input: tickets = [["JFK","SFO"],["JFK","ATL"],["SFO","ATL"],["ATL","JFK"],["ATL","SFO"]] -> Output: ["JFK","ATL","JFK","SFO","ATL","SFO"]
+
+Input: tickets = [["JFK","KUL"],["JFK","NRT"],["NRT","JFK"]] -> Output: ["JFK","NRT","JFK","KUL"]
+
+108. Partition Equal Subset Sum
+URL: https://leetcode.com/problems/partition-equal-subset-sum/
+
+Tags: Array, Dynamic Programming
+
+Difficulty: Medium
+
+Description: Given a non-empty array nums containing only positive integers, find if the array can be partitioned into two subsets such that the sum of elements in both subsets is equal.
+
+Parameters:
+
+nums: List[int]
+
+Return Type: bool
+
+Test Cases:
+
+Input: nums = [1,5,11,5] -> Output: true
+
+Input: nums = [1,2,3,5] -> Output: false
+
+Input: nums = [2] -> Output: false
+
+109. Target Sum
+URL: https://leetcode.com/problems/target-sum/
+
+Tags: Array, Dynamic Programming, Backtracking
+
+Difficulty: Medium
+
+Description: You are given an integer array nums and an integer target. Build an expression by adding '+' or '-' before each integer so they sum to target. Return the number of ways.
+
+Parameters:
+
+nums: List[int]
+
+target: int
+
+Return Type: int
+
+Test Cases:
+
+Input: nums = [1,1,1,1,1], target = 3 -> Output: 5
+
+Input: nums = [1], target = 1 -> Output: 1
+
+Input: nums = [1,2,1], target = 0 -> Output: 2
+
+110. Interleaving String
+URL: https://leetcode.com/problems/interleaving-string/
+
+Tags: String, Dynamic Programming
+
+Difficulty: Medium
+
+Description: Given strings s1, s2, and s3, find whether s3 is formed by an interleaving of s1 and s2.
+
+Parameters:
+
+s1: str
+
+s2: str
+
+s3: str
+
+Return Type: bool
+
+Test Cases:
+
+Input: s1 = "aabcc", s2 = "dbbca", s3 = "aadbbcbcac" -> Output: true
+
+Input: s1 = "aabcc", s2 = "dbbca", s3 = "aadbbbaccc" -> Output: false
+
+Input: s1 = "", s2 = "", s3 = "" -> Output: true
+
+111. Longest Increasing Path in a Matrix
+URL: https://leetcode.com/problems/longest-increasing-path-in-a-matrix/
+
+Tags: Dynamic Programming, Depth-First Search, Breadth-First Search, Graph, Topological Sort, Memoization
+
+Difficulty: Hard
+
+Description: Given an m x n integers matrix, return the length of the longest increasing path in matrix.
+
+Parameters:
+
+matrix: List[List[int]]
+
+Return Type: int
+
+Test Cases:
+
+Input: matrix = [[9,9,4],[6,6,8],[2,1,1]] -> Output: 4
+
+Input: matrix = [[3,4,5],[3,2,6],[2,2,1]] -> Output: 4
+
+Input: matrix = [[1]] -> Output: 1
+
+112. Distinct Subsequences
+URL: https://leetcode.com/problems/distinct-subsequences/
+
+Tags: String, Dynamic Programming
+
+Difficulty: Hard
+
+Description: Given two strings s and t, return the number of distinct subsequences of s which equals t.
+
+Parameters:
+
+s: str
+
+t: str
+
+Return Type: int
+
+Test Cases:
+
+Input: s = "rabbbit", t = "rabbit" -> Output: 3
+
+Input: s = "babgbag", t = "bag" -> Output: 5
+
+Input: s = "aaa", t = "a" -> Output: 3
+
+113. Edit Distance
+URL: https://leetcode.com/problems/edit-distance/
+
+Tags: String, Dynamic Programming
+
+Difficulty: Medium
+
+Description: Return the minimum number of operations (insert, delete, replace) required to convert word1 to word2.
+
+Parameters:
+
+word1: str
+
+word2: str
+
+Return Type: int
+
+Test Cases:
+
+Input: word1 = "horse", word2 = "ros" -> Output: 3
+
+Input: word1 = "intention", word2 = "execution" -> Output: 5
+
+Input: word1 = "", word2 = "a" -> Output: 1
+
+114. Burst Balloons
+URL: https://leetcode.com/problems/burst-balloons/
+
+Tags: Array, Dynamic Programming
+
+Difficulty: Hard
+
+Description: You are given n balloons. If you burst the ith balloon, you will get nums[i - 1] * nums[i] * nums[i + 1] coins. Return the maximum coins you can collect.
+
+Parameters:
+
+nums: List[int]
+
+Return Type: int
+
+Test Cases:
+
+Input: nums = [3,1,5,8] -> Output: 167
+
+Input: nums = [1,5] -> Output: 10
+
+Input: nums = [9,7,8] -> Output: 936
+
+115. Regular Expression Matching
+URL: https://leetcode.com/problems/regular-expression-matching/
+
+Tags: String, Dynamic Programming, Recursion
+
+Difficulty: Hard
+
+Description: Implement regular expression matching with support for . and *.
+
+Parameters:
+
+s: str
+
+p: str
+
+Return Type: bool
+
+Test Cases:
+
+Input: s = "aa", p = "a" -> Output: false
+
+Input: s = "aa", p = "a*" -> Output: true
+
+Input: s = "ab", p = ".*" -> Output: true
+
+116. Single Number
+URL: https://leetcode.com/problems/single-number/
+
+Tags: Array, Bit Manipulation
+
+Difficulty: Easy
+
+Description: Given a non-empty array of integers nums, every element appears twice except for one. Find that single one.
+
+Parameters:
+
+nums: List[int]
+
+Return Type: int
+
+Test Cases:
+
+Input: nums = [2,2,1] -> Output: 1
+
+Input: nums = [4,1,2,1,2] -> Output: 4
+
+Input: nums = [1] -> Output: 1
+
+117. Number of 1 Bits
+URL: https://leetcode.com/problems/number-of-1-bits/
+
+Tags: Divide and Conquer, Bit Manipulation
+
+Difficulty: Easy
+
+Description: Write a function that takes an unsigned integer and returns the number of '1' bits it has (Hamming weight).
+
+Parameters:
+
+n: int
+
+Return Type: int
+
+Test Cases:
+
+Input: n = 11 -> Output: 3
+
+Input: n = 128 -> Output: 1
+
+Input: n = 2147483645 -> Output: 30
+
+118. Counting Bits
+URL: https://leetcode.com/problems/counting-bits/
+
+Tags: Dynamic Programming, Bit Manipulation
+
+Difficulty: Easy
+
+Description: Given an integer n, return an array ans of length n + 1 such that for each i, ans[i] is the number of 1's in the binary representation of i.
+
+Parameters:
+
+n: int
+
+Return Type: List[int]
+
+Test Cases:
+
+Input: n = 2 -> Output: [0,1,1]
+
+Input: n = 5 -> Output: [0,1,1,2,1,2]
+
+Input: n = 0 -> Output: [0]
+
+119. Reverse Bits
+URL: https://leetcode.com/problems/reverse-bits/
+
+Tags: Divide and Conquer, Bit Manipulation
+
+Difficulty: Easy
+
+Description: Reverse bits of a given 32 bits unsigned integer.
+
+Parameters:
+
+n: int
+
+Return Type: int
+
+Test Cases:
+
+Input: n = 43261596 -> Output: 964176192
+
+Input: n = 0 -> Output: 0
+
+Input: n = 4294967295 -> Output: 4294967295
+
+120. Missing Number
+URL: https://leetcode.com/problems/missing-number/
+
+Tags: Array, Hash Table, Math, Bit Manipulation, Sorting
+
+Difficulty: Easy
+
+Description: Given an array nums containing n distinct numbers in the range [0, n], return the only number in the range that is missing from the array.
+
+Parameters:
+
+nums: List[int]
+
+Return Type: int
+
+Test Cases:
+
+Input: nums = [3,0,1] -> Output: 2
+
+Input: nums = [0,1] -> Output: 2
+
+Input: nums = [9,6,4,2,3,5,7,0,1] -> Output: 8
+
+
+
+121. Sum of Two Integers
+URL: https://leetcode.com/problems/sum-of-two-integers/
+
+Tags: Math, Bit Manipulation
+
+Difficulty: Medium
+
+Description: Given two integers a and b, return the sum of the two integers without using the operators + and -.
+
+Parameters:
+
+a: int
+
+b: int
+
+Return Type: int
+
+Test Cases:
+
+Input: a = 1, b = 2 -> Output: 3
+
+Input: a = 2, b = 3 -> Output: 5
+
+Input: a = -1, b = 1 -> Output: 0
+
+122. Reverse Integer
+URL: https://leetcode.com/problems/reverse-integer/
+
+Tags: Math
+
+Difficulty: Medium
+
+Description: Given a signed 32-bit integer x, return x with its digits reversed. If reversing x causes the value to go outside the signed 32-bit integer range [-2^31, 2^31 - 1], then return 0.
+
+Parameters:
+
+x: int
+
+Return Type: int
+
+Test Cases:
+
+Input: x = 123 -> Output: 321
+
+Input: x = -123 -> Output: -321
+
+Input: x = 120 -> Output: 21
+
+123. Happy Number
+URL: https://leetcode.com/problems/happy-number/
+
+Tags: Hash Table, Math, Two Pointers
+
+Difficulty: Easy
+
+Description: Write an algorithm to determine if a number n is happy. A happy number is a number defined by the following process: Starting with any positive integer, replace the number by the sum of the squares of its digits. Repeat until the number equals 1.
+
+Parameters:
+
+n: int
+
+Return Type: bool
+
+Test Cases:
+
+Input: n = 19 -> Output: true
+
+Input: n = 2 -> Output: false
+
+Input: n = 7 -> Output: true
+
+124. Plus One
+URL: https://leetcode.com/problems/plus-one/
+
+Tags: Array, Math
+
+Difficulty: Easy
+
+Description: You are given a large integer represented as an integer array digits. Increment the large integer by one and return the resulting array of digits.
+
+Parameters:
+
+digits: List[int]
+
+Return Type: List[int]
+
+Test Cases:
+
+Input: digits = [1,2,3] -> Output: [1,2,4]
+
+Input: digits = [4,3,2,1] -> Output: [4,3,2,2]
+
+Input: digits = [9] -> Output: [1,0]
+
+125. Pow(x, n)
+URL: https://leetcode.com/problems/powx-n/
+
+Tags: Math, Recursion
+
+Difficulty: Medium
+
+Description: Implement pow(x, n), which calculates x raised to the power n.
+
+Parameters:
+
+x: float
+
+n: int
+
+Return Type: float
+
+Test Cases:
+
+Input: x = 2.00000, n = 10 -> Output: 1024.00000
+
+Input: x = 2.10000, n = 3 -> Output: 9.26100
+
+Input: x = 2.00000, n = -2 -> Output: 0.25000
+
+126. Multiply Strings
+URL: https://leetcode.com/problems/multiply-strings/
+
+Tags: Math, String, Simulation
+
+Difficulty: Medium
+
+Description: Given two non-negative integers num1 and num2 represented as strings, return the product of num1 and num2, also represented as a string.
+
+Parameters:
+
+num1: str
+
+num2: str
+
+Return Type: str
+
+Test Cases:
+
+Input: num1 = "2", num2 = "3" -> Output: "6"
+
+Input: num1 = "123", num2 = "456" -> Output: "56088"
+
+Input: num1 = "0", num2 = "52" -> Output: "0"
+
+127. Detect Squares
+URL: https://leetcode.com/problems/detect-squares/
+
+Tags: Array, Hash Table, Design, Counting
+
+Difficulty: Medium
+
+Description: Design a data structure that adds new points and counts the number of ways to form axis-aligned squares with a query point.
+
+Parameters:
+
+Class Methods: add(point: List[int]), count(point: List[int])
+
+Return Type: void / int
+
+Test Cases:
+
+Input: [add([3, 10]), add([11, 2]), add([3, 2]), count([11, 10])] -> Output: [null, null, null, 1]
+
+Input: [count([14, 8])] (after above) -> Output: [0]
+
+Input: [add([11, 2]), count([11, 10])] (duplicate point added) -> Output: [null, 2]
+
+128. K Closest Points to Origin
+URL: https://leetcode.com/problems/k-closest-points-to-origin/
+
+Tags: Array, Math, Divide and Conquer, Geometry, Sorting, Heap (Priority Queue)
+
+Difficulty: Medium
+
+Description: Given an array of points where points[i] = [xi, yi] and an integer k, return the k closest points to the origin (0, 0).
+
+Parameters:
+
+points: List[List[int]]
+
+k: int
+
+Return Type: List[List[int]]
+
+Test Cases:
+
+Input: points = [[1,3],[-2,2]], k = 1 -> Output: [[-2,2]]
+
+Input: points = [[3,3],[5,-1],[-2,4]], k = 2 -> Output: [[3,3],[-2,4]]
+
+Input: points = [[0,1],[1,0]], k = 2 -> Output: [[0,1],[1,0]]
+
+129. Kth Largest Element in an Array
+URL: https://leetcode.com/problems/kth-largest-element-in-an-array/
+
+Tags: Array, Divide and Conquer, Sorting, Heap (Priority Queue), Quickselect
+
+Difficulty: Medium
+
+Description: Given an integer array nums and an integer k, return the kth largest element in the array.
+
+Parameters:
+
+nums: List[int]
+
+k: int
+
+Return Type: int
+
+Test Cases:
+
+Input: nums = [3,2,1,5,6,4], k = 2 -> Output: 5
+
+Input: nums = [3,2,3,1,2,4,5,5,6], k = 4 -> Output: 4
+
+Input: nums = [1], k = 1 -> Output: 1
+
+130. Task Scheduler
+URL: https://leetcode.com/problems/task-scheduler/
+
+Tags: Array, Hash Table, Greedy, Sorting, Heap (Priority Queue)
+
+Difficulty: Medium
+
+Description: Given a characters array tasks, representing the tasks a CPU needs to do, and a non-negative integer n representing the cooldown period, return the least number of units of time to finish all tasks.
+
+Parameters:
+
+tasks: List[str]
+
+n: int
+
+Return Type: int
+
+Test Cases:
+
+Input: tasks = ["A","A","A","B","B","B"], n = 2 -> Output: 8
+
+Input: tasks = ["A","A","A","B","B","B"], n = 0 -> Output: 6
+
+Input: tasks = ["A","A","A","A","A","A","B","C","D","E","F","G"], n = 2 -> Output: 16
+
+131. Design Twitter
+URL: https://leetcode.com/problems/design-twitter/
+
+Tags: Hash Table, Linked List, Design, Heap (Priority Queue)
+
+Difficulty: Medium
+
+Description: Design a simplified version of Twitter where users can post tweets, follow/unfollow another user, and see the 10 most recent tweets in the user's news feed.
+
+Parameters:
+
+Class Methods: postTweet(userId, tweetId), getNewsFeed(userId), follow(followerId, followeeId), unfollow(followerId, followeeId)
+
+Return Type: void / List[int]
+
+Test Cases:
+
+Input: [postTweet(1, 5), getNewsFeed(1)] -> Output: [null, [5]]
+
+Input: [follow(1, 2), postTweet(2, 6), getNewsFeed(1)] -> Output: [null, null, [6, 5]]
+
+Input: [unfollow(1, 2), getNewsFeed(1)] -> Output: [null, [5]]
+
+132. LRU Cache
+URL: https://leetcode.com/problems/lru-cache/
+
+Tags: Hash Table, Linked List, Design, Doubly-Linked List
+
+Difficulty: Medium
+
+Description: Design a data structure that follows the constraints of a Least Recently Used (LRU) cache.
+
+Parameters:
+
+Constructor: capacity: int
+
+Methods: get(key: int), put(key: int, value: int)
+
+Return Type: int / void
+
+Test Cases:
+
+Input: [LRUCache(2), put(1, 1), put(2, 2), get(1)] -> Output: [null, null, null, 1]
+
+Input: [put(3, 3), get(2)] (after above) -> Output: [null, -1] (2 was evicted)
+
+Input: [put(4, 4), get(1), get(3), get(4)] -> Output: [null, -1, 3, 4]
+
+133. LFU Cache
+URL: https://leetcode.com/problems/lfu-cache/
+
+Tags: Hash Table, Linked List, Design, Doubly-Linked List
+
+Difficulty: Hard
+
+Description: Design and implement a data structure for a Least Frequently Used (LFU) cache.
+
+Parameters:
+
+Constructor: capacity: int
+
+Methods: get(key: int), put(key: int, value: int)
+
+Return Type: int / void
+
+Test Cases:
+
+Input: [LFUCache(2), put(1, 1), put(2, 2), get(1)] -> Output: [null, null, null, 1]
+
+Input: [put(3, 3), get(2)] -> Output: [null, -1] (2 evicted, it was LFU)
+
+Input: [get(3), put(4, 4), get(1)] -> Output: [3, null, -1] (1 evicted, it was LFU)
+
+134. Rotate Array
+URL: https://leetcode.com/problems/rotate-array/
+
+Tags: Array, Math, Two Pointers
+
+Difficulty: Medium
+
+Description: Given an integer array nums, rotate the array to the right by k steps.
+
+Parameters:
+
+nums: List[int]
+
+k: int
+
+Return Type: None
+
+Test Cases:
+
+Input: nums = [1,2,3,4,5,6,7], k = 3 -> Output: [5,6,7,1,2,3,4]
+
+Input: nums = [-1,-100,3,99], k = 2 -> Output: [3,99,-1,-100]
+
+Input: nums = [1,2], k = 3 -> Output: [2,1]
+
+135. Sort Colors
+URL: https://leetcode.com/problems/sort-colors/
+
+Tags: Array, Two Pointers, Sorting
+
+Difficulty: Medium
+
+Description: Given an array nums with n objects colored red, white, or blue, sort them in-place so that objects of the same color are adjacent.
+
+Parameters:
+
+nums: List[int]
+
+Return Type: None
+
+Test Cases:
+
+Input: nums = [2,0,2,1,1,0] -> Output: [0,0,1,1,2,2]
+
+Input: nums = [2,0,1] -> Output: [0,1,2]
+
+Input: nums = [0] -> Output: [0]
+
+136. Gas Station
+URL: https://leetcode.com/problems/gas-station/
+
+Tags: Array, Greedy
+
+Difficulty: Medium
+
+Description: Return the starting gas station's index if you can travel around the circuit once in the clockwise direction, otherwise return -1.
+
+Parameters:
+
+gas: List[int]
+
+cost: List[int]
+
+Return Type: int
+
+Test Cases:
+
+Input: gas = [1,2,3,4,5], cost = [3,4,5,1,2] -> Output: 3
+
+Input: gas = [2,3,4], cost = [3,4,3] -> Output: -1
+
+Input: gas = [5], cost = [4] -> Output: 0
+
+137. Jump Game II
+URL: https://leetcode.com/problems/jump-game-ii/
+
+Tags: Array, Dynamic Programming, Greedy
+
+Difficulty: Medium
+
+Description: Return the minimum number of jumps to reach the last index.
+
+Parameters:
+
+nums: List[int]
+
+Return Type: int
+
+Test Cases:
+
+Input: nums = [2,3,1,1,4] -> Output: 2
+
+Input: nums = [2,3,0,1,4] -> Output: 2
+
+Input: nums = [1] -> Output: 0
+
+138. Partition Labels
+URL: https://leetcode.com/problems/partition-labels/
+
+Tags: Hash Table, Two Pointers, String, Greedy
+
+Difficulty: Medium
+
+Description: Partition the string into as many parts as possible so that each letter appears in at most one part. Return a list of integers representing the size of these parts.
+
+Parameters:
+
+s: str
+
+Return Type: List[int]
+
+Test Cases:
+
+Input: s = "ababcbacadefegdehijhklij" -> Output: [9,7,8]
+
+Input: s = "eccbbbbdec" -> Output: [10]
+
+Input: s = "abc" -> Output: [1,1,1]
+
+139. Hand of Straights
+URL: https://leetcode.com/problems/hand-of-straights/
+
+Tags: Array, Hash Table, Greedy, Sorting
+
+Difficulty: Medium
+
+Description: Rearrange the cards into groups so that each group is of size groupSize, and consists of groupSize consecutive cards.
+
+Parameters:
+
+hand: List[int]
+
+groupSize: int
+
+Return Type: bool
+
+Test Cases:
+
+Input: hand = [1,2,3,6,2,3,4,7,8], groupSize = 3 -> Output: true
+
+Input: hand = [1,2,3,4,5], groupSize = 4 -> Output: false
+
+Input: hand = [1], groupSize = 1 -> Output: true
+
+140. Merge Triplets to Form Target Triplet
+URL: https://leetcode.com/problems/merge-triplets-to-form-target-triplet/
+
+Tags: Array, Greedy
+
+Difficulty: Medium
+
+Description: Return true if it is possible to obtain the target triplet [x, y, z] as an element of triplets.
+
+Parameters:
+
+triplets: List[List[int]]
+
+target: List[int]
+
+Return Type: bool
+
+Test Cases:
+
+Input: triplets = [[2,5,3],[1,8,4],[1,7,5]], target = [2,7,5] -> Output: true
+
+Input: triplets = [[3,4,5],[4,5,6]], target = [3,2,5] -> Output: false
+
+Input: triplets = [[2,5,3],[2,3,4],[1,2,5],[5,2,3]], target = [5,5,5] -> Output: true
+
+
+
+141. Valid Parenthesis String
+URL: https://leetcode.com/problems/valid-parenthesis-string/
+
+Tags: String, Dynamic Programming, Greedy, Stack
+
+Difficulty: Medium
+
+Description: Given a string s containing only '(', ')', and '', return true if s is valid. '' can be treated as '(', ')', or empty.
+
+Parameters:
+
+s: str
+
+Return Type: bool
+
+Test Cases:
+
+Input: s = "()" -> Output: true
+
+Input: s = "(*)" -> Output: true
+
+Input: s = "(*))" -> Output: true
+
+142. Next Permutation
+URL: https://leetcode.com/problems/next-permutation/
+
+Tags: Array, Two Pointers
+
+Difficulty: Medium
+
+Description: Implement the next permutation, which rearranges numbers into the lexicographically next greater permutation of numbers.
+
+Parameters:
+
+nums: List[int]
+
+Return Type: None (Modify in-place)
+
+Test Cases:
+
+Input: nums = [1,2,3] -> Output: [1,3,2]
+
+Input: nums = [3,2,1] -> Output: [1,2,3]
+
+Input: nums = [1,1,5] -> Output: [1,5,1]
+
+143. Find the Duplicate Number
+URL: https://leetcode.com/problems/find-the-duplicate-number/
+
+Tags: Array, Two Pointers, Binary Search, Bit Manipulation
+
+Difficulty: Medium
+
+Description: Given an array of integers nums containing n + 1 integers where each integer is in the range [1, n], find the duplicate number.
+
+Parameters:
+
+nums: List[int]
+
+Return Type: int
+
+Test Cases:
+
+Input: nums = [1,3,4,2,2] -> Output: 2
+
+Input: nums = [3,1,3,4,2] -> Output: 3
+
+Input: nums = [1,1] -> Output: 1
+
+144. Copy List with Random Pointer
+URL: https://leetcode.com/problems/copy-list-with-random-pointer/
+
+Tags: Hash Table, Linked List
+
+Difficulty: Medium
+
+Description: Construct a deep copy of a linked list where each node contains an additional random pointer.
+
+Parameters:
+
+head: Node (Input represented as [[val, random_index]])
+
+Return Type: Node
+
+Test Cases:
+
+Input: head = [[7,null],[13,0],[11,4],[10,2],[1,0]] -> Output: [[7,null],[13,0],[11,4],[10,2],[1,0]]
+
+Input: head = [[1,1],[2,1]] -> Output: [[1,1],[2,1]]
+
+Input: head = [] -> Output: []
+
+145. Add Two Numbers II
+URL: https://leetcode.com/problems/add-two-numbers-ii/
+
+Tags: Linked List, Math, Stack
+
+Difficulty: Medium
+
+Description: Add two numbers represented by linked lists (most significant digit first). Return sum as linked list.
+
+Parameters:
+
+l1: ListNode
+
+l2: ListNode
+
+Return Type: ListNode
+
+Test Cases:
+
+Input: l1 = [7,2,4,3], l2 = [5,6,4] -> Output: [7,8,0,7]
+
+Input: l1 = [2,4,3], l2 = [5,6,4] -> Output: [8,0,7]
+
+Input: l1 = [0], l2 = [0] -> Output: [0]
+
+146. Reverse Nodes in k-Group
+URL: https://leetcode.com/problems/reverse-nodes-in-k-group/
+
+Tags: Linked List, Recursion
+
+Difficulty: Hard
+
+Description: Given the head of a linked list, reverse the nodes of the list k at a time, and return the modified list.
+
+Parameters:
+
+head: ListNode
+
+k: int
+
+Return Type: ListNode
+
+Test Cases:
+
+Input: head = [1,2,3,4,5], k = 2 -> Output: [2,1,4,3,5]
+
+Input: head = [1,2,3,4,5], k = 3 -> Output: [3,2,1,4,5]
+
+Input: head = [1,2,3,4,5], k = 1 -> Output: [1,2,3,4,5]
+
+147. Sort List
+URL: https://leetcode.com/problems/sort-list/
+
+Tags: Linked List, Two Pointers, Divide and Conquer, Sorting, Merge Sort
+
+Difficulty: Medium
+
+Description: Given the head of a linked list, return the list after sorting it in ascending order.
+
+Parameters:
+
+head: ListNode
+
+Return Type: ListNode
+
+Test Cases:
+
+Input: head = [4,2,1,3] -> Output: [1,2,3,4]
+
+Input: head = [-1,5,3,4,0] -> Output: [-1,0,3,4,5]
+
+Input: head = [] -> Output: []
+
+148. Rotate List
+URL: https://leetcode.com/problems/rotate-list/
+
+Tags: Linked List, Two Pointers
+
+Difficulty: Medium
+
+Description: Given the head of a linked list, rotate the list to the right by k places.
+
+Parameters:
+
+head: ListNode
+
+k: int
+
+Return Type: ListNode
+
+Test Cases:
+
+Input: head = [1,2,3,4,5], k = 2 -> Output: [4,5,1,2,3]
+
+Input: head = [0,1,2], k = 4 -> Output: [2,0,1]
+
+Input: head = [], k = 0 -> Output: []
+
+149. Intersection of Two Linked Lists
+URL: https://leetcode.com/problems/intersection-of-two-linked-lists/
+
+Tags: Hash Table, Linked List, Two Pointers
+
+Difficulty: Easy
+
+Description: Given the heads of two singly linked-lists headA and headB, return the node at which the two lists intersect.
+
+Parameters:
+
+headA: ListNode
+
+headB: ListNode
+
+Return Type: ListNode
+
+Test Cases:
+
+Input: intersectVal = 8, listA = [4,1,8,4,5], listB = [5,6,1,8,4,5] -> Output: Reference to Node(8)
+
+Input: intersectVal = 2, listA = [1,9,1,2,4], listB = [3,2,4] -> Output: Reference to Node(2)
+
+Input: listA = [2,6,4], listB = [1,5] -> Output: null
+
+150. Palindrome Linked List
+URL: https://leetcode.com/problems/palindrome-linked-list/
+
+Tags: Linked List, Two Pointers, Stack, Recursion
+
+Difficulty: Easy
+
+Description: Given the head of a singly linked list, return true if it is a palindrome.
+
+Parameters:
+
+head: ListNode
+
+Return Type: bool
+
+Test Cases:
+
+Input: head = [1,2,2,1] -> Output: true
+
+Input: head = [1,2] -> Output: false
+
+Input: head = [1] -> Output: true
+
+151. Binary Tree Right Side View
+URL: https://leetcode.com/problems/binary-tree-right-side-view/
+
+Tags: Tree, Depth-First Search, Breadth-First Search, Binary Tree
+
+Difficulty: Medium
+
+Description: Given the root of a binary tree, imagine yourself standing on the right side of it, return the values of the nodes you can see ordered from top to bottom.
+
+Parameters:
+
+root: TreeNode
+
+Return Type: List[int]
+
+Test Cases:
+
+Input: root = [1,2,3,null,5,null,4] -> Output: [1,3,4]
+
+Input: root = [1,null,3] -> Output: [1,3]
+
+Input: root = [] -> Output: []
+
+152. Binary Tree Zigzag Level Order Traversal
+URL: https://leetcode.com/problems/binary-tree-zigzag-level-order-traversal/
+
+Tags: Tree, Breadth-First Search, Binary Tree
+
+Difficulty: Medium
+
+Description: Return the zigzag level order traversal of nodes' values (left to right, then right to left).
+
+Parameters:
+
+root: TreeNode
+
+Return Type: List[List[int]]
+
+Test Cases:
+
+Input: root = [3,9,20,null,null,15,7] -> Output: [[3],[20,9],[15,7]]
+
+Input: root = [1] -> Output: [[1]]
+
+Input: root = [] -> Output: []
+
+153. Populating Next Right Pointers in Each Node
+URL: https://leetcode.com/problems/populating-next-right-pointers-in-each-node/
+
+Tags: Tree, Depth-First Search, Breadth-First Search, Binary Tree
+
+Difficulty: Medium
+
+Description: Populate each next pointer to point to its next right node. The tree is a perfect binary tree.
+
+Parameters:
+
+root: Node
+
+Return Type: Node
+
+Test Cases:
+
+Input: root = [1,2,3,4,5,6,7] -> Output: [1,#,2,3,#,4,5,6,7,#]
+
+Input: root = [] -> Output: []
+
+Input: root = [1] -> Output: [1,#]
+
+154. Populating Next Right Pointers in Each Node II
+URL: https://leetcode.com/problems/populating-next-right-pointers-in-each-node-ii/
+
+Tags: Tree, Depth-First Search, Breadth-First Search, Binary Tree
+
+Difficulty: Medium
+
+Description: Populate each next pointer to point to its next right node. The tree is a general binary tree (not necessarily perfect).
+
+Parameters:
+
+root: Node
+
+Return Type: Node
+
+Test Cases:
+
+Input: root = [1,2,3,4,5,null,7] -> Output: [1,#,2,3,#,4,5,7,#]
+
+Input: root = [] -> Output: []
+
+Input: root = [1,2] -> Output: [1,#,2,#]
+
+155. Path Sum II
+URL: https://leetcode.com/problems/path-sum-ii/
+
+Tags: Backtracking, Tree, Depth-First Search, Binary Tree
+
+Difficulty: Medium
+
+Description: Return all root-to-leaf paths where the sum of the node values in the path equals targetSum.
+
+Parameters:
+
+root: TreeNode
+
+targetSum: int
+
+Return Type: List[List[int]]
+
+Test Cases:
+
+Input: root = [5,4,8,11,null,13,4,7,2,5,1], targetSum = 22 -> Output: [[5,4,11,2],[5,8,4,5]]
+
+Input: root = [1,2,3], targetSum = 5 -> Output: []
+
+Input: root = [1,2], targetSum = 0 -> Output: []
+
+156. Path Sum III
+URL: https://leetcode.com/problems/path-sum-iii/
+
+Tags: Tree, Depth-First Search, Binary Tree
+
+Difficulty: Medium
+
+Description: Return the number of paths where the sum of the values along the path equals targetSum. The path does not need to start or end at the root or a leaf.
+
+Parameters:
+
+root: TreeNode
+
+targetSum: int
+
+Return Type: int
+
+Test Cases:
+
+Input: root = [10,5,-3,3,2,null,11,3,-2,null,1], targetSum = 8 -> Output: 3
+
+Input: root = [5,4,8,11,null,13,4,7,2,null,null,5,1], targetSum = 22 -> Output: 3
+
+Input: root = [1], targetSum = 1 -> Output: 1
+
+157. Lowest Common Ancestor of a Binary Tree
+URL: https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree/
+
+Tags: Tree, Depth-First Search, Binary Tree
+
+Difficulty: Medium
+
+Description: Find the lowest common ancestor (LCA) of two given nodes in a binary tree.
+
+Parameters:
+
+root: TreeNode
+
+p: TreeNode
+
+q: TreeNode
+
+Return Type: TreeNode
+
+Test Cases:
+
+Input: root = [3,5,1,6,2,0,8,null,null,7,4], p = 5, q = 1 -> Output: 3
+
+Input: root = [3,5,1...], p = 5, q = 4 -> Output: 5
+
+Input: root = [1,2], p = 1, q = 2 -> Output: 1
+
+158. Flatten Binary Tree to Linked List
+URL: https://leetcode.com/problems/flatten-binary-tree-to-linked-list/
+
+Tags: Linked List, Stack, Tree, Depth-First Search, Binary Tree
+
+Difficulty: Medium
+
+Description: Flatten the tree into a "linked list" in-place using the right pointer.
+
+Parameters:
+
+root: TreeNode
+
+Return Type: None
+
+Test Cases:
+
+Input: root = [1,2,5,3,4,null,6] -> Output: [1,null,2,null,3,null,4,null,5,null,6]
+
+Input: root = [] -> Output: []
+
+Input: root = [0] -> Output: [0]
+
+159. Construct Binary Tree from Inorder and Postorder Traversal
+URL: https://leetcode.com/problems/construct-binary-tree-from-inorder-and-postorder-traversal/
+
+Tags: Tree, Array, Hash Table, Divide and Conquer
+
+Difficulty: Medium
+
+Description: Given inorder and postorder traversal arrays, construct and return the binary tree.
+
+Parameters:
+
+inorder: List[int]
+
+postorder: List[int]
+
+Return Type: TreeNode
+
+Test Cases:
+
+Input: inorder = [9,3,15,20,7], postorder = [9,15,7,20,3] -> Output: [3,9,20,null,null,15,7]
+
+Input: inorder = [-1], postorder = [-1] -> Output: [-1]
+
+Input: inorder = [2,1], postorder = [2,1] -> Output: [1,2]
+
+160. Sum Root to Leaf Numbers
+URL: https://leetcode.com/problems/sum-root-to-leaf-numbers/
+
+Tags: Tree, Depth-First Search, Binary Tree
+
+Difficulty: Medium
+
+Description: Each root-to-leaf path represents a number. Return the total sum of all root-to-leaf numbers.
+
+Parameters:
+
+root: TreeNode
+
+Return Type: int
+
+Test Cases:
+
+Input: root = [1,2,3] -> Output: 25 (12 + 13)
+
+Input: root = [4,9,0,5,1] -> Output: 1026
+
+Input: root = [1] -> Output: 1
+
+
+
+
+
+
+161. Recover Binary Search Tree
+URL: https://leetcode.com/problems/recover-binary-search-tree/
+
+Tags: Tree, Depth-First Search, Binary Search Tree, Binary Tree
+
+Difficulty: Medium
+
+Description: You are given the root of a binary search tree (BST), where the values of exactly two nodes of the tree were swapped by mistake. Recover the tree without changing its structure.
+
+Parameters:
+
+root: TreeNode
+
+Return Type: None (Modify in-place)
+
+Test Cases:
+
+Input: root = [1,3,null,null,2] -> Output: [3,1,null,null,2]
+
+Input: root = [3,1,4,null,null,2] -> Output: [2,1,4,null,null,3]
+
+Input: root = [2,1] (Correct BST) -> Output: [2,1]
+
+162. House Robber III
+URL: https://leetcode.com/problems/house-robber-iii/
+
+Tags: Dynamic Programming, Tree, Depth-First Search, Binary Tree
+
+Difficulty: Medium
+
+Description: The thief has found himself a new place for his thievery again. There is only one entrance to this area, called the "root." Return the maximum amount of money the thief can rob tonight without alerting the police (parent and child cannot both be robbed).
+
+Parameters:
+
+root: TreeNode
+
+Return Type: int
+
+Test Cases:
+
+Input: root = [3,2,3,null,3,null,1] -> Output: 7
+
+Input: root = [3,4,5,1,3,null,1] -> Output: 9
+
+Input: root = [4,1,null,2,null,3] -> Output: 7
+
+163. Count Good Nodes in Binary Tree
+URL: https://leetcode.com/problems/count-good-nodes-in-binary-tree/
+
+Tags: Tree, Depth-First Search, Breadth-First Search, Binary Tree
+
+Difficulty: Medium
+
+Description: Given a binary tree root, a node X in the tree is named good if in the path from root to X there are no nodes with a value greater than X. Return the number of good nodes in the binary tree.
+
+Parameters:
+
+root: TreeNode
+
+Return Type: int
+
+Test Cases:
+
+Input: root = [3,1,4,3,null,1,5] -> Output: 4
+
+Input: root = [3,3,null,4,2] -> Output: 3
+
+Input: root = [1] -> Output: 1
+
+164. Maximum Width of Binary Tree
+URL: https://leetcode.com/problems/maximum-width-of-binary-tree/
+
+Tags: Tree, Depth-First Search, Breadth-First Search, Binary Tree
+
+Difficulty: Medium
+
+Description: Return the maximum width of the given tree. The width of one level is defined as the length between the end-nodes (the leftmost and rightmost non-null nodes), where the null nodes between the end-nodes are also counted into the length calculation.
+
+Parameters:
+
+root: TreeNode
+
+Return Type: int
+
+Test Cases:
+
+Input: root = [1,3,2,5,3,null,9] -> Output: 4
+
+Input: root = [1,3,null,5,3] -> Output: 2
+
+Input: root = [1,3,2,5] -> Output: 2
+
+165. All Nodes Distance K in Binary Tree
+URL: https://leetcode.com/problems/all-nodes-distance-k-in-binary-tree/
+
+Tags: Tree, Depth-First Search, Breadth-First Search, Binary Tree
+
+Difficulty: Medium
+
+Description: Return an array of the values of all nodes that have a distance k from the target node.
+
+Parameters:
+
+root: TreeNode
+
+target: TreeNode
+
+k: int
+
+Return Type: List[int]
+
+Test Cases:
+
+Input: root = [3,5,1,6,2,0,8,null,null,7,4], target = 5, k = 2 -> Output: [7,4,1]
+
+Input: root = [1], target = 1, k = 3 -> Output: []
+
+Input: root = [0,2,1,null,null,3], target = 3, k = 3 -> Output: [2]
+
+166. Check Completeness of a Binary Tree
+URL: https://leetcode.com/problems/check-completeness-of-a-binary-tree/
+
+Tags: Tree, Breadth-First Search, Binary Tree
+
+Difficulty: Medium
+
+Description: Determine if a binary tree is complete (all levels are completely filled except possibly the last, which is filled from left to right).
+
+Parameters:
+
+root: TreeNode
+
+Return Type: bool
+
+Test Cases:
+
+Input: root = [1,2,3,4,5,6] -> Output: true
+
+Input: root = [1,2,3,4,5,null,7] -> Output: false
+
+Input: root = [1] -> Output: true
+
+167. Delete Node in a BST
+URL: https://leetcode.com/problems/delete-node-in-a-bst/
+
+Tags: Tree, Binary Search Tree
+
+Difficulty: Medium
+
+Description: Delete the node with the given key in the BST and return the root.
+
+Parameters:
+
+root: TreeNode
+
+key: int
+
+Return Type: TreeNode
+
+Test Cases:
+
+Input: root = [5,3,6,2,4,null,7], key = 3 -> Output: [5,4,6,2,null,null,7]
+
+Input: root = [5,3,6,2,4,null,7], key = 0 -> Output: [5,3,6,2,4,null,7]
+
+Input: root = [], key = 0 -> Output: []
+
+168. Trim a Binary Search Tree
+URL: https://leetcode.com/problems/trim-a-binary-search-tree/
+
+Tags: Tree, Depth-First Search, Binary Search Tree, Binary Tree
+
+Difficulty: Medium
+
+Description: Trim the tree so that all its elements lie in [low, high].
+
+Parameters:
+
+root: TreeNode
+
+low: int
+
+high: int
+
+Return Type: TreeNode
+
+Test Cases:
+
+Input: root = [1,0,2], low = 1, high = 2 -> Output: [1,null,2]
+
+Input: root = [3,0,4,null,2,null,null,1], low = 1, high = 3 -> Output: [3,2,null,1]
+
+Input: root = [1], low = 1, high = 2 -> Output: [1]
+
+169. Course Schedule II
+URL: https://leetcode.com/problems/course-schedule-ii/
+
+Tags: Depth-First Search, Breadth-First Search, Graph, Topological Sort
+
+Difficulty: Medium
+
+Description: Return the ordering of courses you should take to finish all courses.
+
+Parameters:
+
+numCourses: int
+
+prerequisites: List[List[int]]
+
+Return Type: List[int]
+
+Test Cases:
+
+Input: numCourses = 4, prerequisites = [[1,0],[2,0],[3,1],[3,2]] -> Output: [0,2,1,3]
+
+Input: numCourses = 2, prerequisites = [[1,0]] -> Output: [0,1]
+
+Input: numCourses = 2, prerequisites = [[1,0],[0,1]] -> Output: []
+
+170. Surrounded Regions
+URL: https://leetcode.com/problems/surrounded-regions/
+
+Tags: Array, Depth-First Search, Breadth-First Search, Union Find, Matrix
+
+Difficulty: Medium
+
+Description: Capture all regions that are 4-directionally surrounded by 'X'. A region is captured by flipping all 'O's into 'X's in that surrounded region.
+
+Parameters:
+
+board: List[List[str]]
+
+Return Type: None
+
+Test Cases:
+
+Input: board = [["X","X","X","X"],["X","O","O","X"],["X","X","O","X"],["X","O","X","X"]] -> Output: [["X","X","X","X"],["X","X","X","X"],["X","X","X","X"],["X","O","X","X"]]
+
+Input: board = [["X"]] -> Output: [["X"]]
+
+Input: board = [["O","O"],["O","O"]] -> Output: [["O","O"],["O","O"]]
+
+171. Number of Provinces
+URL: https://leetcode.com/problems/number-of-provinces/
+
+Tags: Depth-First Search, Breadth-First Search, Union Find, Graph
+
+Difficulty: Medium
+
+Description: Return the total number of provinces (connected components of cities).
+
+Parameters:
+
+isConnected: List[List[int]]
+
+Return Type: int
+
+Test Cases:
+
+Input: isConnected = [[1,1,0],[1,1,0],[0,0,1]] -> Output: 2
+
+Input: isConnected = [[1,0,0],[0,1,0],[0,0,1]] -> Output: 3
+
+Input: isConnected = [[1,0,0,1],[0,1,1,0],[0,1,1,0],[1,0,0,1]] -> Output: 2
+
+172. Rotting Oranges
+URL: https://leetcode.com/problems/rotting-oranges/
+
+Tags: Array, Breadth-First Search, Matrix
+
+Difficulty: Medium
+
+Description: Every minute, any fresh orange that is 4-directionally adjacent to a rotten orange becomes rotten. Return the minimum number of minutes that must elapse until no cell has a fresh orange.
+
+Parameters:
+
+grid: List[List[int]]
+
+Return Type: int
+
+Test Cases:
+
+Input: grid = [[2,1,1],[1,1,0],[0,1,1]] -> Output: 4
+
+Input: grid = [[2,1,1],[0,1,1],[1,0,1]] -> Output: -1
+
+Input: grid = [[0,2]] -> Output: 0
+
+173. 01 Matrix
+URL: https://leetcode.com/problems/01-matrix/
+
+Tags: Array, Dynamic Programming, Breadth-First Search, Matrix
+
+Difficulty: Medium
+
+Description: Return the distance of the nearest 0 for each cell.
+
+Parameters:
+
+mat: List[List[int]]
+
+Return Type: List[List[int]]
+
+Test Cases:
+
+Input: mat = [[0,0,0],[0,1,0],[0,0,0]] -> Output: [[0,0,0],[0,1,0],[0,0,0]]
+
+Input: mat = [[0,0,0],[0,1,0],[1,1,1]] -> Output: [[0,0,0],[0,1,0],[1,2,1]]
+
+Input: mat = [[1,1],[1,0]] -> Output: [[2,1],[1,0]]
+
+174. Shortest Path in Binary Matrix
+URL: https://leetcode.com/problems/shortest-path-in-binary-matrix/
+
+Tags: Array, Breadth-First Search, Matrix
+
+Difficulty: Medium
+
+Description: Return the length of the shortest clear path in the matrix.
+
+Parameters:
+
+grid: List[List[int]]
+
+Return Type: int
+
+Test Cases:
+
+Input: grid = [[0,1],[1,0]] -> Output: 2
+
+Input: grid = [[0,0,0],[1,1,0],[1,1,0]] -> Output: 4
+
+Input: grid = [[1,0,0],[1,1,0],[1,1,0]] -> Output: -1
+
+175. Is Graph Bipartite?
+URL: https://leetcode.com/problems/is-graph-bipartite/
+
+Tags: Depth-First Search, Breadth-First Search, Union Find, Graph
+
+Difficulty: Medium
+
+Description: Return true if and only if the graph is bipartite.
+
+Parameters:
+
+graph: List[List[int]]
+
+Return Type: bool
+
+Test Cases:
+
+Input: graph = [[1,2,3],[0,2],[0,1,3],[0,2]] -> Output: false
+
+Input: graph = [[1,3],[0,2],[1,3],[0,2]] -> Output: true
+
+Input: graph = [[],[],[]] -> Output: true
+
+176. Keys and Rooms
+URL: https://leetcode.com/problems/keys-and-rooms/
+
+Tags: Depth-First Search, Breadth-First Search, Graph
+
+Difficulty: Medium
+
+Description: Return true if you can visit all the rooms.
+
+Parameters:
+
+rooms: List[List[int]]
+
+Return Type: bool
+
+Test Cases:
+
+Input: rooms = [[1],[2],[3],[]] -> Output: true
+
+Input: rooms = [[1,3],[3,0,1],[2],[0]] -> Output: false
+
+Input: rooms = [[],[1]] -> Output: false
+
+177. All Paths From Source to Target
+URL: https://leetcode.com/problems/all-paths-from-source-to-target/
+
+Tags: Backtracking, Depth-First Search, Graph, Directed Acyclic Graph
+
+Difficulty: Medium
+
+Description: Find all possible paths from node 0 to node n - 1 and return them in any order.
+
+Parameters:
+
+graph: List[List[int]]
+
+Return Type: List[List[int]]
+
+Test Cases:
+
+Input: graph = [[1,2],[3],[3],[]] -> Output: [[0,1,3],[0,2,3]]
+
+Input: graph = [[4,3,1],[3,2,4],[3],[4],[]] -> Output: [[0,4],[0,3,4],[0,1,3,4],[0,1,2,3,4],[0,1,4]]
+
+Input: graph = [[1],[]] -> Output: [[0,1]]
+
+178. Max Area of Island
+URL: https://leetcode.com/problems/max-area-of-island/
+
+Tags: Array, Depth-First Search, Breadth-First Search, Union Find, Matrix
+
+Difficulty: Medium
+
+Description: Return the maximum area of an island in grid.
+
+Parameters:
+
+grid: List[List[int]]
+
+Return Type: int
+
+Test Cases:
+
+Input: grid = [[0,0,1,0,0,0,0,1,0,0,0,0,0]...] (large grid) -> Output: 6
+
+Input: grid = [[0,0,0,0,0,0,0,0]] -> Output: 0
+
+Input: grid = [[1]] -> Output: 1
+
+179. Open the Lock
+URL: https://leetcode.com/problems/open-the-lock/
+
+Tags: Array, Hash Table, String, Breadth-First Search
+
+Difficulty: Medium
+
+Description: Start at "0000", return the minimum total number of turns required to open the lock without hitting deadends.
+
+Parameters:
+
+deadends: List[str]
+
+target: str
+
+Return Type: int
+
+Test Cases:
+
+Input: deadends = ["0201","0101","0102","1212","2002"], target = "0202" -> Output: 6
+
+Input: deadends = ["8888"], target = "0009" -> Output: 1
+
+Input: deadends = ["8887","8889"..."8898"], target = "8888" -> Output: -1
+
+180. Evaluate Division
+URL: https://leetcode.com/problems/evaluate-division/
+
+Tags: Array, Depth-First Search, Breadth-First Search, Union Find, Graph, Shortest Path
+
+Difficulty: Medium
+
+Description: Given equations A / B = k, return the answers to queries C / D.
+
+Parameters:
+
+equations: List[List[str]]
+
+values: List[float]
+
+queries: List[List[str]]
+
+Return Type: List[float]
+
+Test Cases:
+
+Input: equations = [["a","b"],["b","c"]], values = [2.0,3.0], queries = [["a","c"],["b","a"],["a","e"],["a","a"],["x","x"]] -> Output: [6.00000,0.50000,-1.00000,1.00000,-1.00000]
+
+Input: equations = [["a","b"]], values = [0.5], queries = [["a","b"],["b","a"],["a","c"]] -> Output: [0.50000,2.00000,-1.00000]
+
+Input: equations = [["a","b"]], values = [0.0], queries = [["b","a"]] -> Output: 0.0
+
+
+
+
+
+
+
+181. Snakes and Ladders
+URL: https://leetcode.com/problems/snakes-and-ladders/
+
+Tags: Array, Breadth-First Search, Matrix
+
+Difficulty: Medium
+
+Description: Return the least number of moves required to reach the square n^2 on an n x n board. If the square contains a snake or ladder, you must move to the destination of that snake or ladder.
+
+Parameters:
+
+board: List[List[int]]
+
+Return Type: int
+
+Test Cases:
+
+Input: board = [[-1,-1,-1,-1,-1,-1],[-1,-1,-1,-1,-1,-1],[-1,-1,-1,-1,-1,-1],[-1,35,-1,-1,13,-1],[-1,-1,-1,-1,-1,-1],[-1,15,-1,-1,-1,-1]] -> Output: 4
+
+Input: board = [[-1,-1],[-1,3]] -> Output: 1
+
+Input: board = [[1,1],[1,1]] -> Output: 0 (or handled as loop)
+
+182. Minimum Genetic Mutation
+URL: https://leetcode.com/problems/minimum-genetic-mutation/
+
+Tags: Hash Table, String, Breadth-First Search
+
+Difficulty: Medium
+
+Description: A gene string can be represented by an 8-character long string. Given a start gene, an end gene, and a bank of valid gene mutations, return the minimum number of mutations needed to mutate from start to end.
+
+Parameters:
+
+startGene: str
+
+endGene: str
+
+bank: List[str]
+
+Return Type: int
+
+Test Cases:
+
+Input: startGene = "AACCGGTT", endGene = "AACCGGTA", bank = ["AACCGGTA"] -> Output: 1
+
+Input: startGene = "AACCGGTT", endGene = "AAACGGTA", bank = ["AACCGGTA","AACCGCTA","AAACGGTA"] -> Output: 2
+
+Input: startGene = "AAAAACCC", endGene = "AACCCCCC", bank = ["AAAACCCC", "AAACCCCC", "AACCCCCC"] -> Output: 3
+
+183. Find Eventual Safe States
+URL: https://leetcode.com/problems/find-eventual-safe-states/
+
+Tags: Depth-First Search, Breadth-First Search, Graph, Topological Sort
+
+Difficulty: Medium
+
+Description: A node is a safe node if every possible path starting from that node leads to a terminal node (or another safe node). Return an array containing all the safe nodes of the graph.
+
+Parameters:
+
+graph: List[List[int]]
+
+Return Type: List[int]
+
+Test Cases:
+
+Input: graph = [[1,2],[2,3],[5],[0],[5],[],[]] -> Output: [2,4,5,6]
+
+Input: graph = [[1,2,3,4],[1,2],[3,4],[0,4],[]] -> Output: [4]
+
+Input: graph = [[],[0,2,3,4],[3],[4],[]] -> Output: [0,1,2,3,4]
+
+184. Basic Calculator II
+URL: https://leetcode.com/problems/basic-calculator-ii/
+
+Tags: Math, String, Stack
+
+Difficulty: Medium
+
+Description: Given a string s which represents an expression, evaluate this expression and return its value. The integer division should truncate toward zero.
+
+Parameters:
+
+s: str
+
+Return Type: int
+
+Test Cases:
+
+Input: s = "3+2*2" -> Output: 7
+
+Input: s = " 3/2 " -> Output: 1
+
+Input: s = " 3+5 / 2 " -> Output: 5
+
+185. Decode String
+URL: https://leetcode.com/problems/decode-string/
+
+Tags: String, Stack, Recursion
+
+Difficulty: Medium
+
+Description: Given an encoded string, return its decoded string. The encoding rule is: k[encoded_string], where the encoded_string inside the square brackets is being repeated exactly k times.
+
+Parameters:
+
+s: str
+
+Return Type: str
+
+Test Cases:
+
+Input: s = "3[a]2[bc]" -> Output: "aaabcbc"
+
+Input: s = "3[a2[c]]" -> Output: "accaccacc"
+
+Input: s = "2[abc]3[cd]ef" -> Output: "abcabccdcdcdef"
+
+186. Kth Smallest Element in a Sorted Matrix
+URL: https://leetcode.com/problems/kth-smallest-element-in-a-sorted-matrix/
+
+Tags: Array, Binary Search, Sorting, Heap (Priority Queue), Matrix
+
+Difficulty: Medium
+
+Description: Given an n x n matrix where each of the rows and columns is sorted in ascending order, return the kth smallest element in the matrix.
+
+Parameters:
+
+matrix: List[List[int]]
+
+k: int
+
+Return Type: int
+
+Test Cases:
+
+Input: matrix = [[1,5,9],[10,11,13],[12,13,15]], k = 8 -> Output: 13
+
+Input: matrix = [[-5]], k = 1 -> Output: -5
+
+Input: matrix = [[1,2],[1,3]], k = 2 -> Output: 1
+
+187. Find K Closest Elements
+URL: https://leetcode.com/problems/find-k-closest-elements/
+
+Tags: Array, Two Pointers, Binary Search, Sliding Window, Sorting, Heap
+
+Difficulty: Medium
+
+Description: Given a sorted integer array arr, two integers k and x, return the k closest integers to x in the array. The result should also be sorted in ascending order.
+
+Parameters:
+
+arr: List[int]
+
+k: int
+
+x: int
+
+Return Type: List[int]
+
+Test Cases:
+
+Input: arr = [1,2,3,4,5], k = 4, x = 3 -> Output: [1,2,3,4]
+
+Input: arr = [1,2,3,4,5], k = 4, x = -1 -> Output: [1,2,3,4]
+
+Input: arr = [1,1,1,10,10,10], k = 1, x = 9 -> Output: [10]
+
+188. Top K Frequent Words
+URL: https://leetcode.com/problems/top-k-frequent-words/
+
+Tags: Hash Table, String, Trie, Sorting, Heap (Priority Queue)
+
+Difficulty: Medium
+
+Description: Given an array of strings words and an integer k, return the k most frequent strings. Sort by frequency highest to lowest, then lexicographically.
+
+Parameters:
+
+words: List[str]
+
+k: int
+
+Return Type: List[str]
+
+Test Cases:
+
+Input: words = ["i","love","leetcode","i","love","coding"], k = 2 -> Output: ["i","love"]
+
+Input: words = ["the","day","is","sunny","the","the","the","sunny","is","is"], k = 4 -> Output: ["the","is","sunny","day"]
+
+Input: words = ["a","aa","aaa"], k = 2 -> Output: ["a","aa"]
+
+189. Reorganize String
+URL: https://leetcode.com/problems/reorganize-string/
+
+Tags: Hash Table, String, Greedy, Sorting, Heap (Priority Queue), Counting
+
+Difficulty: Medium
+
+Description: Given a string s, rearrange the characters of s so that any two adjacent characters are not the same. Return any valid rearrangement.
+
+Parameters:
+
+s: str
+
+Return Type: str
+
+Test Cases:
+
+Input: s = "aab" -> Output: "aba"
+
+Input: s = "aaab" -> Output: ""
+
+Input: s = "vvvlo" -> Output: "vlvov"
+
+190. Last Stone Weight
+URL: https://leetcode.com/problems/last-stone-weight/
+
+Tags: Array, Heap (Priority Queue)
+
+Difficulty: Easy
+
+Description: Smash heaviest two stones. Return weight of the last remaining stone.
+
+Parameters:
+
+stones: List[int]
+
+Return Type: int
+
+Test Cases:
+
+Input: stones = [2,7,4,1,8,1] -> Output: 1
+
+Input: stones = [1] -> Output: 1
+
+Input: stones = [2,2] -> Output: 0
+
+191. Kth Largest Element in a Stream
+URL: https://leetcode.com/problems/kth-largest-element-in-a-stream/
+
+Tags: Tree, Design, Binary Search Tree, Heap (Priority Queue), Data Stream
+
+Difficulty: Easy
+
+Description: Design a class to find the kth largest element in a stream.
+
+Parameters:
+
+Class Methods: KthLargest(k: int, nums: List[int]), add(val: int)
+
+Return Type: void / int
+
+Test Cases:
+
+Input: [KthLargest(3, [4, 5, 8, 2]), add(3)] -> Output: [null, 4]
+
+Input: [add(5)] (after above) -> Output: [5]
+
+Input: [add(10), add(9), add(4)] -> Output: [5, 8, 8]
+
+192. Sort Characters By Frequency
+URL: https://leetcode.com/problems/sort-characters-by-frequency/
+
+Tags: Hash Table, String, Sorting, Heap (Priority Queue), Bucket Sort
+
+Difficulty: Medium
+
+Description: Given a string s, sort it in decreasing order based on the frequency of the characters.
+
+Parameters:
+
+s: str
+
+Return Type: str
+
+Test Cases:
+
+Input: s = "tree" -> Output: "eert"
+
+Input: s = "cccaaa" -> Output: "aaaccc"
+
+Input: s = "Aabb" -> Output: "bbAa"
+
+193. Implement Queue using Stacks
+URL: https://leetcode.com/problems/implement-queue-using-stacks/
+
+Tags: Stack, Design, Queue
+
+Difficulty: Easy
+
+Description: Implement a FIFO queue using only two stacks.
+
+Parameters:
+
+Class Methods: push(int), pop(), peek(), empty()
+
+Return Type: void / int / int / bool
+
+Test Cases:
+
+Input: [MyQueue(), push(1), push(2), peek()] -> Output: [null, null, null, 1]
+
+Input: [pop()] -> Output: [1]
+
+Input: [empty()] -> Output: [false]
+
+194. Min Cost Climbing Stairs
+URL: https://leetcode.com/problems/min-cost-climbing-stairs/
+
+Tags: Array, Dynamic Programming
+
+Difficulty: Easy
+
+Description: Return the minimum cost to reach the top of the floor. You can start from index 0 or 1.
+
+Parameters:
+
+cost: List[int]
+
+Return Type: int
+
+Test Cases:
+
+Input: cost = [10,15,20] -> Output: 15
+
+Input: cost = [1,100,1,1,1,100,1,1,100,1] -> Output: 6
+
+Input: cost = [0,0,0,1] -> Output: 0
+
+195. N-th Tribonacci Number
+URL: https://leetcode.com/problems/n-th-tribonacci-number/
+
+Tags: Math, Dynamic Programming, Memoization
+
+Difficulty: Easy
+
+Description: The Tribonacci sequence Tn is defined as follows: T0 = 0, T1 = 1, T2 = 1, and Tn+3 = Tn + Tn+1 + Tn+2. Given n, return the value of Tn.
+
+Parameters:
+
+n: int
+
+Return Type: int
+
+Test Cases:
+
+Input: n = 4 -> Output: 4
+
+Input: n = 25 -> Output: 1389537
+
+Input: n = 0 -> Output: 0
+
+196. Pascal's Triangle
+URL: https://leetcode.com/problems/pascals-triangle/
+
+Tags: Array, Dynamic Programming
+
+Difficulty: Easy
+
+Description: Given an integer numRows, return the first numRows of Pascal's triangle.
+
+Parameters:
+
+numRows: int
+
+Return Type: List[List[int]]
+
+Test Cases:
+
+Input: numRows = 5 -> Output: [[1],[1,1],[1,2,1],[1,3,3,1],[1,4,6,4,1]]
+
+Input: numRows = 1 -> Output: [[1]]
+
+Input: numRows = 2 -> Output: [[1],[1,1]]
+
+197. Remove Duplicates from Sorted List II
+URL: https://leetcode.com/problems/remove-duplicates-from-sorted-list-ii/
+
+Tags: Linked List, Two Pointers
+
+Difficulty: Medium
+
+Description: Given the head of a sorted linked list, delete all nodes that have duplicate numbers, leaving only distinct numbers.
+
+Parameters:
+
+head: ListNode
+
+Return Type: ListNode
+
+Test Cases:
+
+Input: head = [1,2,3,3,4,4,5] -> Output: [1,2,5]
+
+Input: head = [1,1,1,2,3] -> Output: [2,3]
+
+Input: head = [1,1] -> Output: []
+
+198. Swap Nodes in Pairs
+URL: https://leetcode.com/problems/swap-nodes-in-pairs/
+
+Tags: Linked List, Recursion
+
+Difficulty: Medium
+
+Description: Given a linked list, swap every two adjacent nodes and return its head.
+
+Parameters:
+
+head: ListNode
+
+Return Type: ListNode
+
+Test Cases:
+
+Input: head = [1,2,3,4] -> Output: [2,1,4,3]
+
+Input: head = [] -> Output: []
+
+Input: head = [1] -> Output: [1]
+
+199. Design Browser History
+URL: https://leetcode.com/problems/design-browser-history/
+
+Tags: Array, Linked List, Stack, Design, Doubly-Linked List
+
+Difficulty: Medium
+
+Description: Design a system that supports visiting URLs, and moving back and forward in history.
+
+Parameters:
+
+Class Methods: BrowserHistory(homepage: str), visit(url: str), back(steps: int), forward(steps: int)
+
+Return Type: void / str
+
+Test Cases:
+
+Input: [BrowserHistory("google.com"), visit("facebook.com"), visit("youtube.com")] -> Output: [null, null, null]
+
+Input: [back(1), back(1)] -> Output: ["facebook.com", "google.com"]
+
+Input: [forward(1), visit("linkedin.com"), forward(2)] -> Output: ["facebook.com", null, "linkedin.com"]
+
+200. Ugly Number II
+URL: https://leetcode.com/problems/ugly-number-ii/
+
+Tags: Hash Table, Math, Dynamic Programming, Heap (Priority Queue)
+
+Difficulty: Medium
+
+Description: An ugly number is a positive integer whose prime factors are limited to 2, 3, and 5. Given n, return the nth ugly number.
+
+Parameters:
+
+n: int
+
+Return Type: int
+
+Test Cases:
+
+Input: n = 10 -> Output: 12
+
+Input: n = 1 -> Output: 1
+
+Input: n = 11 -> Output: 15
+
+
+
+201. Trapping Rain Water
+URL: https://leetcode.com/problems/trapping-rain-water/
+
+Tags: Array, Two Pointers, Dynamic Programming, Stack, Monotonic Stack
+
+Difficulty: Hard
+
+Description: Given n non-negative integers representing an elevation map where the width of each bar is 1, compute how much water it can trap after raining.
+
+Parameters:
+
+height: List[int]
+
+Return Type: int
+
+Test Cases:
+
+Input: height = [0,1,0,2,1,0,1,3,2,1,2,1] -> Output: 6
+
+Input: height = [4,2,0,3,2,5] -> Output: 9
+
+Input: height = [1,2,3] -> Output: 0
+
+202. First Missing Positive
+URL: https://leetcode.com/problems/first-missing-positive/
+
+Tags: Array, Hash Table
+
+Difficulty: Hard
+
+Description: Given an unsorted integer array nums, return the smallest missing positive integer. You must implement an algorithm that runs in O(n) time and uses constant extra space.
+
+Parameters:
+
+nums: List[int]
+
+Return Type: int
+
+Test Cases:
+
+Input: nums = [1,2,0] -> Output: 3
+
+Input: nums = [3,4,-1,1] -> Output: 2
+
+Input: nums = [7,8,9,11,12] -> Output: 1
+
+203. Maximal Square
+URL: https://leetcode.com/problems/maximal-square/
+
+Tags: Array, Dynamic Programming, Matrix
+
+Difficulty: Medium
+
+Description: Given an m x n binary matrix filled with 0s and 1s, find the largest square containing only 1s and return its area.
+
+Parameters:
+
+matrix: List[List[str]]
+
+Return Type: int
+
+Test Cases:
+
+Input: matrix = [["1","0","1","0","0"],["1","0","1","1","1"],["1","1","1","1","1"],["1","0","0","1","0"]] -> Output: 4
+
+Input: matrix = [["0","1"],["1","0"]] -> Output: 1
+
+Input: matrix = [["0"]] -> Output: 0
+
+204. Best Time to Buy and Sell Stock with Cooldown
+URL: https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/
+
+Tags: Array, Dynamic Programming
+
+Difficulty: Medium
+
+Description: Find the maximum profit. After you sell your stock, you cannot buy stock on the next day (cooldown one day).
+
+Parameters:
+
+prices: List[int]
+
+Return Type: int
+
+Test Cases:
+
+Input: prices = [1,2,3,0,2] -> Output: 3
+
+Input: prices = [1] -> Output: 0
+
+Input: prices = [1,2,4] -> Output: 3
+
+205. Best Time to Buy and Sell Stock with Transaction Fee
+URL: https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-transaction-fee/
+
+Tags: Array, Dynamic Programming, Greedy
+
+Difficulty: Medium
+
+Description: Find the maximum profit. You may complete as many transactions as you like, but you must pay the transaction fee for each transaction.
+
+Parameters:
+
+prices: List[int]
+
+fee: int
+
+Return Type: int
+
+Test Cases:
+
+Input: prices = [1,3,2,8,4,9], fee = 2 -> Output: 8
+
+Input: prices = [1,3,7,5,10,3], fee = 3 -> Output: 6
+
+Input: prices = [1,1,1], fee = 0 -> Output: 0
+
+206. Best Time to Buy and Sell Stock III
+URL: https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iii/
+
+Tags: Array, Dynamic Programming
+
+Difficulty: Hard
+
+Description: Find the maximum profit. You may complete at most two transactions.
+
+Parameters:
+
+prices: List[int]
+
+Return Type: int
+
+Test Cases:
+
+Input: prices = [3,3,5,0,0,3,1,4] -> Output: 6
+
+Input: prices = [1,2,3,4,5] -> Output: 4
+
+Input: prices = [7,6,4,3,1] -> Output: 0
+
+207. Best Time to Buy and Sell Stock IV
+URL: https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iv/
+
+Tags: Array, Dynamic Programming
+
+Difficulty: Hard
+
+Description: Find the maximum profit. You may complete at most k transactions.
+
+Parameters:
+
+k: int
+
+prices: List[int]
+
+Return Type: int
+
+Test Cases:
+
+Input: k = 2, prices = [2,4,1] -> Output: 2
+
+Input: k = 2, prices = [3,2,6,5,0,3] -> Output: 7
+
+Input: k = 0, prices = [1,3] -> Output: 0
+
+208. Dungeon Game
+URL: https://leetcode.com/problems/dungeon-game/
+
+Tags: Array, Dynamic Programming, Matrix
+
+Difficulty: Hard
+
+Description: The knight starts at the top-left room and must reach the princess at the bottom-right. Calculate the minimum initial health needed to survive.
+
+Parameters:
+
+dungeon: List[List[int]]
+
+Return Type: int
+
+Test Cases:
+
+Input: dungeon = [[-2,-3,3],[-5,-10,1],[10,30,-5]] -> Output: 7
+
+Input: dungeon = [[0]] -> Output: 1
+
+Input: dungeon = [[100]] -> Output: 1
+
+209. Longest Valid Parentheses
+URL: https://leetcode.com/problems/longest-valid-parentheses/
+
+Tags: String, Dynamic Programming, Stack
+
+Difficulty: Hard
+
+Description: Given a string containing just the characters '(' and ')', return the length of the longest valid (well-formed) parentheses substring.
+
+Parameters:
+
+s: str
+
+Return Type: int
+
+Test Cases:
+
+Input: s = "(()" -> Output: 2
+
+Input: s = ")()())" -> Output: 4
+
+Input: s = "" -> Output: 0
+
+210. Wildcard Matching
+URL: https://leetcode.com/problems/wildcard-matching/
+
+Tags: String, Dynamic Programming, Greedy, Recursion
+
+Difficulty: Hard
+
+Description: Implement wildcard pattern matching with support for '?' (any single char) and '*' (any sequence of characters).
+
+Parameters:
+
+s: str
+
+p: str
+
+Return Type: bool
+
+Test Cases:
+
+Input: s = "aa", p = "a" -> Output: false
+
+Input: s = "aa", p = "*" -> Output: true
+
+Input: s = "cb", p = "?a" -> Output: false
+
+211. Russian Doll Envelopes
+URL: https://leetcode.com/problems/russian-doll-envelopes/
+
+Tags: Array, Binary Search, Dynamic Programming, Sorting
+
+Difficulty: Hard
+
+Description: Return the maximum number of envelopes you can Russian doll (put one inside the other).
+
+Parameters:
+
+envelopes: List[List[int]]
+
+Return Type: int
+
+Test Cases:
+
+Input: envelopes = [[5,4],[6,4],[6,7],[2,3]] -> Output: 3
+
+Input: envelopes = [[1,1],[1,1],[1,1]] -> Output: 1
+
+Input: envelopes = [[4,5],[4,6],[6,7],[2,3],[1,1]] -> Output: 4
+
+212. Triangle
+URL: https://leetcode.com/problems/triangle/
+
+Tags: Array, Dynamic Programming
+
+Difficulty: Medium
+
+Description: Return the minimum path sum from top to bottom. For each step, you may move to an adjacent number of the row below.
+
+Parameters:
+
+triangle: List[List[int]]
+
+Return Type: int
+
+Test Cases:
+
+Input: triangle = [[2],[3,4],[6,5,7],[4,1,8,3]] -> Output: 11
+
+Input: triangle = [[-10]] -> Output: -10
+
+Input: triangle = [[1],[2,3]] -> Output: 3
+
+213. Minimum Path Sum
+URL: https://leetcode.com/problems/minimum-path-sum/
+
+Tags: Array, Dynamic Programming, Matrix
+
+Difficulty: Medium
+
+Description: Find a path from top left to bottom right which minimizes the sum of all numbers along its path.
+
+Parameters:
+
+grid: List[List[int]]
+
+Return Type: int
+
+Test Cases:
+
+Input: grid = [[1,3,1],[1,5,1],[4,2,1]] -> Output: 7
+
+Input: grid = [[1,2,3],[4,5,6]] -> Output: 12
+
+Input: grid = [[5]] -> Output: 5
+
+214. Perfect Squares
+URL: https://leetcode.com/problems/perfect-squares/
+
+Tags: Math, Dynamic Programming, Breadth-First Search
+
+Difficulty: Medium
+
+Description: Return the least number of perfect square numbers that sum to n.
+
+Parameters:
+
+n: int
+
+Return Type: int
+
+Test Cases:
+
+Input: n = 12 -> Output: 3 (4+4+4)
+
+Input: n = 13 -> Output: 2 (4+9)
+
+Input: n = 1 -> Output: 1
+
+215. Ones and Zeroes
+URL: https://leetcode.com/problems/ones-and-zeroes/
+
+Tags: Array, String, Dynamic Programming
+
+Difficulty: Medium
+
+Description: Return the size of the largest subset of strs such that there are at most m 0's and n 1's in the subset.
+
+Parameters:
+
+strs: List[str]
+
+m: int
+
+n: int
+
+Return Type: int
+
+Test Cases:
+
+Input: strs = ["10","0001","111001","1","0"], m = 5, n = 3 -> Output: 4
+
+Input: strs = ["10","0","1"], m = 1, n = 1 -> Output: 2
+
+Input: strs = ["111","1000"], m = 1, n = 1 -> Output: 0
+
+216. Partition to K Equal Sum Subsets
+URL: https://leetcode.com/problems/partition-to-k-equal-sum-subsets/
+
+Tags: Array, Dynamic Programming, Backtracking, Bit Masking
+
+Difficulty: Medium
+
+Description: Return true if it is possible to divide this array into k non-empty subsets whose sums are all equal.
+
+Parameters:
+
+nums: List[int]
+
+k: int
+
+Return Type: bool
+
+Test Cases:
+
+Input: nums = [4,3,2,3,5,2,1], k = 4 -> Output: true
+
+Input: nums = [1,2,3,4], k = 3 -> Output: false
+
+Input: nums = [2,2,2,2,3,4,5], k = 4 -> Output: false
+
+217. Online Stock Span
+URL: https://leetcode.com/problems/online-stock-span/
+
+Tags: Stack, Design, Monotonic Stack, Data Stream
+
+Difficulty: Medium
+
+Description: Design an algorithm that collects daily price quotes for some stock and returns the span of that stock's price for the current day.
+
+Parameters:
+
+Class Methods: next(price: int)
+
+Return Type: int
+
+Test Cases:
+
+Input: [StockSpanner(), next(100), next(80), next(60), next(70), next(60), next(75), next(85)] -> Output: [null, 1, 1, 1, 2, 1, 4, 6]
+
+218. Remove K Digits
+URL: https://leetcode.com/problems/remove-k-digits/
+
+Tags: String, Stack, Greedy, Monotonic Stack
+
+Difficulty: Medium
+
+Description: Return the smallest possible integer after removing k digits from num.
+
+Parameters:
+
+num: str
+
+k: int
+
+Return Type: str
+
+Test Cases:
+
+Input: num = "1432219", k = 3 -> Output: "1219"
+
+Input: num = "10200", k = 1 -> Output: "200"
+
+Input: num = "10", k = 2 -> Output: "0"
+
+219. Increasing Triplet Subsequence
+URL: https://leetcode.com/problems/increasing-triplet-subsequence/
+
+Tags: Array, Greedy
+
+Difficulty: Medium
+
+Description: Return true if there exists a triple of indices (i, j, k) such that i < j < k and nums[i] < nums[j] < nums[k].
+
+Parameters:
+
+nums: List[int]
+
+Return Type: bool
+
+Test Cases:
+
+Input: nums = [1,2,3,4,5] -> Output: true
+
+Input: nums = [5,4,3,2,1] -> Output: false
+
+Input: nums = [2,1,5,0,4,6] -> Output: true
+
+220. Longest Palindromic Subsequence
+URL: https://leetcode.com/problems/longest-palindromic-subsequence/
+
+Tags: String, Dynamic Programming
+
+Difficulty: Medium
+
+Description: Given a string s, find the longest palindromic subsequence's length in s.
+
+Parameters:
+
+s: str
+
+Return Type: int
+
+Test Cases:
+
+Input: s = "bbbab" -> Output: 4
+
+Input: s = "cbbd" -> Output: 2
+
+Input: s = "a" -> Output: 1
+
+
+
+221. String to Integer (atoi)
+URL: https://leetcode.com/problems/string-to-integer-atoi/
+
+Tags: String, Optimization
+
+Difficulty: Medium
+
+Description: Implement the myAtoi(string s) function, which converts a string to a 32-bit signed integer.
+
+Parameters:
+
+s: str
+
+Return Type: int
+
+Test Cases:
+
+Input: s = "42" -> Output: 42
+
+Input: s = " -42" -> Output: -42
+
+Input: s = "4193 with words" -> Output: 4193
+
+222. Integer to Roman
+URL: https://leetcode.com/problems/integer-to-roman/
+
+Tags: Hash Table, Math, String
+
+Difficulty: Medium
+
+Description: Given an integer, convert it to a roman numeral.
+
+Parameters:
+
+num: int
+
+Return Type: str
+
+Test Cases:
+
+Input: num = 3 -> Output: "III"
+
+Input: num = 58 -> Output: "LVIII"
+
+Input: num = 1994 -> Output: "MCMXCIV"
+
+223. Roman to Integer
+URL: https://leetcode.com/problems/roman-to-integer/
+
+Tags: Hash Table, Math, String
+
+Difficulty: Easy
+
+Description: Given a roman numeral, convert it to an integer.
+
+Parameters:
+
+s: str
+
+Return Type: int
+
+Test Cases:
+
+Input: s = "III" -> Output: 3
+
+Input: s = "LVIII" -> Output: 58
+
+Input: s = "MCMXCIV" -> Output: 1994
+
+224. Compare Version Numbers
+URL: https://leetcode.com/problems/compare-version-numbers/
+
+Tags: Two Pointers, String
+
+Difficulty: Medium
+
+Description: Given two version numbers, version1 and version2, compare them. Return -1 if v1 < v2, 1 if v1 > v2, 0 otherwise.
+
+Parameters:
+
+version1: str
+
+version2: str
+
+Return Type: int
+
+Test Cases:
+
+Input: version1 = "1.01", version2 = "1.001" -> Output: 0
+
+Input: version1 = "1.0", version2 = "1.0.0" -> Output: 0
+
+Input: version1 = "0.1", version2 = "1.1" -> Output: -1
+
+225. Zigzag Conversion
+URL: https://leetcode.com/problems/zigzag-conversion/
+
+Tags: String
+
+Difficulty: Medium
+
+Description: The string "PAYPALISHIRING" is written in a zigzag pattern on a given number of rows. Read line by line.
+
+Parameters:
+
+s: str
+
+numRows: int
+
+Return Type: str
+
+Test Cases:
+
+Input: s = "PAYPALISHIRING", numRows = 3 -> Output: "PAHNAPLSIIGYIR"
+
+Input: s = "PAYPALISHIRING", numRows = 4 -> Output: "PINALSIGYAHRPI"
+
+Input: s = "A", numRows = 1 -> Output: "A"
+
+226. Text Justification
+URL: https://leetcode.com/problems/text-justification/
+
+Tags: Array, String, Simulation
+
+Difficulty: Hard
+
+Description: Format the text such that each line has exactly maxWidth characters and is fully (left and right) justified.
+
+Parameters:
+
+words: List[str]
+
+maxWidth: int
+
+Return Type: List[str]
+
+Test Cases:
+
+Input: words = ["This", "is", "an", "example", "of", "text", "justification."], maxWidth = 16 -> Output: ["This is an", "example of text", "justification. "]
+
+Input: words = ["What","must","be","acknowledgment","shall","be"], maxWidth = 16 -> Output: ["What must be", "acknowledgment ", "shall be "]
+
+Input: words = ["A"], maxWidth = 1 -> Output: ["A"]
+
+227. Simplify Path
+URL: https://leetcode.com/problems/simplify-path/
+
+Tags: String, Stack
+
+Difficulty: Medium
+
+Description: Convert an absolute path (starting with '/') to the simplified canonical path.
+
+Parameters:
+
+path: str
+
+Return Type: str
+
+Test Cases:
+
+Input: path = "/home/" -> Output: "/home"
+
+Input: path = "/../" -> Output: "/"
+
+Input: path = "/home//foo/" -> Output: "/home/foo"
+
+228. Restore IP Addresses
+URL: https://leetcode.com/problems/restore-ip-addresses/
+
+Tags: String, Backtracking
+
+Difficulty: Medium
+
+Description: Return all possible valid IP addresses that can be formed by inserting dots into s.
+
+Parameters:
+
+s: str
+
+Return Type: List[str]
+
+Test Cases:
+
+Input: s = "25525511135" -> Output: ["255.255.11.135","255.255.111.35"]
+
+Input: s = "0000" -> Output: ["0.0.0.0"]
+
+Input: s = "101023" -> Output: ["1.0.10.23","1.0.102.3"...]
+
+229. Subarray Sum Equals K
+URL: https://leetcode.com/problems/subarray-sum-equals-k/
+
+Tags: Array, Hash Table, Prefix Sum
+
+Difficulty: Medium
+
+Description: Return the total number of subarrays whose sum equals to k.
+
+Parameters:
+
+nums: List[int]
+
+k: int
+
+Return Type: int
+
+Test Cases:
+
+Input: nums = [1,1,1], k = 2 -> Output: 2
+
+Input: nums = [1,2,3], k = 3 -> Output: 2
+
+Input: nums = [1], k = 0 -> Output: 0
+
+230. Contiguous Array
+URL: https://leetcode.com/problems/contiguous-array/
+
+Tags: Array, Hash Table, Prefix Sum
+
+Difficulty: Medium
+
+Description: Given a binary array, return the maximum length of a contiguous subarray with an equal number of 0 and 1.
+
+Parameters:
+
+nums: List[int]
+
+Return Type: int
+
+Test Cases:
+
+Input: nums = [0,1] -> Output: 2
+
+Input: nums = [0,1,0] -> Output: 2
+
+Input: nums = [0,0,0,1,1,1] -> Output: 6
+
+231. Maximum Sum Circular Subarray
+URL: https://leetcode.com/problems/maximum-sum-circular-subarray/
+
+Tags: Array, Divide and Conquer, Dynamic Programming, Queue, Monotonic Queue
+
+Difficulty: Medium
+
+Description: Return the maximum possible sum of a non-empty subarray of nums (circular).
+
+Parameters:
+
+nums: List[int]
+
+Return Type: int
+
+Test Cases:
+
+Input: nums = [1,-2,3,-2] -> Output: 3
+
+Input: nums = [5,-3,5] -> Output: 10
+
+Input: nums = [-3,-2,-3] -> Output: -2
+
+232. Subarray Product Less Than K
+URL: https://leetcode.com/problems/subarray-product-less-than-k/
+
+Tags: Array, Sliding Window
+
+Difficulty: Medium
+
+Description: Return the number of contiguous subarrays where the product of all the elements in the subarray is strictly less than k.
+
+Parameters:
+
+nums: List[int]
+
+k: int
+
+Return Type: int
+
+Test Cases:
+
+Input: nums = [10,5,2,6], k = 100 -> Output: 8
+
+Input: nums = [1,2,3], k = 0 -> Output: 0
+
+Input: nums = [10,9,10,4,3,8,3,3,6,2,10,10,9,3], k = 19 -> Output: 18
+
+233. Find Pivot Index
+URL: https://leetcode.com/problems/find-pivot-index/
+
+Tags: Array, Prefix Sum
+
+Difficulty: Easy
+
+Description: Calculate the pivot index where the sum of numbers to the left equals the sum of numbers to the right.
+
+Parameters:
+
+nums: List[int]
+
+Return Type: int
+
+Test Cases:
+
+Input: nums = [1,7,3,6,5,6] -> Output: 3
+
+Input: nums = [1,2,3] -> Output: -1
+
+Input: nums = [2,1,-1] -> Output: 0
+
+234. Range Sum Query 2D - Immutable
+URL: https://leetcode.com/problems/range-sum-query-2d-immutable/
+
+Tags: Array, Design, Matrix, Prefix Sum
+
+Difficulty: Medium
+
+Description: Handle multiple queries of calculating the sum of the elements inside a rectangle defined by its upper left corner and lower right corner.
+
+Parameters:
+
+Constructor: matrix: List[List[int]]
+
+Method: sumRegion(row1: int, col1: int, row2: int, col2: int)
+
+Return Type: int
+
+Test Cases:
+
+Input: [NumMatrix([[3,0,1,4,2],[5,6,3,2,1]...]), sumRegion(2,1,4,3)] -> Output: [null, 8]
+
+Input: [sumRegion(1,1,2,2)] -> Output: [11]
+
+Input: [sumRegion(1,2,2,4)] -> Output: [12]
+
+235. Random Pick with Weight
+URL: https://leetcode.com/problems/random-pick-with-weight/
+
+Tags: Array, Math, Binary Search, Prefix Sum, Randomized
+
+Difficulty: Medium
+
+Description: Implement a function pickIndex() which randomly picks an index based on weights.
+
+Parameters:
+
+Constructor: w: List[int]
+
+Method: pickIndex()
+
+Return Type: int
+
+Test Cases:
+
+Input: [Solution([1]), pickIndex()] -> Output: [null, 0]
+
+Input: [Solution([1,3]), pickIndex()] -> Output: [null, 1] (Higher prob. for 1)
+
+Input: [Solution([1,3]), pickIndex()] -> Output: [null, 0] (Lower prob. for 0)
+
+236. Shuffle an Array
+URL: https://leetcode.com/problems/shuffle-an-array/
+
+Tags: Array, Math, Randomized
+
+Difficulty: Medium
+
+Description: Design an algorithm to randomly shuffle the array.
+
+Parameters:
+
+Constructor: nums: List[int]
+
+Methods: reset(), shuffle()
+
+Return Type: List[int]
+
+Test Cases:
+
+Input: [Solution([1,2,3]), shuffle()] -> Output: [null, [2,1,3]] (Random)
+
+Input: [reset()] -> Output: [[1,2,3]]
+
+Input: [shuffle()] -> Output: [[1,3,2]]
+
+237. Insert Delete GetRandom O(1)
+URL: https://leetcode.com/problems/insert-delete-getrandom-o1/
+
+Tags: Array, Hash Table, Math, Design, Randomized
+
+Difficulty: Medium
+
+Description: Implement a set where insert, remove, and getRandom all run in average O(1) time.
+
+Parameters:
+
+Methods: insert(val: int), remove(val: int), getRandom()
+
+Return Type: bool / int
+
+Test Cases:
+
+Input: [insert(1), remove(2), insert(2), getRandom()] -> Output: [true, false, true, 2]
+
+Input: [remove(1), insert(2)] -> Output: [true, false]
+
+Input: [getRandom()] -> Output: [2]
+
+238. Insert Delete GetRandom O(1) - Duplicates allowed
+URL: https://leetcode.com/problems/insert-delete-getrandom-o1-duplicates-allowed/
+
+Tags: Array, Hash Table, Math, Design, Randomized
+
+Difficulty: Hard
+
+Description: Implement a collection allowing duplicates where operations run in O(1) time.
+
+Parameters:
+
+Methods: insert(val: int), remove(val: int), getRandom()
+
+Return Type: bool / int
+
+Test Cases:
+
+Input: [insert(1), insert(1), insert(2)] -> Output: [true, false, true]
+
+Input: [getRandom()] -> Output: [1] (2/3 chance)
+
+Input: [remove(1), getRandom()] -> Output: [true, 1] (1/2 chance)
+
+239. First Unique Character in a String
+URL: https://leetcode.com/problems/first-unique-character-in-a-string/
+
+Tags: Hash Table, String, Queue, Counting
+
+Difficulty: Easy
+
+Description: Find the first non-repeating character in a string and return its index. If it does not exist, return -1.
+
+Parameters:
+
+s: str
+
+Return Type: int
+
+Test Cases:
+
+Input: s = "leetcode" -> Output: 0
+
+Input: s = "loveleetcode" -> Output: 2
+
+Input: s = "aabb" -> Output: -1
+
+240. Is Subsequence
+URL: https://leetcode.com/problems/is-subsequence/
+
+Tags: Two Pointers, String, Dynamic Programming
+
+Difficulty: Easy
+
+Description: Return true if s is a subsequence of t, or false otherwise.
+
+Parameters:
+
+s: str
+
+t: str
+
+Return Type: bool
+
+Test Cases:
+
+Input: s = "abc", t = "ahbgdc" -> Output: true
+
+Input: s = "axc", t = "ahbgdc" -> Output: false
+
+Input: s = "", t = "ahbgdc" -> Output: true
+
+
+
+question name - question type
+
+
+Two Sum - Array / Hash Table
+
+Best Time to Buy and Sell Stock - Array / DP
+
+Contains Duplicate - Array / Hash Table
+
+Product of Array Except Self - Array / Prefix Sum
+
+Maximum Subarray - Array / DP
+
+Maximum Product Subarray - Array / DP
+
+Find Minimum in Rotated Sorted Array - Binary Search
+
+Search in Rotated Sorted Array - Binary Search
+
+3Sum - Two Pointers
+
+Container With Most Water - Two Pointers / Greedy
+
+Sliding Window Maximum - Sliding Window / Heap
+
+Minimum Window Substring - Sliding Window
+
+Longest Substring Without Repeating Characters - Sliding Window
+
+Longest Repeating Character Replacement - Sliding Window
+
+Valid Anagram - Hash Table / String
+
+Group Anagrams - Hash Table / String
+
+Valid Parentheses - Stack
+
+Valid Palindrome - Two Pointers / String
+
+Longest Palindromic Substring - String / DP
+
+Palindromic Substrings - String / DP
+
+Batch 2 (21–40)
+Encode and Decode Strings - String / Design
+
+Top K Frequent Elements - Heap / Hash Table
+
+Climbing Stairs - DP
+
+Coin Change - DP
+
+Longest Increasing Subsequence - DP / Binary Search
+
+Longest Common Subsequence - DP
+
+Word Break - DP / Trie
+
+Combination Sum - Backtracking
+
+House Robber - DP
+
+House Robber II - DP
+
+Decode Ways - DP
+
+Unique Paths - DP / Math
+
+Jump Game - Greedy / DP
+
+Clone Graph - Graph / DFS / BFS
+
+Course Schedule - Graph / Topological Sort
+
+Pacific Atlantic Water Flow - Graph / DFS / BFS
+
+Number of Islands - Graph / DFS / BFS
+
+Longest Consecutive Sequence - Union Find / Hash Table
+
+Alien Dictionary - Graph / Topological Sort
+
+Graph Valid Tree - Graph / Union Find
+
+Batch 3 (41–60)
+Number of Connected Components in an Undirected Graph - Graph / Union Find
+
+Insert Interval - Array
+
+Merge Intervals - Array / Sorting
+
+Non-overlapping Intervals - Greedy / Interval
+
+Meeting Rooms - Interval / Sorting
+
+Meeting Rooms II - Interval / Heap
+
+Reverse Linked List - Linked List
+
+Linked List Cycle - Linked List / Two Pointers
+
+Merge Two Sorted Lists - Linked List
+
+Merge k Sorted Lists - Linked List / Heap
+
+Remove Nth Node From End of List - Linked List
+
+Reorder List - Linked List
+
+Set Matrix Zeroes - Matrix
+
+Spiral Matrix - Matrix
+
+Rotate Image - Matrix
+
+Word Search - Matrix / Backtracking
+
+Find Median from Data Stream - Heap / Design
+
+Maximum Depth of Binary Tree - Tree / DFS
+
+Same Tree - Tree / DFS
+
+Invert Binary Tree - Tree / DFS
+
+Batch 4 (61–80)
+Binary Tree Maximum Path Sum - Tree / DFS
+
+Binary Tree Level Order Traversal - Tree / BFS
+
+Serialize and Deserialize Binary Tree - Tree / Design
+
+Subtree of Another Tree - Tree / DFS
+
+Construct Binary Tree from Preorder and Inorder Traversal - Tree
+
+Validate Binary Search Tree - BST / DFS
+
+Kth Smallest Element in a BST - BST / DFS
+
+Lowest Common Ancestor of a BST - BST
+
+Implement Trie (Prefix Tree) - Trie / Design
+
+Design Add and Search Words Data Structure - Trie / Design
+
+Word Search II - Trie / Backtracking
+
+Merge Sorted Array - Array / Two Pointers
+
+Valid Palindrome II - String / Two Pointers
+
+Diameter of Binary Tree - Tree / DFS
+
+Add Two Numbers - Linked List / Math
+
+Symmetric Tree - Tree / DFS
+
+Convert Sorted Array to Binary Search Tree - BST / Divide & Conquer
+
+Balanced Binary Tree - Tree / DFS
+
+Path Sum - Tree / DFS
+
+Min Stack - Stack / Design
+
+Batch 5 (81–100)
+Evaluate Reverse Polish Notation - Stack
+
+Daily Temperatures - Monotonic Stack
+
+Car Fleet - Monotonic Stack
+
+Largest Rectangle in Histogram - Monotonic Stack
+
+Binary Search - Binary Search
+
+Search a 2D Matrix - Binary Search / Matrix
+
+Koko Eating Bananas - Binary Search
+
+Find Minimum in Rotated Sorted Array II - Binary Search
+
+Time Based Key-Value Store - Binary Search / Hash Map
+
+Median of Two Sorted Arrays - Binary Search
+
+Permutation in String - Sliding Window / Hash Map
+
+Minimum Size Subarray Sum - Sliding Window / Two Pointers
+
+Subsets - Backtracking
+
+Subsets II - Backtracking
+
+Permutations - Backtracking
+
+Permutations II - Backtracking
+
+Combination Sum II - Backtracking
+
+Palindrome Partitioning - Backtracking / DP
+
+Letter Combinations of a Phone Number - Backtracking
+
+N-Queens - Backtracking
+
+Batch 6 (101–120)
+Redundant Connection - Union Find / Graph
+
+Word Ladder - BFS / Graph
+
+Cheapest Flights Within K Stops - Graph / Shortest Path (Dijkstra/Bellman-Ford)
+
+Network Delay Time - Graph / Shortest Path (Dijkstra)
+
+Min Cost to Connect All Points - Graph / MST (Prim's/Kruskal's)
+
+Swim in Rising Water - Graph / Dijkstra / Binary Search
+
+Reconstruct Itinerary - Graph / Eulerian Path
+
+Partition Equal Subset Sum - DP (Knapsack)
+
+Target Sum - DP / Backtracking
+
+Interleaving String - DP
+
+Longest Increasing Path in a Matrix - DP / DFS
+
+Distinct Subsequences - DP
+
+Edit Distance - DP
+
+Burst Balloons - DP
+
+Regular Expression Matching - DP
+
+Single Number - Bit Manipulation
+
+Number of 1 Bits - Bit Manipulation
+
+Counting Bits - Bit Manipulation / DP
+
+Reverse Bits - Bit Manipulation
+
+Missing Number - Bit Manipulation / Math
+
+Batch 7 (121–140)
+Sum of Two Integers - Bit Manipulation
+
+Reverse Integer - Math
+
+Happy Number - Math / Two Pointers
+
+Plus One - Array / Math
+
+Pow(x, n) - Recursion / Math
+
+Multiply Strings - Math / String
+
+Detect Squares - Geometry / Hash Table
+
+K Closest Points to Origin - Heap / Sorting
+
+Kth Largest Element in an Array - Heap / Quickselect
+
+Task Scheduler - Greedy / Heap
+
+Design Twitter - Design / Heap
+
+LRU Cache - Design / Hash Map + Linked List
+
+LFU Cache - Design / Hash Map + Linked List
+
+Rotate Array - Array / Two Pointers
+
+Sort Colors - Two Pointers / Sorting
+
+Gas Station - Greedy
+
+Jump Game II - Greedy / DP
+
+Partition Labels - Greedy / Two Pointers
+
+Hand of Straights - Greedy / Heap
+
+Merge Triplets to Form Target Triplet - Greedy
+
+Batch 8 (141–160)
+Valid Parenthesis String - Greedy / String
+
+Next Permutation - Array / Two Pointers
+
+Find the Duplicate Number - Two Pointers / Binary Search
+
+Copy List with Random Pointer - Linked List / Hash Map
+
+Add Two Numbers II - Linked List / Stack
+
+Reverse Nodes in k-Group - Linked List
+
+Sort List - Linked List / Merge Sort
+
+Rotate List - Linked List
+
+Intersection of Two Linked Lists - Linked List
+
+Palindrome Linked List - Linked List / Two Pointers
+
+Binary Tree Right Side View - Tree / BFS / DFS
+
+Binary Tree Zigzag Level Order Traversal - Tree / BFS
+
+Populating Next Right Pointers in Each Node - Tree / BFS
+
+Populating Next Right Pointers in Each Node II - Tree / BFS
+
+Path Sum II - Tree / DFS
+
+Path Sum III - Tree / DFS / Prefix Sum
+
+Lowest Common Ancestor of a Binary Tree - Tree / DFS
+
+Flatten Binary Tree to Linked List - Tree / DFS
+
+Construct Binary Tree from Inorder and Postorder Traversal - Tree / Array
+
+Sum Root to Leaf Numbers - Tree / DFS
+
+Batch 9 (161–180)
+Recover Binary Search Tree - BST / DFS
+
+House Robber III - Tree / DP
+
+Count Good Nodes in Binary Tree - Tree / DFS
+
+Maximum Width of Binary Tree - Tree / BFS
+
+All Nodes Distance K in Binary Tree - Tree / Graph / BFS
+
+Check Completeness of a Binary Tree - Tree / BFS
+
+Delete Node in a BST - BST
+
+Trim a Binary Search Tree - BST
+
+Course Schedule II - Graph / Topological Sort
+
+Surrounded Regions - Graph / DFS / BFS
+
+Number of Provinces - Graph / Union Find / DFS
+
+Rotting Oranges - Graph / BFS
+
+01 Matrix - Graph / BFS / DP
+
+Shortest Path in Binary Matrix - Graph / BFS
+
+Is Graph Bipartite? - Graph / BFS / DFS
+
+Keys and Rooms - Graph / DFS / BFS
+
+All Paths From Source to Target - Graph / Backtracking
+
+Max Area of Island - Graph / DFS / BFS
+
+Open the Lock - Graph / BFS
+
+Evaluate Division - Graph / DFS / BFS / Union Find
+
+Batch 10 (181–200)
+Snakes and Ladders - Graph / BFS
+
+Minimum Genetic Mutation - Graph / BFS
+
+Find Eventual Safe States - Graph / Topological Sort
+
+Basic Calculator II - Stack / String
+
+Decode String - Stack / String
+
+Kth Smallest Element in a Sorted Matrix - Heap / Binary Search
+
+Find K Closest Elements - Binary Search / Two Pointers
+
+Top K Frequent Words - Heap / Hash Map
+
+Reorganize String - Heap / Greedy
+
+Last Stone Weight - Heap
+
+Kth Largest Element in a Stream - Heap / Design
+
+Sort Characters By Frequency - Heap / Bucket Sort
+
+Implement Queue using Stacks - Stack / Design
+
+Min Cost Climbing Stairs - DP
+
+N-th Tribonacci Number - DP
+
+Pascal's Triangle - Array / DP
+
+Remove Duplicates from Sorted List II - Linked List
+
+Swap Nodes in Pairs - Linked List
+
+Design Browser History - Design / Stack / Linked List
+
+Ugly Number II - Heap / DP
+
+Batch 11 (201–220)
+Trapping Rain Water - Two Pointers / Stack
+
+First Missing Positive - Array / Hash Map
+
+Maximal Square - DP / Matrix
+
+Best Time to Buy and Sell Stock with Cooldown - DP
+
+Best Time to Buy and Sell Stock with Transaction Fee - DP
+
+Best Time to Buy and Sell Stock III - DP
+
+Best Time to Buy and Sell Stock IV - DP
+
+Dungeon Game - DP
+
+Longest Valid Parentheses - DP / Stack
+
+Wildcard Matching - DP / String
+
+Russian Doll Envelopes - DP / Binary Search (LIS)
+
+Triangle - DP
+
+Minimum Path Sum - DP
+
+Perfect Squares - DP / BFS
+
+Ones and Zeroes - DP (Knapsack)
+
+Partition to K Equal Sum Subsets - Backtracking
+
+Online Stock Span - Monotonic Stack
+
+Remove K Digits - Monotonic Stack / Greedy
+
+Increasing Triplet Subsequence - Greedy
+
+Longest Palindromic Subsequence - DP
+
+Batch 12 (221–240)
+String to Integer (atoi) - String / Math
+
+Integer to Roman - String / Math
+
+Roman to Integer - String / Math
+
+Compare Version Numbers - String / Two Pointers
+
+Zigzag Conversion - String
+
+Text Justification - String / Simulation
+
+Simplify Path - String / Stack
+
+Restore IP Addresses - String / Backtracking
+
+Subarray Sum Equals K - Array / Hash Map
+
+Contiguous Array - Array / Hash Map
+
+Maximum Sum Circular Subarray - Array / Kadane's Algorithm
+
+Subarray Product Less Than K - Sliding Window
+
+Find Pivot Index - Prefix Sum
+
+Range Sum Query 2D - Immutable - Prefix Sum / Matrix
+
+Random Pick with Weight - Prefix Sum / Binary Search
+
+Shuffle an Array - Array / Randomized
+
+Insert Delete GetRandom O(1) - Hash Map / Array
+
+Insert Delete GetRandom O(1) - Duplicates allowed - Hash Map / Array
+
+First Unique Character in a String - Hash Map / String
+
+Is Subsequence - Two Pointers / String
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

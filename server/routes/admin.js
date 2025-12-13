@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const { generateScaffolds } = require('../utils/scaffoldGenerator');
 const bcrypt = require('bcryptjs');
 const multer = require('multer');
 const { verifyFirebaseToken, isAdmin } = require('../middlewares/authFirebase');
@@ -531,6 +532,7 @@ router.post('/questions/bulk-upload', verifyFirebaseToken, isAdmin, upload.singl
     const result = await processExcelImport(req.db, req.file.buffer);
 
     if (!result.success) {
+      console.error('Validation errors:', JSON.stringify(result, null, 2));
       return res.status(400).json({
         status: 'error',
         message: 'Validation errors found in Excel file',
@@ -650,6 +652,46 @@ router.delete('/test-cases/:testCaseId', verifyFirebaseToken, isAdmin, async (re
       status: 'error',
       message: 'Failed to delete test case. Please try again.'
     });
+  }
+});
+
+/**
+ * @route   GET /api/admin/questions/:id/scaffold
+ * @desc    Generate language-specific scaffolding for a question
+ * @access  Private (Admin only)
+ */
+router.get('/questions/:id/scaffold', verifyFirebaseToken, isAdmin, async (req, res) => {
+  try {
+    const questionId = Number(req.params.id);
+    if (!Number.isInteger(questionId) || questionId <= 0) {
+      return res.status(400).json({ success: false, message: 'Invalid question id' });
+    }
+
+    const [rows] = await req.db.execute('SELECT id, title, function_name, question_type, parameter_schema FROM questions WHERE id = ?', [questionId]);
+    if (!rows || rows.length === 0) {
+      return res.status(404).json({ success: false, message: 'Question not found' });
+    }
+
+    const q = rows[0];
+    let schema = null;
+    try {
+      schema = typeof q.parameter_schema === 'string' ? JSON.parse(q.parameter_schema) : q.parameter_schema;
+    } catch (e) {
+      return res.status(400).json({ success: false, message: 'Invalid parameter_schema JSON' });
+    }
+
+    const problem = {
+      title: q.title,
+      function_name: q.function_name,
+      question_type: q.question_type,
+      parameter_schema: schema
+    };
+
+    const scaffolds = generateScaffolds(problem, ['java','python','javascript','cpp']);
+    return res.json({ success: true, data: scaffolds });
+  } catch (error) {
+    console.error('Scaffold generation error:', error.message);
+    return res.status(500).json({ success: false, message: 'Internal server error' });
   }
 });
 

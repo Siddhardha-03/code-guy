@@ -5,6 +5,8 @@
  * outputs, and language-specific scaffolding.
  */
 
+const { mapCanonicalToLang } = require('./scaffoldGenerator');
+
 /**
  * Converts a human-friendly title into a deterministic camelCase function name
  * to align user code with generated templates.
@@ -20,6 +22,59 @@ const sanitizeTitleToFunction = (title = '') => {
   const [first, ...rest] = tokens;
   const camel = first.toLowerCase() + rest.map(token => token.charAt(0).toUpperCase() + token.slice(1)).join('');
   return camel || 'solve';
+};
+
+// Normalizes language keys to the ones used by scaffold mapping
+const normalizeLangKey = (language = '') => {
+  const key = String(language || '').toLowerCase();
+  if (key === 'javascript') return 'js';
+  if (key === 'typescript') return 'ts';
+  if (key === 'python') return 'py';
+  return key;
+};
+
+const javaArrayLiteral = (values, componentType) => {
+  if (!Array.isArray(values)) return 'null';
+  const parts = values.map(v => javaValueLiteral(v, componentType));
+  return `new ${componentType}[]{${parts.join(', ')}}`;
+};
+
+const java2DArrayLiteral = (values, componentType) => {
+  if (!Array.isArray(values)) return 'null';
+  const rows = values.map(row => javaArrayLiteral(Array.isArray(row) ? row : [], componentType));
+  return `new ${componentType}[][]{${rows.join(', ')}}`;
+};
+
+// Builds Java literals from canonical schema types so the harness uses valid Java types
+const javaLiteralFromCanonical = (value, canonicalType, paramName = null) => {
+  const t = String(canonicalType || '').toLowerCase().trim();
+  if (value === null || value === undefined) return 'null';
+
+  if (t === 'int' || t === 'integer') return javaValueLiteral(value, 'int');
+  if (t === 'long') return javaValueLiteral(value, 'long');
+  if (t === 'float') return javaValueLiteral(value, 'float');
+  if (t === 'double' || t === 'number') return javaValueLiteral(value, 'double');
+  if (t === 'bool' || t === 'boolean') return javaValueLiteral(value, 'boolean');
+  if (t === 'char' || t === 'character') return javaValueLiteral(value, 'char');
+  if (t === 'str' || t === 'string') return javaValueLiteral(value, 'String');
+
+  if (t === 'list[int]' || t === 'array[int]') return javaArrayLiteral(value, 'int');
+  if (t === 'list[long]') return javaArrayLiteral(value, 'long');
+  if (t === 'list[float]') return javaArrayLiteral(value, 'float');
+  if (t === 'list[double]') return javaArrayLiteral(value, 'double');
+  if (t === 'list[bool]' || t === 'list[boolean]') return javaArrayLiteral(value, 'boolean');
+  if (t === 'list[char]') return javaArrayLiteral(value, 'char');
+  if (t === 'list[str]' || t === 'list[string]') return javaArrayLiteral(value, 'String');
+
+  if (t === 'list[list[int]]' || t === 'array[array[int]]') return java2DArrayLiteral(value, 'int');
+  // Special case: if parameter is named 'board', use char[][], else String[][]
+  if (t === 'list[list[str]]' || t === 'list[list[string]]') {
+    const componentType = paramName && paramName.toLowerCase() === 'board' ? 'char' : 'String';
+    return java2DArrayLiteral(value, componentType);
+  }
+  if (t === 'list[list[char]]') return java2DArrayLiteral(value, 'char');
+
+  return toJavaLiteral(value);
 };
 
 /**
@@ -139,9 +194,7 @@ struct TreeNode {
     int val;
     TreeNode *left;
     TreeNode *right;
-    TreeNode() : val(0), left(nullptr), right(nullptr) {}
     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
-    TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
 };
 #endif`;
 
@@ -420,10 +473,19 @@ const wrapJavaCode = (code, functionName, args, options = {}) => {
   }).join('\n        ');
   const callArgs = (args || []).map((_, idx) => `arg${idx}`).join(', ');
   const resultDeclarationType = resultType || 'Object';
-  const resultProcessing = resultProcessor
-    ? `Object output = ${resultProcessor}(result);\n        System.out.println(serialize(output));`
-    : 'System.out.println(serialize(result));';
-  return `${code}\n\npublic class Main {\n    ${serialize}\n    public static void main(String[] args) {\n        ${mainArgs}\n        ${className} solution = new ${className}();\n        ${resultDeclarationType} result = solution.${functionName}(${callArgs});\n        ${resultProcessing}\n    }\n}`;
+  const isVoidReturn = resultType && resultType.toLowerCase() === 'void';
+  let resultProcessing;
+  if (isVoidReturn) {
+    resultProcessing = 'solution.' + functionName + '(' + callArgs + ');\n        System.out.println("null");';
+  } else {
+    resultProcessing = resultProcessor
+      ? `Object output = ${resultProcessor}(result);\n        System.out.println(serialize(output));`
+      : 'System.out.println(serialize(result));';
+  }
+  const methodCall = isVoidReturn
+    ? `solution.${functionName}(${callArgs});\n        System.out.println("null");`
+    : `${resultDeclarationType} result = solution.${functionName}(${callArgs});\n        ${resultProcessor ? `Object output = ${resultProcessor}(result);\n        System.out.println(serialize(output));` : 'System.out.println(serialize(result));'}`;
+  return `${code}\n\npublic class Main {\n    ${serialize}\n    public static void main(String[] args) {\n        ${mainArgs}\n        ${className} solution = new ${className}();\n        ${methodCall}\n    }\n}`;
 };
 
 /**
@@ -541,7 +603,7 @@ const wrapJavaScriptCode = (code, functionName, args, options = {}) => {
   const processedResult = resultProcessor
     ? `const result = ${resultProcessor}(__result);`
     : 'const result = __result;';
-  const serializeBlock = `function __serialize(value) {\n  if (Array.isArray(value)) {\n    return '[' + value.map(__serialize).join(', ') + ']';\n  }\n  if (value && typeof value === 'object') {\n    const entries = Object.entries(value).map(([key, val]) => String(JSON.stringify(key)) + ': ' + __serialize(val));\n    return '{' + entries.join(', ') + '}';\n  }\n  if (typeof value === 'string') {\n    return value;\n  }\n  if (typeof value === 'number') {\n    return Number.isFinite(value) ? String(value) : (value > 0 ? 'Infinity' : '-Infinity');\n  }\n  if (typeof value === 'boolean') {\n    return value ? 'true' : 'false';\n  }\n  if (value === null || value === undefined) {\n    return 'null';\n  }\n  return JSON.stringify(value);\n}\nconsole.log(__serialize(result));`;
+  const serializeBlock = `function __serialize(value) {\n  // Arrays\n  if (Array.isArray(value)) {\n    return '[' + value.map(__serialize).join(',') + ']';\n  }\n  // Sets -> array without spaces\n  if (value instanceof Set) {\n    return '[' + Array.from(value).map(__serialize).join(',') + ']';\n  }\n  // Maps -> serialize as object-like without spaces\n  if (value instanceof Map) {\n    const entries = Array.from(value.entries()).map(([key, val]) => __serialize(key) + ':' + __serialize(val));\n    return '{' + entries.join(',') + '}';\n  }\n  // Plain Objects\n  if (value && typeof value === 'object') {\n    const entries = Object.entries(value).map(([key, val]) => String(JSON.stringify(key)) + ':' + __serialize(val));\n    return '{' + entries.join(',') + '}';\n  }\n  // Primitives\n  if (typeof value === 'string') {\n    return value;\n  }\n  if (typeof value === 'number') {\n    return Number.isFinite(value) ? String(value) : (value > 0 ? 'Infinity' : '-Infinity');\n  }\n  if (typeof value === 'boolean') {\n    return value ? 'true' : 'false';\n  }\n  if (value === null || value === undefined) {\n    return 'null';\n  }\n  // Fallback to JSON without spaces in arrays/objects\n  try {\n    const json = JSON.stringify(value);\n    return json ? json.replace(/,\s+/g, ',').replace(/:\s+/g, ':') : String(value);\n  } catch {\n    return String(value);\n  }\n}\nconsole.log(__serialize(result));`;
   return `${helperBlock}${code}\n\n${resultAssignment}\n${processedResult}\n${serializeBlock}`;
 };
 
@@ -554,9 +616,11 @@ const wrapPythonCode = (code, functionName, args, options = {}) => {
   const callArgs = (args || []).map(arg => toPythonLiteral(arg)).join(', ');
   const resultHandlingLines = [
     ...(resultProcessor ? [`    result = ${resultProcessor}(result)`] : []),
-    '    if isinstance(result, (list, dict, tuple)):',
+    '    if isinstance(result, bool):',
+    "        print('true' if result else 'false')",
+    '    elif isinstance(result, (list, dict, tuple)):',
     '        import json',
-    '        print(json.dumps(result))',
+    "        print(json.dumps(result, separators=(',',':')))",
     '    else:',
     '        print(result)'
   ].join('\n');
@@ -590,6 +654,25 @@ def build_linked_list(values):
         tail.next = ListNode(value)
         tail = tail.next
     return dummy.next
+
+
+def build_linked_list_with_cycle(values, pos):
+  head = build_linked_list(values)
+  if pos is None or pos < 0:
+    return head
+  cycle_target = None
+  current = head
+  idx = 0
+  prev = None
+  while current:
+    if idx == pos:
+      cycle_target = current
+    prev = current
+    current = current.next
+    idx += 1
+  if prev and cycle_target:
+    prev.next = cycle_target
+  return head
 
 
 def linked_list_to_list(head):
@@ -687,6 +770,7 @@ const pythonSupportHelpers = {
   linked_list: {
     helpers: pythonListNodeHelpers,
     fromInput: 'build_linked_list',
+    fromInputCycle: 'build_linked_list_with_cycle',
     toOutput: 'normalize_linked_list_output'
   },
   binary_tree: {
@@ -714,6 +798,27 @@ function buildLinkedList(values) {
     tail = tail.next;
   }
   return dummy.next;
+}
+
+function buildLinkedListWithCycle(values, pos) {
+  const head = buildLinkedList(values);
+  if (pos === null || pos === undefined || pos < 0) return head;
+  let cycleTarget = null;
+  let current = head;
+  let idx = 0;
+  let prev = null;
+  while (current) {
+    if (idx === pos) {
+      cycleTarget = current;
+    }
+    prev = current;
+    current = current.next;
+    idx += 1;
+  }
+  if (prev && cycleTarget) {
+    prev.next = cycleTarget;
+  }
+  return head;
 }
 
 function linkedListToArray(head) {
@@ -828,6 +933,7 @@ const javascriptSupportHelpers = {
   linked_list: {
     helpers: javascriptLinkedListHelpers,
     fromInput: 'buildLinkedList',
+    fromInputCycle: 'buildLinkedListWithCycle',
     toOutput: 'normalizeLinkedListOutput'
   },
   binary_tree: {
@@ -847,14 +953,12 @@ const cppLinkedListStruct = `#ifndef CASCADE_LISTNODE_DEFINED
 struct ListNode {
     int val;
     ListNode *next;
-    ListNode() : val(0), next(nullptr) {}
     ListNode(int x) : val(x), next(nullptr) {}
-    ListNode(int x, ListNode *next) : val(x), next(next) {}
 };
 #endif`;
 
 const cppLinkedListHelpers = `static ListNode* buildLinkedList(const std::vector<int>& values) {
-    ListNode* dummy = new ListNode();
+    ListNode* dummy = new ListNode(0);
     ListNode* tail = dummy;
     for (int val : values) {
         tail->next = new ListNode(val);
@@ -863,6 +967,27 @@ const cppLinkedListHelpers = `static ListNode* buildLinkedList(const std::vector
     ListNode* head = dummy->next;
     delete dummy;
     return head;
+}
+
+static ListNode* buildLinkedListWithCycle(const std::vector<int>& values, int pos) {
+  ListNode* head = buildLinkedList(values);
+  if (pos < 0) return head;
+  ListNode* cycleTarget = nullptr;
+  ListNode* current = head;
+  ListNode* prev = nullptr;
+  int idx = 0;
+  while (current) {
+    if (idx == pos) {
+      cycleTarget = current;
+    }
+    prev = current;
+    current = current->next;
+    ++idx;
+  }
+  if (prev && cycleTarget) {
+    prev->next = cycleTarget;
+  }
+  return head;
 }
 
 static std::vector<int> linkedListToVector(ListNode* head) {
@@ -880,6 +1005,7 @@ const cppSupportHelpers = {
     helperFunctions: cppLinkedListHelpers,
     structPattern: /^\s*struct\s+ListNode\b/m,
     fromInput: 'buildLinkedList',
+    fromInputCycle: 'buildLinkedListWithCycle',
     toOutput: 'linkedListToVector'
   },
   binary_tree: {
@@ -924,6 +1050,29 @@ const javaListNodeUtil = `class ListNodeUtil {
         }
         return dummy.next;
     }
+
+  static ListNode buildLinkedListWithCycle(int[] values, int pos) {
+    ListNode head = buildLinkedList(values);
+    if (pos < 0) {
+      return head;
+    }
+    ListNode cycleTarget = null;
+    ListNode current = head;
+    ListNode prev = null;
+    int idx = 0;
+    while (current != null) {
+      if (idx == pos) {
+        cycleTarget = current;
+      }
+      prev = current;
+      current = current.next;
+      idx++;
+    }
+    if (prev != null && cycleTarget != null) {
+      prev.next = cycleTarget;
+    }
+    return head;
+  }
 
     static int[] linkedListToArray(ListNode head) {
         java.util.List<Integer> result = new java.util.ArrayList<>();
@@ -1099,6 +1248,7 @@ const javaSupportHelpers = {
     classDefinition: javaListNodeClass,
     helperFunctions: javaListNodeUtil,
     fromInput: 'ListNodeUtil.buildLinkedList',
+    fromInputCycle: 'ListNodeUtil.buildLinkedListWithCycle',
     toOutput: 'ListNodeUtil.linkedListToArray',
     argumentType: 'ListNode',
     resultType: 'ListNode',
@@ -1222,7 +1372,48 @@ const parseInputToParams = (input = '') => {
   if (!input) return [];
   const normalized = input.replace(/\r/g, '').trim();
   if (!normalized) return [];
+  
   const lines = normalized.split('\n').map(line => line.trim()).filter(Boolean);
+  
+  // If single line with commas separating multiple params (e.g. "[2,7,11,15], 9")
+  if (lines.length === 1) {
+    const line = lines[0];
+    // Try to split by commas that separate top-level parameters
+    // Look for pattern: ], followed by comma and space, then non-bracket content
+    const parts = [];
+    let current = '';
+    let depth = 0;
+    for (let i = 0; i < line.length; i++) {
+      const char = line[i];
+      if (char === '[' || char === '{') depth++;
+      if (char === ']' || char === '}') depth--;
+      
+      if (char === ',' && depth === 0) {
+        parts.push(current.trim());
+        current = '';
+      } else {
+        current += char;
+      }
+    }
+    if (current) parts.push(current.trim());
+    
+    // If we split into multiple parts, parse each as a param
+    if (parts.length > 1) {
+      return parts.map(part => {
+        try {
+          return JSON.parse(part);
+        } catch (err) {
+          if (part === 'true') return true;
+          if (part === 'false') return false;
+          const numeric = Number(part);
+          if (!Number.isNaN(numeric)) return numeric;
+          return part;
+        }
+      });
+    }
+  }
+  
+  // Multi-line format: each line is a parameter
   const params = lines.map(line => {
     if (!line) return '';
     try {
@@ -1237,7 +1428,7 @@ const parseInputToParams = (input = '') => {
       return line;
     }
   });
-  return params.length === 1 ? params : params;
+  return params;
 };
 
 const toJavaScriptLiteral = (value) => {
@@ -1293,6 +1484,83 @@ const toPythonLiteral = (value) => {
     return 'None';
   }
   return JSON.stringify(value);
+};
+
+// Ensures the argument list count matches the declared schema length, but keeps
+// the extra cycle-position argument for linked_list problems (values + pos).
+const alignArgsToSchemaCount = (args, schemaParams = [], problem = {}) => {
+  if (!Array.isArray(schemaParams) || schemaParams.length === 0) return args;
+  if (!Array.isArray(args)) return args;
+  const targetLen = schemaParams.length;
+
+  const isLinkedListCycleShape = problem?.question_type === 'linked_list'
+    && args.length === 2
+    && Array.isArray(args[0])
+    && Number.isInteger(args[1]);
+  if (isLinkedListCycleShape) return args;
+
+  if (args.length > targetLen) return args.slice(0, targetLen);
+  return args;
+};
+
+const detectLinkedListCycleArgs = (args, schemaParams = [], problem = {}) => {
+  if (problem?.question_type !== 'linked_list') return null;
+  if (!Array.isArray(args)) return null;
+
+  if (args.length === 2 && Array.isArray(args[0]) && Number.isInteger(args[1])) {
+    return { values: args[0], pos: args[1] };
+  }
+
+  if (args.length === 1 && Array.isArray(args[0])) {
+    const inner = args[0];
+    if (inner.length === 2 && Array.isArray(inner[0]) && Number.isInteger(inner[1])) {
+      return { values: inner[0], pos: inner[1] };
+    }
+  }
+
+  return null;
+};
+
+// Applies parameter schema typing to arguments to keep harness types aligned with templates
+const applyParameterSchemaToArgs = (args, language, schemaParams = []) => {
+  if (!Array.isArray(schemaParams) || schemaParams.length === 0) return args;
+  const langKey = normalizeLangKey(language);
+  return (args || []).map((arg, idx) => {
+    if (arg && typeof arg === 'object' && arg.__expr) {
+      return arg;
+    }
+    const schemaType = schemaParams[idx]?.type;
+    const paramName = schemaParams[idx]?.name || null;
+    if (!schemaType) return arg;
+
+    if (langKey === 'java') {
+      let mapped = mapCanonicalToLang(schemaType) || {};
+      let targetType = mapped.java || 'Object';
+      // Special case: if parameter is named 'board' with type List[List[str]], use char[][]
+      if (paramName && paramName.toLowerCase() === 'board' && 
+          (schemaType.toLowerCase().includes('list[list[str]') || schemaType.toLowerCase().includes('list[list[string]'))) {
+        targetType = 'char[][]';
+      }
+      const literal = javaLiteralFromCanonical(arg, schemaType, paramName);
+      return { __expr: literal, __type: targetType };
+    }
+
+    if (langKey === 'cpp') {
+      let cppLiteral = toCppLiteral(arg);
+      // Special case: if parameter is named 'board' with type List[List[str]], convert to char vectors
+      if (paramName && paramName.toLowerCase() === 'board' && 
+          (schemaType.toLowerCase().includes('list[list[str]') || schemaType.toLowerCase().includes('list[list[string]')) &&
+          Array.isArray(arg) && arg.every(item => Array.isArray(item) && item.every(v => typeof v === 'string'))) {
+        // Convert array of string arrays to vector<vector<char>>
+        const inner = arg.map(row => `std::vector<char>{${row.map(c => `'${c}'`).join(', ')}}`).join(', ');
+        cppLiteral = `std::vector<std::vector<char>>{${inner}}`;
+      }
+      return { __expr: cppLiteral };
+    }
+
+    // JavaScript/TypeScript/Python are dynamically typed; use raw values
+    return arg;
+  });
 };
 
 const wrapCodeForExecution = ({ code, language, functionName, args, helpers, resultProcessor, invocationOptions = {} }) => {
@@ -1354,6 +1622,15 @@ const detectFunctionName = ({ code, language, fallbackFunctionName }) => {
 };
 
 const buildWrappedCode = ({ problem, code, language, testCaseInput }) => {
+  const schemaParams = Array.isArray(problem?.parameter_schema?.params)
+    ? problem.parameter_schema.params
+    : [];
+  const schemaReturnType = problem?.parameter_schema?.returnType || null;
+  const langKey = normalizeLangKey(language);
+  const mappedReturn = schemaReturnType ? mapCanonicalToLang(schemaReturnType) : null;
+  const schemaResultType = mappedReturn ? mappedReturn[langKey] : null;
+  const returnTypeLower = String(schemaReturnType || '').toLowerCase();
+  const isStructReturn = ['listnode', 'treenode', 'graphnode'].some(tok => returnTypeLower.includes(tok));
   const storedFunction = problem?.function_name && typeof problem.function_name === 'string'
     ? problem.function_name.trim()
     : null;
@@ -1361,7 +1638,9 @@ const buildWrappedCode = ({ problem, code, language, testCaseInput }) => {
     ? storedFunction
     : sanitizeTitleToFunction(problem?.title || 'solution');
   const functionName = detectFunctionName({ code, language, fallbackFunctionName });
-  const args = parseInputToParams(testCaseInput);
+  let args = parseInputToParams(testCaseInput);
+  args = alignArgsToSchemaCount(args, schemaParams, problem);
+  const cycleInfo = detectLinkedListCycleArgs(args, schemaParams, problem);
   let helpers = null;
   let processedArgs = args;
   let resultProcessor = null;
@@ -1372,29 +1651,43 @@ const buildWrappedCode = ({ problem, code, language, testCaseInput }) => {
     const support = pythonSupportHelpers[problem.question_type];
     if (support) {
       helpers = support.helpers;
-      resultProcessor = support.toOutput || null;
-      processedArgs = args.map(arg => {
-        if (!Array.isArray(arg)) {
-          return arg;
-        }
-        const literal = toPythonLiteral(arg);
-        return { __expr: `${support.fromInput}(${literal})` };
-      });
+      resultProcessor = isStructReturn ? (support.toOutput || null) : null;
+      const isCycleInput = Boolean(cycleInfo && support.fromInputCycle);
+      if (isCycleInput) {
+        const listLiteral = toPythonLiteral(cycleInfo.values);
+        const posLiteral = toPythonLiteral(cycleInfo.pos);
+        processedArgs = [{ __expr: `${support.fromInputCycle}(${listLiteral}, ${posLiteral})` }];
+      } else {
+        processedArgs = args.map(arg => {
+          if (!Array.isArray(arg)) {
+            return arg;
+          }
+          const literal = toPythonLiteral(arg);
+          return { __expr: `${support.fromInput}(${literal})` };
+        });
+      }
     }
   }
 
-  if (lowerLang === 'javascript' && problem?.question_type) {
+  if ((lowerLang === 'javascript' || lowerLang === 'typescript') && problem?.question_type) {
     const support = javascriptSupportHelpers[problem.question_type];
     if (support) {
       helpers = support.helpers;
-      resultProcessor = support.toOutput || null;
-      processedArgs = args.map(arg => {
-        if (!Array.isArray(arg)) {
-          return arg;
-        }
-        const literal = toJavaScriptLiteral(arg);
-        return { __expr: `${support.fromInput}(${literal})` };
-      });
+      resultProcessor = isStructReturn ? (support.toOutput || null) : null;
+      const isCycleInput = Boolean(cycleInfo && support.fromInputCycle);
+      if (isCycleInput) {
+        const listLiteral = toJavaScriptLiteral(cycleInfo.values);
+        const posLiteral = toJavaScriptLiteral(cycleInfo.pos);
+        processedArgs = [{ __expr: `${support.fromInputCycle}(${listLiteral}, ${posLiteral})` }];
+      } else {
+        processedArgs = args.map(arg => {
+          if (!Array.isArray(arg)) {
+            return arg;
+          }
+          const literal = toJavaScriptLiteral(arg);
+          return { __expr: `${support.fromInput}(${literal})` };
+        });
+      }
     }
   }
 
@@ -1402,25 +1695,37 @@ const buildWrappedCode = ({ problem, code, language, testCaseInput }) => {
     const support = cppSupportHelpers[problem.question_type];
     if (support) {
       helpers = support.helperFunctions || null;
-      resultProcessor = support.toOutput || null;
+      resultProcessor = isStructReturn ? (support.toOutput || null) : null;
       if (support.structDefinition) {
         invocationOptions.structDefinition = support.structDefinition;
       }
       if (support.structPattern) {
         invocationOptions.structPattern = support.structPattern;
       }
-      processedArgs = args.map(arg => {
-        if (!Array.isArray(arg)) {
-          return arg;
-        }
-        const literal = toCppLiteral(arg);
-        return { __expr: `${support.fromInput}(${literal})` };
-      });
+      const isCycleInput = Boolean(cycleInfo && support.fromInputCycle);
+      if (isCycleInput) {
+        const listLiteral = toCppLiteral(cycleInfo.values);
+        const posLiteral = toCppLiteral(cycleInfo.pos);
+        processedArgs = [{ __expr: `${support.fromInputCycle}(${listLiteral}, ${posLiteral})` }];
+      } else {
+        processedArgs = args.map(arg => {
+          if (!Array.isArray(arg)) {
+            return arg;
+          }
+          const literal = toCppLiteral(arg);
+          return { __expr: `${support.fromInput}(${literal})` };
+        });
+      }
     }
   }
 
-  if (lowerLang === 'java' && problem?.question_type) {
-    const support = javaSupportHelpers[problem.question_type];
+  if (lowerLang === 'java') {
+    // Set result type from schema for all Java problems
+    if (schemaResultType) {
+      invocationOptions.resultType = schemaResultType;
+    }
+    
+    const support = javaSupportHelpers[problem?.question_type];
     if (support) {
       const sanitizedJavaCode = typeof code === 'string'
         ? code.replace(/\/\*[\s\S]*?\*\//g, ' ').replace(/\/\/.*$/gm, ' ')
@@ -1433,21 +1738,34 @@ const buildWrappedCode = ({ problem, code, language, testCaseInput }) => {
         helperPieces.push(support.helperFunctions);
       }
       helpers = helperPieces.length ? helperPieces.join('\n\n') : null;
-      resultProcessor = support.toOutput || null;
-      if (support.resultType) {
+      resultProcessor = isStructReturn ? (support.toOutput || null) : null;
+      // Override with support result type if present and no schema type
+      if (!schemaResultType && support.resultType) {
         invocationOptions.resultType = support.resultType;
       }
-      processedArgs = args.map(arg => {
-        if (!Array.isArray(arg)) {
-          return arg;
-        }
+      const isCycleInput = Boolean(cycleInfo && support.fromInputCycle);
+      if (isCycleInput) {
         const literalOptions = support.inputLiteralOptions || {};
-        const literal = toJavaLiteral(arg, literalOptions);
+        const listLiteral = toJavaLiteral(cycleInfo.values, literalOptions);
+        const posLiteral = Number.isInteger(cycleInfo.pos) ? `${cycleInfo.pos}` : '0';
         const argType = support.argumentType || 'Object';
-        return { __expr: `${support.fromInput}(${literal})`, __type: argType };
-      });
+        processedArgs = [{ __expr: `${support.fromInputCycle}(${listLiteral}, ${posLiteral})`, __type: argType }];
+      } else {
+        processedArgs = args.map(arg => {
+          if (!Array.isArray(arg)) {
+            return arg;
+          }
+          const literalOptions = support.inputLiteralOptions || {};
+          const literal = toJavaLiteral(arg, literalOptions);
+          const argType = support.argumentType || 'Object';
+          return { __expr: `${support.fromInput}(${literal})`, __type: argType };
+        });
+      }
     }
   }
+
+  // Align harness argument declarations with the canonical parameter schema
+  processedArgs = applyParameterSchemaToArgs(processedArgs, language, schemaParams);
 
   return wrapCodeForExecution({
     code,

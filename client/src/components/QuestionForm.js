@@ -167,18 +167,30 @@ const QuestionForm = ({ question, onSave, onCancel }) => {
     'void',
     'int',
     'long',
-    'double',
     'float',
-    'boolean',
+    'double',
+    'bool',
     'char',
-    'String',
-    'int[]',
-    'long[]',
-    'double[]',
-    'String[]',
+    'str',
+    'string',
+    'List[int]',
+    'List[long]',
+    'List[float]',
+    'List[double]',
+    'List[bool]',
+    'List[char]',
+    'List[str]',
+    'List[List[int]]',
+    'List[List[long]]',
+    'List[List[str]]',
+    'List[List[char]]',
+    'Set[int]',
+    'Set[str]',
+    'Map[str,int]',
+    'Map[int,int]',
     'ListNode',
     'TreeNode',
-    'List<List<Integer>>'
+    'GraphNode'
   ];
 
   const handleReturnTypeChange = (value) => {
@@ -198,6 +210,28 @@ const QuestionForm = ({ question, onSave, onCancel }) => {
         returnType: prev.parameter_schema?.returnType || '',
         params: [...(prev.parameter_schema?.params || []), { name: '', type: '' }]
       }
+    }));
+  };
+
+  const addExample = () => {
+    setFormData(prev => ({
+      ...prev,
+      examples: [...(prev.examples || []), { input: '', output: '', explanation: '' }]
+    }));
+  };
+
+  const handleExampleChange = (index, field, value) => {
+    setFormData(prev => {
+      const examples = [...(prev.examples || [])];
+      examples[index] = { ...examples[index], [field]: value };
+      return { ...prev, examples };
+    });
+  };
+
+  const removeExample = (index) => {
+    setFormData(prev => ({
+      ...prev,
+      examples: (prev.examples || []).filter((_, i) => i !== index)
     }));
   };
 
@@ -259,6 +293,18 @@ const QuestionForm = ({ question, onSave, onCancel }) => {
         setError(`Test case ${i + 1} must have both input and expected output`);
         setLoading(false);
         return;
+      }
+    }
+
+    // Validate examples if provided
+    if (formData.examples && formData.examples.length > 0) {
+      for (let i = 0; i < formData.examples.length; i++) {
+        const example = formData.examples[i];
+        if (!example.input?.trim() || !example.output?.trim()) {
+          setError(`Example ${i + 1} must have both input and output`);
+          setLoading(false);
+          return;
+        }
       }
     }
 
@@ -390,17 +436,27 @@ const QuestionForm = ({ question, onSave, onCancel }) => {
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                     >
                       <option value="">Select type</option>
-                      <option value="array">Array</option>
+                      <option value="array">Array / Two Pointer / Sliding Window</option>
                       <option value="string">String</option>
-                      <option value="primitives">Primitives</option>
-                      <option value="math">Math</option>
-                      <option value="matrix">Matrix</option>
                       <option value="linked_list">Linked List</option>
-                      <option value="binary_tree">Binary Tree</option>
-                      <option value="graph">Graph</option>
+                      <option value="binary_tree">Binary Tree / BST</option>
+                      <option value="graph">Graph (Adjacency List)</option>
+                      <option value="dynamic_programming">Dynamic Programming / Recursion</option>
+                      <option value="heap">Heap / Priority Queue</option>
+                      <option value="primitives">Primitives / Basic Math</option>
+                      <option value="math">Math / Number Theory</option>
+                      <option value="matrix">Matrix / 2D Array</option>
                       <option value="custom_class">Custom Class</option>
+                      <option value="bit_manipulation">Bit Manipulation</option>
+                      <option value="binary_search">Binary Search</option>
+                      <option value="intervals">Intervals</option>
+                      <option value="geometry">Geometry</option>
+                      <option value="backtracking">Backtracking</option>
+                      <option value="greedy">Greedy</option>
+                      <option value="stack">Stack</option>
+                      <option value="trie">Trie</option>
                     </select>
-                    <p className="text-xs text-gray-500 mt-1">Used to generate accurate language scaffolds (e.g., Math for numeric input/output)</p>
+                    <p className="text-xs text-gray-500 mt-1">Used to generate accurate language scaffolds and organize content</p>
                   </div>
 
                   <div>
@@ -582,6 +638,87 @@ const QuestionForm = ({ question, onSave, onCancel }) => {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4" />
                   </svg>
                   Add Parameter
+                </button>
+              </div>
+
+              {/* Examples Section */}
+              <div className="bg-gray-50 rounded-lg p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <h4 className="text-lg font-semibold text-gray-900 flex items-center">
+                    <svg className="w-5 h-5 mr-2 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6.253v13m0-13C6.5 6.253 2 10.998 2 17s4.5 10.747 10 10.747c5.5 0 10-4.998 10-10.747S17.5 6.253 12 6.253z" />
+                    </svg>
+                    Examples (optional)
+                  </h4>
+                  <div className="text-sm text-gray-600 bg-white px-3 py-1 rounded-full">
+                    {formData.examples?.length || 0} example(s)
+                  </div>
+                </div>
+
+                <p className="text-sm text-gray-600 mb-4">Add worked examples to help users understand the problem better. These will be displayed alongside the problem statement.</p>
+
+                <div className="space-y-4">
+                  {formData.examples?.map((example, index) => (
+                    <div key={index} className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
+                      <div className="flex justify-between items-center mb-3">
+                        <h5 className="font-medium text-gray-900">Example {index + 1}</h5>
+                        {formData.examples.length > 0 && (
+                          <button
+                            type="button"
+                            onClick={() => removeExample(index)}
+                            className="text-red-600 hover:text-red-800 text-sm font-medium px-2 py-1 rounded hover:bg-red-50 transition-colors"
+                          >
+                            Remove
+                          </button>
+                        )}
+                      </div>
+
+                      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-2">Input</label>
+                          <textarea
+                            value={example.input || ''}
+                            onChange={(e) => handleExampleChange(index, 'input', e.target.value)}
+                            rows={3}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all font-mono text-sm"
+                            placeholder="e.g., nums = [2,7,11,15], target = 9"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-2">Output</label>
+                          <textarea
+                            value={example.output || ''}
+                            onChange={(e) => handleExampleChange(index, 'output', e.target.value)}
+                            rows={3}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all font-mono text-sm"
+                            placeholder="e.g., [0,1]"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="mt-4">
+                        <label className="block text-sm font-medium text-gray-700 mb-2">Explanation (optional)</label>
+                        <textarea
+                          value={example.explanation || ''}
+                          onChange={(e) => handleExampleChange(index, 'explanation', e.target.value)}
+                          rows={2}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                          placeholder="Explain why this output is correct..."
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <button
+                  type="button"
+                  onClick={addExample}
+                  className="mt-4 w-full py-3 border-2 border-dashed border-gray-300 rounded-lg text-gray-600 hover:border-amber-400 hover:text-amber-600 transition-colors flex items-center justify-center"
+                >
+                  <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                  </svg>
+                  Add Another Example
                 </button>
               </div>
 

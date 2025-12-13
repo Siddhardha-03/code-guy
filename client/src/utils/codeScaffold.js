@@ -1,9 +1,64 @@
 /**
  * @file codeScaffold.js
- * @description Centralized code template generation for multiple languages.
- * Supports JavaScript, Python, Java, and C++ with intelligent type inference
- * from test cases and stored parameter schemas.
+ * @description Enhanced code template generation using canonical type system.
+ * Supports JavaScript, TypeScript, Python, Java, C++, and more with intelligent
+ * struct injection, proper imports/includes, and LeetCode-style documentation.
+ * 
+ * Aligned with server/utils/scaffoldGenerator.js for consistency.
  */
+
+/**
+ * Maps canonical types to language-specific types.
+ * This is the single source of truth for type mappings across all languages.
+ */
+export const mapCanonicalToLang = (type) => {
+  const t = String(type || '').toLowerCase().trim();
+  
+  // Void/None returns
+  if (t === 'void' || t === 'none' || t === '') return { java: 'void', py: 'None', js: 'void', cpp: 'void', ts: 'void' };
+  
+  // Primitives
+  if (t === 'int' || t === 'integer') return { java: 'int', py: 'int', js: 'number', cpp: 'int', ts: 'number' };
+  if (t === 'long') return { java: 'long', py: 'int', js: 'number', cpp: 'long long', ts: 'number' };
+  if (t === 'float') return { java: 'float', py: 'float', js: 'number', cpp: 'float', ts: 'number' };
+  if (t === 'double' || t === 'number') return { java: 'double', py: 'float', js: 'number', cpp: 'double', ts: 'number' };
+  if (t === 'bool' || t === 'boolean') return { java: 'boolean', py: 'bool', js: 'boolean', cpp: 'bool', ts: 'boolean' };
+  if (t === 'char' || t === 'character') return { java: 'char', py: 'str', js: 'string', cpp: 'char', ts: 'string' };
+  if (t === 'str' || t === 'string') return { java: 'String', py: 'str', js: 'string', cpp: 'string', ts: 'string' };
+
+  // 1D Arrays
+  if (t === 'list[int]' || t === 'array[int]' || t === 'int[]') return { java: 'int[]', py: 'List[int]', js: 'number[]', cpp: 'vector<int>', ts: 'number[]' };
+  if (t === 'list[long]') return { java: 'long[]', py: 'List[int]', js: 'number[]', cpp: 'vector<long long>', ts: 'number[]' };
+  if (t === 'list[float]') return { java: 'float[]', py: 'List[float]', js: 'number[]', cpp: 'vector<float>', ts: 'number[]' };
+  if (t === 'list[double]') return { java: 'double[]', py: 'List[float]', js: 'number[]', cpp: 'vector<double>', ts: 'number[]' };
+  if (t === 'list[bool]' || t === 'list[boolean]') return { java: 'boolean[]', py: 'List[bool]', js: 'boolean[]', cpp: 'vector<bool>', ts: 'boolean[]' };
+  if (t === 'list[char]') return { java: 'char[]', py: 'List[str]', js: 'string[]', cpp: 'vector<char>', ts: 'string[]' };
+  if (t === 'list[str]' || t === 'list[string]' || t === 'string[]') return { java: 'String[]', py: 'List[str]', js: 'string[]', cpp: 'vector<string>', ts: 'string[]' };
+
+  // 2D Arrays
+  if (t === 'list[list[int]]' || t === 'array[array[int]]' || t === 'int[][]') return { java: 'int[][]', py: 'List[List[int]]', js: 'number[][]', cpp: 'vector<vector<int>>', ts: 'number[][]' };
+  if (t === 'list[list[str]]' || t === 'list[list[string]]') return { java: 'String[][]', py: 'List[List[str]]', js: 'string[][]', cpp: 'vector<vector<string>>', ts: 'string[][]' };
+  if (t === 'list[list[char]]') return { java: 'char[][]', py: 'List[List[str]]', js: 'string[][]', cpp: 'vector<vector<char>>', ts: 'string[][]' };
+
+  // Collections
+  if (t === 'set[int]') return { java: 'Set<Integer>', py: 'Set[int]', js: 'Set<number>', cpp: 'unordered_set<int>', ts: 'Set<number>' };
+  if (t === 'set[str]' || t === 'set[string]') return { java: 'Set<String>', py: 'Set[str]', js: 'Set<string>', cpp: 'unordered_set<string>', ts: 'Set<string>' };
+  if (t === 'map[str,int]' || t === 'dict[str,int]') return { java: 'Map<String, Integer>', py: 'Dict[str, int]', js: 'Map<string, number>', cpp: 'unordered_map<string, int>', ts: 'Map<string, number>' };
+  if (t === 'map[int,int]' || t === 'dict[int,int]') return { java: 'Map<Integer, Integer>', py: 'Dict[int, int]', js: 'Map<number, number>', cpp: 'unordered_map<int, int>', ts: 'Map<number, number>' };
+
+  // Linked list / Tree
+  if (t.includes('listnode')) return { java: 'ListNode', py: 'ListNode', js: 'ListNode', cpp: 'ListNode*', ts: 'ListNode | null' };
+  if (t.includes('treenode')) return { java: 'TreeNode', py: 'TreeNode', js: 'TreeNode', cpp: 'TreeNode*', ts: 'TreeNode | null' };
+
+  // Graph adjacency list
+  if (t === 'list[list[integer]]') return { java: 'List<List<Integer>>', py: 'List[List[int]]', js: 'number[][]', cpp: 'vector<vector<int>>', ts: 'number[][]' };
+
+  // Fallback - try to extract from List<...>
+  if (t.startsWith('list<list<integer>>')) return { java: 'List<List<Integer>>', py: 'List[List[int]]', js: 'number[][]', cpp: 'vector<vector<int>>', ts: 'number[][]' };
+  
+  // Final fallback
+  return { java: 'Object', py: 'object', js: 'any', cpp: 'auto', ts: 'any' };
+};
 
 /**
  * Deduces Java data type from a sample value.
@@ -126,131 +181,161 @@ export const sanitizeFunctionName = (title) => {
 };
 
 /**
- * Java support class definitions.
+ * Java support class definitions with LeetCode-style comments.
  */
-export const getJavaSupportDefinition = (questionType) => {
-  switch (questionType) {
-    case 'linked_list':
-      return `/**
+export const getJavaSupportDefinition = (questionType, params = [], returnType = '') => {
+  const needsListNode = [...params, returnType].some(t => String(t).toLowerCase().includes('listnode'));
+  const needsTreeNode = [...params, returnType].some(t => String(t).toLowerCase().includes('treenode'));
+  
+  const pieces = [];
+  
+  if (needsListNode) {
+    pieces.push(`/**
  * Definition for singly-linked list.
- * public class ListNode {
- *     int val;
- *     ListNode next;
- *     ListNode() {}
- *     ListNode(int val) { this.val = val; }
- *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
- * }
- */`;
-    case 'binary_tree':
-      return `/**
- * Definition for a binary tree node.
- * public class TreeNode {
- *     int val;
- *     TreeNode left;
- *     TreeNode right;
- *     TreeNode() {}
- *     TreeNode(int val) { this.val = val; }
- *     TreeNode(int val, TreeNode left, TreeNode right) { this.val = val; this.left = left; this.right = right; }
- * }
- */`;
-    case 'graph':
-      return `/**
- * Definition for a graph node.
- * class GraphNode {
- *     int val;
- *     List<GraphNode> neighbors;
- *     GraphNode() { neighbors = new ArrayList<>(); }
- *     GraphNode(int val) { this.val = val; neighbors = new ArrayList<>(); }
- * }
- */`;
-    default:
-      return '';
+ */
+class ListNode {
+    int val;
+    ListNode next;
+    ListNode() {}
+    ListNode(int val) { this.val = val; }
+    ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+}`);
   }
+  
+  if (needsTreeNode) {
+    pieces.push(`/**
+ * Definition for a binary tree node.
+ */
+class TreeNode {
+    int val;
+    TreeNode left;
+    TreeNode right;
+    TreeNode() {}
+    TreeNode(int val) { this.val = val; }
+    TreeNode(int val, TreeNode left, TreeNode right) { this.val = val; this.left = left; this.right = right; }
+}`);
+  }
+  
+  return pieces.join('\n\n');
 };
 
 /**
- * JavaScript support comments.
+ * JavaScript support with JSDoc comments.
  */
-export const getJavaScriptSupportComment = (questionType) => {
-  switch (questionType) {
-    case 'linked_list':
-      return `/**
+export const getJavaScriptSupportComment = (params = [], returnType = '') => {
+  const needsListNode = [...params, returnType].some(t => String(t).toLowerCase().includes('listnode'));
+  const needsTreeNode = [...params, returnType].some(t => String(t).toLowerCase().includes('treenode'));
+  
+  const pieces = [];
+  
+  if (needsListNode) {
+    pieces.push(`/**
  * Definition for singly-linked list.
- * function ListNode(val, next) {
- *     this.val = (val === undefined ? 0 : val)
- *     this.next = (next === undefined ? null : next)
- * }
- */`;
-    case 'binary_tree':
-      return `/**
- * Definition for a binary tree node.
- * function TreeNode(val, left, right) {
- *     this.val = (val === undefined ? 0 : val)
- *     this.left = (left === undefined ? null : left)
- *     this.right = (right === undefined ? null : right)
- * }
- */`;
-    default:
-      return '';
+ * @param {number} val
+ * @param {ListNode} next
+ */
+function ListNode(val, next) {
+    this.val = (val===undefined ? 0 : val);
+    this.next = (next===undefined ? null : next);
+}`);
   }
+  
+  if (needsTreeNode) {
+    pieces.push(`/**
+ * Definition for a binary tree node.
+ * @param {number} val
+ * @param {TreeNode} left
+ * @param {TreeNode} right
+ */
+function TreeNode(val, left, right) {
+    this.val = (val===undefined ? 0 : val);
+    this.left = (left===undefined ? null : left);
+    this.right = (right===undefined ? null : right);
+}`);
+  }
+  
+  return pieces.join('\n\n');
 };
 
 /**
- * Python support definitions.
+ * Python support definitions with proper type hints.
  */
-export const getPythonSupportDefinition = (questionType) => {
-  switch (questionType) {
-    case 'linked_list':
-      return `# Definition for singly-linked list.
-# class ListNode:
-#     def __init__(self, val=0, next=None):
-#         self.val = val
-#         self.next = next
-`;
-    case 'binary_tree':
-      return `# Definition for a binary tree node.
-# class TreeNode:
-#     def __init__(self, val=0, left=None, right=None):
-#         self.val = val
-#         self.left = left
-#         self.right = right
-`;
-    default:
-      return '';
+export const getPythonSupportDefinition = (params = [], returnType = '') => {
+  const needsListNode = [...params, returnType].some(t => String(t).toLowerCase().includes('listnode'));
+  const needsTreeNode = [...params, returnType].some(t => String(t).toLowerCase().includes('treenode'));
+  
+  const pieces = [];
+  
+  if (needsListNode) {
+    pieces.push(`# Definition for singly-linked list.
+class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next`);
   }
+  
+  if (needsTreeNode) {
+    pieces.push(`# Definition for a binary tree node.
+class TreeNode:
+    def __init__(self, val=0, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right`);
+  }
+  
+  return pieces.join('\n\n');
 };
 
 /**
- * C++ support comments.
+ * C++ support with proper includes and struct definitions.
  */
-export const getCppSupportComment = (questionType) => {
-  switch (questionType) {
-    case 'linked_list':
-      return `/**
- * Definition for singly-linked list.
- * struct ListNode {
- *     int val;
- *     ListNode *next;
- *     ListNode() : val(0), next(nullptr) {}
- *     ListNode(int x) : val(x), next(nullptr) {}
- *     ListNode(int x, ListNode *next) : val(x), next(next) {}
- * };
- */`;
-    case 'binary_tree':
-      return `/**
- * Definition for a binary tree node.
- * struct TreeNode {
- *     int val;
- *     TreeNode *left;
- *     TreeNode *right;
- *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
- *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
- *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
- * };
- */`;
-    default:
-      return '';
+export const getCppSupportComment = (params = [], returnType = '') => {
+  const allTypes = [...params, returnType].map(t => String(t).toLowerCase());
+  const needsVector = allTypes.some(t => t.includes('vector') || t.includes('list[') || t.includes('[]'));
+  const needsString = allTypes.some(t => t.includes('string'));
+  const needsUnorderedSet = allTypes.some(t => t.includes('unordered_set') || t.includes('set['));
+  const needsUnorderedMap = allTypes.some(t => t.includes('unordered_map') || t.includes('map[') || t.includes('dict['));
+  const needsListNode = allTypes.some(t => t.includes('listnode'));
+  const needsTreeNode = allTypes.some(t => t.includes('treenode'));
+  
+  const pieces = [];
+  
+  // Add includes
+  const includes = [];
+  if (needsVector) includes.push('#include <vector>');
+  if (needsString) includes.push('#include <string>');
+  if (needsUnorderedSet) includes.push('#include <unordered_set>');
+  if (needsUnorderedMap) includes.push('#include <unordered_map>');
+  
+  if (includes.length > 0) {
+    pieces.push(includes.join('\n') + '\nusing namespace std;');
   }
+  
+  // Add struct definitions
+  if (needsListNode) {
+    pieces.push(`/**
+ * Definition for singly-linked list.
+ */
+struct ListNode {
+    int val;
+    ListNode *next;
+    ListNode(int x) : val(x), next(nullptr) {}
+};`);
+  }
+  
+  if (needsTreeNode) {
+    pieces.push(`/**
+ * Definition for a binary tree node.
+ */
+struct TreeNode {
+    int val;
+    TreeNode *left;
+    TreeNode *right;
+    TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+};`);
+  }
+  
+  return pieces.join('\n\n');
 };
 
 /**
@@ -286,110 +371,55 @@ export const normalizeParameterSchema = (schema, fallbackTypes) => {
  * Maps canonical types to JavaScript JSDoc types.
  */
 export const mapJsType = (type) => {
-  const base = type?.trim();
-  switch (base) {
-    case 'int':
-    case 'long':
-    case 'double':
-    case 'float':
-      return 'number';
-    case 'int[]':
-    case 'long[]':
-      return 'number[]';
-    case 'boolean':
-      return 'boolean';
-    case 'char':
-    case 'String':
-      return 'string';
-    case 'String[]':
-      return 'string[]';
-    case 'List<List<Integer>>':
-      return 'number[][]';
-    case 'ListNode':
-    case 'TreeNode':
-      return base;
-    case 'void':
-      return 'void';
-    default:
-      return base || 'any';
-  }
+  const mapped = mapCanonicalToLang(type);
+  return mapped.js || 'any';
 };
 
 /**
  * Maps canonical types to Python type hints.
  */
 export const mapPythonType = (type) => {
-  const base = type?.trim();
-  switch (base) {
-    case 'int':
-    case 'long':
-      return { hint: 'int' };
-    case 'double':
-    case 'float':
-      return { hint: 'float' };
-    case 'boolean':
-      return { hint: 'bool' };
-    case 'String':
-      return { hint: 'str' };
-    case 'int[]':
-      return { hint: 'List[int]', imports: ['List'] };
-    case 'String[]':
-      return { hint: 'List[str]', imports: ['List'] };
-    case 'List<List<Integer>>':
-      return { hint: 'List[List[int]]', imports: ['List'] };
-    case 'void':
-      return { hint: 'None' };
-    default:
-      return { hint: 'Any', imports: ['Any'] };
-  }
+  const mapped = mapCanonicalToLang(type);
+  const hint = mapped.py || 'Any';
+  const imports = [];
+  if (hint.includes('List[')) imports.push('List');
+  if (hint.includes('Set[')) imports.push('Set');
+  if (hint.includes('Dict[')) imports.push('Dict');
+  if (hint.includes('Optional[') || type?.toLowerCase().includes('listnode') || type?.toLowerCase().includes('treenode')) imports.push('Optional');
+  return { hint, imports };
 };
 
 /**
  * Maps canonical types to C++ types.
  */
 export const mapCppType = (type, { isReturn = false } = {}) => {
-  const base = type?.trim();
-  switch (base) {
-    case 'int':
-      return 'int';
-    case 'long':
-      return 'long long';
-    case 'double':
-    case 'float':
-      return 'double';
-    case 'boolean':
-      return 'bool';
-    case 'String':
-      return 'string';
-    case 'int[]':
-      return isReturn ? 'vector<int>' : 'vector<int>&';
-    case 'String[]':
-      return isReturn ? 'vector<string>' : 'vector<string>&';
-    case 'List<List<Integer>>':
-      return isReturn ? 'vector<vector<int>>' : 'vector<vector<int>>&';
-    case 'ListNode':
-    case 'TreeNode':
-      return `${base}*`;
-    default:
-      return 'int';
+  const mapped = mapCanonicalToLang(type);
+  let cppType = mapped.cpp || 'int';
+  // Add reference for non-return parameters with vectors
+  if (!isReturn && cppType.includes('vector<') && !cppType.includes('*')) {
+    cppType += '&';
   }
+  return cppType;
 };
 
 /**
- * Builds Java template.
+ * Builds Java template with intelligent imports and struct injection.
  */
-export const buildJavaTemplate = (functionName, typeInfo, questionType, parameterSchema) => {
-  const fallback = {
-    returnType: typeInfo.returnType || 'int',
-    paramTypes: typeInfo.paramTypes && typeInfo.paramTypes.length ? typeInfo.paramTypes : ['int']
-  };
-  const normalized = normalizeParameterSchema(parameterSchema, fallback);
+export const buildJavaTemplate = (functionName, normalized, questionType) => {
   const paramList = normalized.params
     .map(param => `${param.type} ${param.name}`)
     .join(', ');
-  const supportComment = getJavaSupportDefinition(questionType);
-  const prefix = supportComment ? `${supportComment}\n\n` : '';
-  return `${prefix}class Solution {
+  
+  // Check if we need java.util imports
+  const allTypes = [...normalized.params.map(p => p.type), normalized.returnType].join(' ');
+  const needsCollections = allTypes.includes('List<') || allTypes.includes('Set<') || allTypes.includes('Map<');
+  const imports = needsCollections ? 'import java.util.*;\n\n' : '';
+  
+  // Get struct definitions
+  const structs = getJavaSupportDefinition(questionType, normalized.params.map(p => p.type), normalized.returnType);
+  const prefix = structs ? `${structs}\n\n` : '';
+  
+  return `${imports}${prefix}class Solution {
     public ${normalized.returnType} ${functionName}(${paramList}) {
         // Write your solution here
         
@@ -401,7 +431,7 @@ export const buildJavaTemplate = (functionName, typeInfo, questionType, paramete
  * Builds JavaScript template.
  */
 export const buildJavascriptTemplate = (functionName, context) => {
-  const support = getJavaScriptSupportComment(context.questionType);
+  const structs = getJavaScriptSupportComment(context.normalized.params.map(p => p.type), context.normalized.returnType);
   const jsDocParams = context.jsDocs
     .filter(doc => doc.name)
     .map(doc => ` * @param {${doc.type}} ${doc.name}`)
@@ -409,7 +439,7 @@ export const buildJavascriptTemplate = (functionName, context) => {
   const jsDocReturn = ` * @return {${context.jsReturnType || 'any'}}`;
   const paramsList = context.normalized.params.map(param => param.name).join(', ');
   const docBlock = jsDocParams ? `/**\n${jsDocParams}\n${jsDocReturn}\n */` : `/**\n${jsDocReturn}\n */`;
-  const supportBlock = support ? `${support}\n\n` : '';
+  const supportBlock = structs ? `${structs}\n\n` : '';
   return `${supportBlock}${docBlock}
 var ${functionName} = function(${paramsList}) {
     // Write your solution here
@@ -421,7 +451,7 @@ var ${functionName} = function(${paramsList}) {
  * Builds Python template.
  */
 export const buildPythonTemplate = (functionName, context) => {
-  const supportDefinition = getPythonSupportDefinition(context.questionType);
+  const structs = getPythonSupportDefinition(context.normalized.params.map(p => p.type), context.normalized.returnType);
   const importLine = context.pythonImports.length
     ? `from typing import ${context.pythonImports.join(', ')}\n\n`
     : '';
@@ -430,7 +460,7 @@ export const buildPythonTemplate = (functionName, context) => {
     .join(', ');
   const args = params ? `, ${params}` : '';
   const returnHint = context.pythonReturnHint ? ` -> ${context.pythonReturnHint}` : '';
-  const supportBlock = supportDefinition ? `${supportDefinition}\n\n` : '';
+  const supportBlock = structs ? `${structs}\n\n` : '';
   return `${supportBlock}${importLine}class Solution:
     def ${functionName}(self${args})${returnHint}:
         # Write your solution here
@@ -441,14 +471,14 @@ export const buildPythonTemplate = (functionName, context) => {
  * Builds C++ template.
  */
 export const buildCppTemplate = (functionName, context) => {
-  const support = getCppSupportComment(context.questionType);
+  const structs = getCppSupportComment(context.normalized.params.map(p => p.type), context.normalized.returnType);
   const params = context.normalized.params
     .map((param, idx) => {
       const type = context.cppParamTypes[idx] || 'auto';
       return `${type} ${param.name}`;
     })
     .join(', ');
-  const supportBlock = support ? `${support}\n` : '';
+  const supportBlock = structs ? `${structs}\n\n` : '';
   return `${supportBlock}class Solution {
 public:
     ${context.cppReturnType} ${functionName}(${params}) {
@@ -467,6 +497,7 @@ export const generateCodeTemplate = (problem, language, testCases = []) => {
   const problemTitle = problem?.title || 'Solution';
   const storedFunctionName = typeof problem?.function_name === 'string' ? problem.function_name.trim() : '';
   const functionName = storedFunctionName || sanitizeFunctionName(problemTitle);
+  const langKey = language === 'python' ? 'py' : language === 'javascript' ? 'js' : language === 'typescript' ? 'ts' : language === 'c++' ? 'cpp' : language;
   
   const javaFallbackTypes = getJavaFallbackTypes(problem?.question_type);
   const javaTypesFromTests = getJavaTypeFromTestCases(testCases, javaFallbackTypes);
@@ -480,7 +511,22 @@ export const generateCodeTemplate = (problem, language, testCases = []) => {
     }
   }
 
-  const normalizedParams = normalizeParameterSchema(parameterSchema, {
+  // Normalize schema types to language-specific types using the canonical mapper
+  const mapSchemaTypes = (schema, langKey) => {
+    if (!schema) return null;
+    const params = Array.isArray(schema.params)
+      ? schema.params.map(p => ({
+          ...p,
+          type: mapCanonicalToLang(p.type || '')[langKey] || p.type || 'Object'
+        }))
+      : [];
+    const returnType = mapCanonicalToLang(schema.returnType || 'void')[langKey] || 'void';
+    return { params, returnType };
+  };
+
+  const parameterSchemaForJava = mapSchemaTypes(parameterSchema, 'java');
+
+  const normalizedParams = normalizeParameterSchema(parameterSchemaForJava || parameterSchema, {
     returnType: javaTypesFromTests.returnType,
     paramTypes: javaTypesFromTests.paramTypes
   });
@@ -524,16 +570,26 @@ export const generateCodeTemplate = (problem, language, testCases = []) => {
     cppReturnType
   };
 
-  const javaTypeInfo = javaTypesFromTests;
-
   switch (language) {
     case 'python':
+    case 'py':
       return buildPythonTemplate(functionName, templateContext);
     case 'java':
-      return buildJavaTemplate(functionName, javaTypeInfo, problem?.question_type, parameterSchema);
+      return buildJavaTemplate(functionName, normalizedParams, problem?.question_type);
     case 'cpp':
+    case 'c++':
       return buildCppTemplate(functionName, templateContext);
+    case 'typescript':
+    case 'ts': {
+      // Reuse JS template but keep type annotations for TypeScript
+      const tsContext = { ...templateContext, jsReturnType: mapCanonicalToLang(normalizedParams.returnType).ts || 'any', normalized: {
+        ...templateContext.normalized,
+        params: templateContext.normalized.params.map(p => ({ ...p, type: mapCanonicalToLang(p.type).ts || 'any' }))
+      }};
+      return buildJavascriptTemplate(functionName, tsContext);
+    }
     case 'javascript':
+    case 'js':
     default:
       return buildJavascriptTemplate(functionName, templateContext);
   }

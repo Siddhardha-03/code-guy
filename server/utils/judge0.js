@@ -3,20 +3,23 @@ require('dotenv').config();
 
 const { buildWrappedCode } = require('./codeRunner');
 
+// Map of supported languages and their Judge0 IDs (kept small but extensible)
+const LANGUAGE_IDS = {
+  javascript: 63,  // JavaScript (Node.js)
+  typescript: 94,  // TypeScript (Node.js)
+  python: 71,      // Python
+  java: 62,        // Java
+  cpp: 54,         // C++
+  c: 50,           // C
+  csharp: 51,      // C#
+  ruby: 72,        // Ruby
+  go: 60,          // Go
+  php: 68          // PHP
+};
+
 const JUDGE0_BASE_URL = process.env.JUDGE0_BASE_URL || 'https://ce.judge0.com';
 
-// Language IDs for Judge0 API
-const LANGUAGE_IDS = {
-  javascript: 63,  // JavaScript (Node.js 12.14.0)
-  python: 71,      // Python (3.8.1)
-  java: 62,        // Java (OpenJDK 13.0.1)
-  cpp: 54,         // C++ (GCC 9.2.0)
-  c: 50,           // C (GCC 9.2.0)
-  csharp: 51,      // C# (Mono 6.6.0.161)
-  ruby: 72,        // Ruby (2.7.0)
-  go: 60,          // Go (1.13.5)
-  php: 68,         // PHP (7.4.1)
-};
+// (Removed duplicate LANGUAGE_IDS declaration)
 
 /**
  * Submit code to Judge0 API for execution

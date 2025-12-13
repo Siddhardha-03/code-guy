@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { getFeaturedSheets } from '../services/sheetsService';
+import { getSheets } from '../services/sheetsService';
 
 const Sheets = () => {
 	const [sheets, setSheets] = useState([]);
@@ -8,12 +8,11 @@ const Sheets = () => {
 	const [error, setError] = useState('');
 
 	useEffect(() => {
-		const loadSheets = async () => 
-		{
+		const loadSheets = async () => {
 			setLoading(true);
 			setError('');
 			try {
-				const data = await getFeaturedSheets();
+				const data = await getSheets();
 				setSheets(data || []);
 			} catch (err) {
 				setError('Failed to load sheets. Please try again.');
