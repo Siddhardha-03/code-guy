@@ -35,6 +35,7 @@ module.exports = {
       fontFamily: {
         sans: ['Inter', 'sans-serif'],
         mono: ['Fira Code', 'monospace'],
+        grotesk: ['Space Grotesk', 'sans-serif'],
       },
     },
   },

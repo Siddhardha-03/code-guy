@@ -29,15 +29,15 @@ const Navbar = ({ user }) => {
       <div className="w-full px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo and site name - Left */}
-          <Link to="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity" onClick={closeMobileMenu}>
+          <Link to="/" className="flex items-center gap-2 sm:gap-3 hover:opacity-80 transition-opacity" onClick={closeMobileMenu}>
             <img
               src="/codigloo-logo.png"
               alt="CodiGloo logo"
-              className="w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20"
+              className="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20"
               loading="lazy"
             />
             <div className="flex flex-col leading-tight">
-              <span className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 dark:from-blue-400 dark:to-cyan-400 bg-clip-text text-transparent">CodiGloo</span>
+              <span className="text-xl sm:text-3xl font-grotesk font-extrabold tracking-tight bg-gradient-to-r from-blue-600 to-cyan-600 dark:from-blue-400 dark:to-cyan-400 bg-clip-text text-transparent">CodiGloo</span>
             </div>
           </Link>
 

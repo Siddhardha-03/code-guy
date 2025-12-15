@@ -1,6 +1,9 @@
 /* Import our professional theme */
 @import './styles/theme.css';
 
+/* Import Space Grotesk font */
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
 /* Keep Tailwind for utility classes */
 @tailwind base;
 @tailwind components;
