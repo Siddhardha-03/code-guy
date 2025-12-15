@@ -17,7 +17,8 @@ import {
 } from '../services/submissionService';
 import CodeEditor from '../components/CodeEditor';
 import OutputModal from '../components/OutputModal';
-import axios from 'axios';
+import SuccessAnimation from '../components/SuccessAnimation';
+import { calculateStreak } from '../utils/streakUtils';
 import { generateCodeTemplate } from '../utils/codeScaffold';
 
 /**
@@ -43,6 +44,7 @@ const ProblemDetail = ({ user }) => {
   const [executing, setExecuting] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [showOutputModal, setShowOutputModal] = useState(false);
+  const [showSuccessAnimation, setShowSuccessAnimation] = useState(false);
   
   // UI state
   const [loading, setLoading] = useState(true);
@@ -417,14 +419,29 @@ const ProblemDetail = ({ user }) => {
 
       if (allPassed) {
         setResultStatus('success');
+        
+        // Show success animation
+        setShowSuccessAnimation(true);
+        
+        // Fetch user submissions to calculate streak
+        setTimeout(() => {
+          fetchSubmissions().then(() => {
+            // Calculate streak from submissions
+            if (user) {
+              getQuestionSubmissions(id).then(submissions => {
+                const streakInfo = calculateStreak(submissions);
+              }).catch(() => {
+                console.log('Could not fetch submissions for streak');
+              });
+            }
+          });
+        }, 500);
       } else if (anyErrors) {
         setResultStatus('error');
       } else {
         setResultStatus('failed');
       }
       setShowOutputModal(true);
-
-      await fetchSubmissions();
 
       try {
         localStorage.setItem('practiceNeedsRefresh', 'true');
@@ -1099,6 +1116,12 @@ const ProblemDetail = ({ user }) => {
           </div>
         </div>
       )}
+
+      {/* Success Animation with Points */}
+      <SuccessAnimation 
+        show={showSuccessAnimation} 
+        onComplete={() => setShowSuccessAnimation(false)}
+      />
     </div>
   );
 };

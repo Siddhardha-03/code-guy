@@ -358,7 +358,7 @@ router.get('/leaderboard', verifyFirebaseToken, isAdmin, async (req, res) => {
 
     if (type === 'overall' || type === 'coding') {
       try {
-        // Coding challenges leaderboard using existing submissions table
+        // Coding challenges leaderboard with dynamic scoring (10 Easy, 25 Medium, 50 Hard)
         const [codingLeaderboard] = await req.db.query(`
           SELECT 
             u.id,
@@ -366,17 +366,27 @@ router.get('/leaderboard', verifyFirebaseToken, isAdmin, async (req, res) => {
             u.email,
             COUNT(DISTINCT CASE WHEN s.passed = 1 THEN s.question_id END) as problems_solved,
             COUNT(DISTINCT s.question_id) as problems_attempted,
-            CASE 
-              WHEN COUNT(DISTINCT s.question_id) > 0 
-              THEN ROUND((COUNT(DISTINCT CASE WHEN s.passed = 1 THEN s.question_id END) * 100.0 / COUNT(DISTINCT s.question_id)), 2)
-              ELSE 0 
-            END as success_rate,
-            COUNT(s.id) as total_submissions
+            ROUND(COALESCE(
+              SUM(CASE WHEN s.passed = 1 THEN 1 ELSE 0 END) * 100.0 / COUNT(*), 
+              0
+            ), 1) as success_rate,
+            COUNT(s.id) as total_submissions,
+            COALESCE(SUM(
+              CASE WHEN s.passed = 1 THEN
+                CASE q.difficulty
+                  WHEN 'Easy' THEN 10
+                  WHEN 'Medium' THEN 25
+                  WHEN 'Hard' THEN 50
+                  ELSE 10
+                END
+              ELSE 0 END
+            ), 0) as total_points
           FROM users u
-          INNER JOIN submissions s ON u.id = s.user_id
+          LEFT JOIN submissions s ON u.id = s.user_id
+          LEFT JOIN questions q ON s.question_id = q.id
           WHERE u.role = 'student'
           GROUP BY u.id, u.name, u.email
-          ORDER BY problems_solved DESC, success_rate DESC
+          ORDER BY total_points DESC, problems_solved DESC
           LIMIT ?
         `, [limit]);
         

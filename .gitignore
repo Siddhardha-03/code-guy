@@ -97,3 +97,8 @@ verify-*.js
 
 # Runtime configuration
 .pm2/ 
+
+
+.mds
+*.md 
+docs/*.md

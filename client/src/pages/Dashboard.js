@@ -3,13 +3,16 @@ import { Link } from 'react-router-dom';
 import { updateProfile } from '../services/authService';
 import { getUserStats, getUserSubmissions } from '../services/questionService';
 import { getUserQuizStats, getUserQuizSubmissions } from '../services/quizService';
+import { calculateStreak } from '../utils/streakUtils';
+import { getStreakBadge } from '../utils/scoringSystem';
 
 const Dashboard = ({ user }) => {
   const [stats, setStats] = useState({
     solvedProblems: 0,
     completedQuizzes: 0,
     totalScore: 0,
-    streak: 0
+    streak: 0,
+    streakInfo: null
   });
   const [recentActivity, setRecentActivity] = useState([]);
   const [profileForm, setProfileForm] = useState({
@@ -25,16 +28,22 @@ const Dashboard = ({ user }) => {
     setLoading(true);
     try {
       // Fetch both submission and quiz stats in parallel
-      const [submissionStats, quizStats] = await Promise.all([
+      const [submissionStats, quizStats, submissionData] = await Promise.all([
         getUserStats().catch(() => ({ total: 0, passed: 0, averageScore: 0 })),
-        getUserQuizStats().catch(() => ({ total: 0, averageScore: 0 }))
+        getUserQuizStats().catch(() => ({ total: 0, averageScore: 0 })),
+        getUserSubmissions({ limit: 1000 }).catch(() => ({ submissions: [] }))
       ]);
+
+      // Calculate streak from submission data
+      const streakData = calculateStreak(submissionData.submissions || []);
+      const streakBadge = getStreakBadge(streakData.currentStreak);
 
       setStats({
         solvedProblems: submissionStats.passed || 0,
         completedQuizzes: quizStats.total || 0,
-        totalScore: Math.round(((submissionStats.averageScore || 0) + (quizStats.averageScore || 0)) / 2),
-        streak: calculateStreak() // We'll implement this based on recent activity
+        totalScore: submissionStats.totalPoints || 0,
+        streak: streakData.currentStreak || 0,
+        streakInfo: { data: streakData, badge: streakBadge }
       });
     } catch (err) {
       console.error('Error fetching user stats:', err);
@@ -43,7 +52,8 @@ const Dashboard = ({ user }) => {
         solvedProblems: 0,
         completedQuizzes: 0,
         totalScore: 0,
-        streak: 0
+        streak: 0,
+        streakInfo: null
       });
     } finally {
       setLoading(false);
@@ -104,12 +114,6 @@ const Dashboard = ({ user }) => {
       fetchRecentActivity();
     }
   }, [user, fetchUserStats, fetchRecentActivity]);
-
-  const calculateStreak = () => {
-    // Simple streak calculation - could be enhanced
-    // For now, return a default value
-    return 0;
-  };
 
   const handleProfileChange = (e) => {
     const { name, value } = e.target;
@@ -195,7 +199,7 @@ const Dashboard = ({ user }) => {
         <div className="bg-white dark:bg-gray-900 p-6 rounded-xl shadow-sm border-l-4 border-purple-500 dark:border-purple-400 hover:shadow-lg transition-all animate-shine">
           <div className="flex items-start justify-between mb-2">
             <div>
-              <div className="text-gray-500 dark:text-gray-400 text-sm font-medium uppercase tracking-wide mb-1">Total Score</div>
+              <div className="text-gray-500 dark:text-gray-400 text-sm font-medium uppercase tracking-wide mb-1">Coding Points</div>
               <div className="text-4xl font-extrabold bg-gradient-to-r from-purple-600 to-pink-600 dark:from-purple-400 dark:to-pink-400 bg-clip-text text-transparent">{stats.totalScore}</div>
             </div>
             <svg className="w-10 h-10 text-purple-200 dark:text-purple-900" fill="currentColor" viewBox="0 0 24 24">
@@ -210,12 +214,27 @@ const Dashboard = ({ user }) => {
             <div>
               <div className="text-gray-500 dark:text-gray-400 text-sm font-medium uppercase tracking-wide mb-1">Day Streak</div>
               <div className="text-4xl font-extrabold bg-gradient-to-r from-orange-600 to-red-600 dark:from-orange-400 dark:to-red-400 bg-clip-text text-transparent">{stats.streak}</div>
+              {stats.streakInfo?.badge && (
+                <div className="text-xs mt-2 flex items-center gap-2">
+                  <span className="text-lg">{stats.streakInfo.badge.icon}</span>
+                  <span className="font-semibold" style={{ color: stats.streakInfo.badge.color }}>
+                    {stats.streakInfo.badge.label}
+                  </span>
+                </div>
+              )}
             </div>
             <svg className="w-10 h-10 text-orange-200 dark:text-orange-900" fill="currentColor" viewBox="0 0 24 24">
               <path d="M12 1v22m11-11H1"/>
             </svg>
           </div>
-          <div className="text-xs text-gray-400 dark:text-gray-500 mt-3">Keep the momentum going!</div>
+          <div className="text-xs text-gray-400 dark:text-gray-500 mt-3">
+            {stats.streak > 0 ? "Keep the momentum going! 🔥" : "Start solving to build your streak!"}
+          </div>
+          {stats.streakInfo?.data?.maxStreak > 0 && stats.streakInfo.data.maxStreak !== stats.streak && (
+            <div className="text-xs text-gray-400 dark:text-gray-500 mt-1">
+              Personal best: {stats.streakInfo.data.maxStreak} days 🎯
+            </div>
+          )}
         </div>
       </div>
       

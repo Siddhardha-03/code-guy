@@ -422,6 +422,24 @@ router.get('/stats/user', verifyFirebaseToken, async (req, res) => {
        GROUP BY q.difficulty`,
       [req.user.id]
     );
+
+    // Calculate dynamic total points based on difficulty (no schema change)
+    const [pointsResult] = await req.db.execute(
+      `SELECT COALESCE(SUM(
+          CASE WHEN s.passed = 1 THEN
+            CASE q.difficulty
+              WHEN 'Easy' THEN 10
+              WHEN 'Medium' THEN 25
+              WHEN 'Hard' THEN 50
+              ELSE 10
+            END
+          ELSE 0 END
+        ), 0) as total_points
+       FROM submissions s
+       JOIN questions q ON s.question_id = q.id
+       WHERE s.user_id = ?`,
+      [req.user.id]
+    );
     
     // Get recent submissions
     const [recentSubmissions] = await req.db.execute(
@@ -440,6 +458,7 @@ router.get('/stats/user', verifyFirebaseToken, async (req, res) => {
         total: totalResult[0].total,
         passed: passedResult[0].passed,
         solved: solvedResult[0].solved,
+        totalPoints: pointsResult[0].total_points,
         byDifficulty: difficultyResult,
         recentSubmissions
       }
