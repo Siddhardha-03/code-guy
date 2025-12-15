@@ -40,14 +40,14 @@ const Home = ({ user }) => {
           <div className="flex flex-col sm:flex-row justify-center gap-4 mt-8 sm:mt-10">
             <Link
               to="/practice"
-              className="bg-white text-blue-600 hover:bg-blue-50 px-6 py-3 sm:px-8 sm:py-4 rounded-lg font-bold text-base sm:text-lg transition-all transform hover:scale-105 shadow-lg"
+              className="bg-gray-900 text-white hover:bg-gray-800 px-6 py-3 sm:px-8 sm:py-4 rounded-lg font-bold text-base sm:text-lg transition-all transform hover:scale-105 shadow-xl hover:shadow-2xl"
             >
               Start Coding Now →
             </Link>
             {!user && (
               <Link
                 to="/register"
-                className="border-2 border-white text-white hover:bg-white hover:text-blue-600 px-6 py-3 sm:px-8 sm:py-4 rounded-lg font-bold text-base sm:text-lg transition-all transform hover:scale-105"
+                className="bg-white text-blue-600 hover:bg-blue-50 border-2 border-white px-6 py-3 sm:px-8 sm:py-4 rounded-lg font-bold text-base sm:text-lg transition-all transform hover:scale-105 shadow-xl hover:shadow-2xl"
               >
                 Create Free Account
               </Link>
