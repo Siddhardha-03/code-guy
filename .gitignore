@@ -102,3 +102,4 @@ verify-*.js
 .mds
 *.md 
 docs/*.md
+*.csv

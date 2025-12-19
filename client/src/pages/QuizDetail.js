@@ -9,6 +9,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getQuiz, submitQuiz } from '../services/quizService';
+import useProctoring from '../utils/useProctoring';
 
 /**
  * QuizDetail component delivers the full quiz experience including guarded
@@ -26,7 +27,22 @@ const QuizDetail = ({ user }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [displayedScore, setDisplayedScore] = useState(0);
+  const [showProctorModal, setShowProctorModal] = useState(true);
   const animationRef = useRef(null);
+  const proctorStartedRef = useRef(false);
+
+  const handleViolationThreshold = useCallback(async () => {
+    setError('Violation limit reached. Auto-submitting...');
+    await handleSubmitQuiz();
+  }, [handleSubmitQuiz]);
+
+  const { startProctoring, stopProctoring, violationCount, lastViolation } = useProctoring({
+    assessmentId: id,
+    assessmentType: 'quiz',
+    maxViolations: 3,
+    onThreshold: handleViolationThreshold,
+    onViolation: (payload) => console.log('[Proctor][Quiz] violation', payload),
+  });
 
   /**
    * Loads quiz metadata and initializes answer slots plus the countdown timer
@@ -85,6 +101,16 @@ const QuizDetail = ({ user }) => {
     }
   }, [user, navigate, id, answers]);
 
+  const handleStartProctoring = async () => {
+    const started = await startProctoring();
+    if (started) {
+      proctorStartedRef.current = true;
+      setShowProctorModal(false);
+    } else {
+      setError('Unable to start proctoring. Please allow fullscreen.');
+    }
+  };
+
   useEffect(() => {
     if (!user) {
       navigate('/login', { state: { from: `/quizzes/${id}` } });
@@ -93,6 +119,17 @@ const QuizDetail = ({ user }) => {
     
     fetchQuiz();
   }, [id, user, navigate, fetchQuiz]);
+
+  useEffect(() => {
+    if (quiz && !quizCompleted && !proctorStartedRef.current) {
+      setShowProctorModal(true);
+    }
+    if (quizCompleted) {
+      stopProctoring();
+    }
+  }, [quiz, quizCompleted, stopProctoring]);
+
+  useEffect(() => () => stopProctoring(), [stopProctoring]);
 
   useEffect(() => {
     let timer;
@@ -342,6 +379,34 @@ const QuizDetail = ({ user }) => {
 
   return (
     <div className="space-y-6 max-w-5xl mx-auto">
+      {showProctorModal && (
+        <div className="fixed inset-0 z-40 bg-black/60 flex items-center justify-center px-4">
+          <div className="max-w-lg w-full bg-white rounded-2xl shadow-2xl p-6 space-y-4">
+            <h3 className="text-xl font-bold text-gray-900">Proctored Quiz</h3>
+            <p className="text-sm text-gray-700">Stay in fullscreen. Switching tabs/windows or exiting fullscreen counts as a violation. Max 3 violations before auto-submit.</p>
+            <ul className="text-sm text-gray-700 list-disc pl-5 space-y-1">
+              <li>No tab/window switching or reloads.</li>
+              <li>Copy/paste blocked for question text; inputs allowed.</li>
+              <li>Esc to exit fullscreen is blocked.</li>
+            </ul>
+            <div className="flex gap-3 pt-2">
+              <button
+                onClick={handleStartProctoring}
+                className="flex-1 px-4 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700"
+              >
+                Start Proctored Quiz
+              </button>
+              <button
+                onClick={() => navigate('/quizzes')}
+                className="px-4 py-3 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Quiz header */}
       <div className="bg-white p-6 rounded-lg shadow-sm">
         <h1 className="text-2xl font-bold text-gray-800">{quiz.title}</h1>
@@ -360,6 +425,13 @@ const QuizDetail = ({ user }) => {
               {timeLeft <= 300 && (
                 <span className="ml-2 text-red-600 animate-pulse">⚠️</span>
               )}
+              <div className="mt-1 inline-flex items-center gap-2 text-[11px] text-gray-600 bg-gray-100 px-2 py-1 rounded">
+                <span className="font-semibold text-gray-800">Violations</span>
+                <span className={`px-2 py-0.5 rounded-full text-white ${violationCount >= 2 ? 'bg-red-600' : 'bg-yellow-500'}`}>
+                  {violationCount}
+                </span>
+                {lastViolation?.violationType && <span className="text-gray-500">last: {lastViolation.violationType}</span>}
+              </div>
             </div>
           )}
         </div>

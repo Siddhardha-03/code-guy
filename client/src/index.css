@@ -21,3 +21,26 @@
     min-height: 200px;
   }
 }
+
+/* Proctoring: disable selection globally, re-enable for allowed inputs */
+.proctoring-block-select {
+  user-select: none;
+}
+
+.proctoring-block-select input,
+.proctoring-block-select textarea,
+.proctoring-block-select [contenteditable="true"],
+.proctoring-block-select [data-allow-select="true"] {
+  user-select: text;
+}
+
+/* Proctoring: hide navbar and footer during test */
+body.proctoring-active nav,
+body.proctoring-active footer {
+  display: none !important;
+}
+
+body.proctoring-active main {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}

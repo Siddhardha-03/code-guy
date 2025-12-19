@@ -15,6 +15,7 @@ import Toast from '../components/Toast';
 // Note: QuizCard component retained in repo for legacy/fallback, but
 // inline contest quiz flow (existing in-page quiz UI) will be used.
 import { generateCodeTemplate } from '../utils/codeScaffold';
+import useProctoring from '../utils/useProctoring';
 
 const formatTime = (seconds) => {
   const mm = Math.floor(seconds / 60);
@@ -37,6 +38,8 @@ const ContestAttempt = ({ user }) => {
   const [error, setError] = useState(null);
   const [isRegistered, setIsRegistered] = useState(false);
   const [participantStatus, setParticipantStatus] = useState(null);
+  const [showProctorModal, setShowProctorModal] = useState(true);
+  const proctorStartedRef = useRef(false);
   
   // UI state
   const [toast, setToast] = useState(null);
@@ -59,6 +62,27 @@ const ContestAttempt = ({ user }) => {
   const [quizCompleted, setQuizCompleted] = useState(false);
   const saveTimeoutRef = useRef(null);
   const lastSavedRef = useRef('');
+
+  const handleViolationThreshold = useCallback(async (payload) => {
+    showToast('Violation limit reached. Auto-submitting your contest…', 'error');
+    try {
+      await finalizeContest(contestId);
+      setContestEnded(true);
+      setParticipantStatus('completed');
+      navigate('/contests');
+    } catch (err) {
+      console.error('Auto-finalize after violations failed:', err);
+    }
+  }, [contestId, navigate]);
+
+  const { startProctoring, stopProctoring, violationCount, lastViolation } = useProctoring({
+    assessmentId: contestId,
+    assessmentType: 'contest',
+    maxViolations: 3,
+    onThreshold: handleViolationThreshold,
+    onViolation: (payload) => console.log('[Proctor][Contest] violation', payload),
+    allowPasteSelectors: ['.monaco-editor', 'input', 'textarea', '[contenteditable="true"]', '[data-allow-paste="true"]'],
+  });
 
   // problem detail for coding items
   const [problem, setProblem] = useState(null);
@@ -127,6 +151,18 @@ const ContestAttempt = ({ user }) => {
     loadContest();
   }, [loadContest]);
 
+  useEffect(() => {
+    if (isRegistered && !contestEnded && participantStatus !== 'completed' && !proctorStartedRef.current) {
+      setShowProctorModal(true);
+    }
+    if (contestEnded || participantStatus === 'completed') {
+      setShowProctorModal(false);
+      stopProctoring();
+    }
+  }, [isRegistered, contestEnded, participantStatus, stopProctoring]);
+
+  useEffect(() => () => stopProctoring(), [stopProctoring]);
+
   const handleRegisterNow = async () => {
     try {
       console.log(`[Register] Registering for contest ${contestId}`);
@@ -145,6 +181,17 @@ const ContestAttempt = ({ user }) => {
         return;
       }
       showToast(msg, 'error');
+    }
+  };
+
+  const handleStartProctoring = async () => {
+    const started = await startProctoring();
+    if (started) {
+      proctorStartedRef.current = true;
+      setShowProctorModal(false);
+      showToast('Proctoring started. Stay in fullscreen and avoid tab switches.', 'info');
+    } else {
+      showToast('Unable to start proctoring. Please ensure fullscreen permissions.', 'error');
     }
   };
 
@@ -631,6 +678,34 @@ const ContestAttempt = ({ user }) => {
         />
       )}
 
+      {showProctorModal && (
+        <div className="fixed inset-0 z-40 bg-black/60 flex items-center justify-center px-4">
+          <div className="max-w-xl w-full bg-white rounded-2xl shadow-2xl p-6 space-y-4">
+            <h3 className="text-xl font-bold text-gray-900">Proctored Mode</h3>
+            <p className="text-sm text-gray-700">Stay in fullscreen. Tab/window changes, reload, or exiting fullscreen will be recorded. {`Max violations: 3`}</p>
+            <ul className="text-sm text-gray-700 list-disc pl-5 space-y-1">
+              <li>No tab/window switching; focus loss counts as a violation.</li>
+              <li>No reload/back; Esc to exit fullscreen is blocked.</li>
+              <li>Copy/paste blocked except in the code editor and inputs.</li>
+            </ul>
+            <div className="flex gap-3 pt-2">
+              <button
+                onClick={handleStartProctoring}
+                className="flex-1 px-4 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700"
+              >
+                Start Proctored Contest
+              </button>
+              <button
+                onClick={() => navigate('/contests')}
+                className="px-4 py-3 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Header */}
       <div className="border-b bg-white sticky top-0 z-20">
         <div className="px-6 py-3 flex items-center justify-between">
@@ -656,6 +731,15 @@ const ContestAttempt = ({ user }) => {
             <div className="text-sm text-gray-500">Time Remaining</div>
             <div className={`text-2xl font-mono font-bold ${timeLeft <= 300 && timeLeft > 0 ? 'text-red-600' : timeLeft === 0 ? 'text-red-600' : 'text-gray-900'}`}>
               {formatTime(timeLeft)}
+            </div>
+            <div className="mt-1 inline-flex items-center gap-2 text-xs text-gray-600 bg-gray-100 px-2 py-1 rounded">
+              <span className="font-semibold text-gray-800">Violations</span>
+              <span className={`px-2 py-0.5 rounded-full text-white ${violationCount >= 2 ? 'bg-red-600' : 'bg-yellow-500'}`}>
+                {violationCount}
+              </span>
+              {lastViolation?.violationType && (
+                <span className="text-gray-500">last: {lastViolation.violationType}</span>
+              )}
             </div>
           </div>
         </div>

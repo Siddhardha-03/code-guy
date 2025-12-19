@@ -3,6 +3,7 @@ import { Routes, Route, Link, useLocation } from 'react-router-dom';
 import { getUsers, getPlatformStats, deleteQuestion, deleteQuiz } from '../services/adminService';
 import { getQuestions } from '../services/questionService';
 import { getQuizzes } from '../services/quizService';
+import { fetchViolations } from '../services/proctoringService';
 import QuestionForm from '../components/QuestionForm';
 import QuizForm from '../components/QuizForm';
 import Leaderboard from '../components/Leaderboard';
@@ -33,6 +34,8 @@ const AdminPanel = ({ user }) => {
       setActiveTab('sheets');
     } else if (path === 'leaderboard') {
       setActiveTab('leaderboard');
+    } else if (path === 'proctoring') {
+      setActiveTab('proctoring');
     }
   }, [location]);
 
@@ -92,6 +95,13 @@ const AdminPanel = ({ user }) => {
             >
               Leaderboard
             </Link>
+            <Link
+              to="/admin/proctoring"
+              className={`py-4 px-6 border-b-2 font-medium text-sm transition-all ${activeTab === 'proctoring' ? 'border-blue-500 dark:border-blue-400 text-blue-600 dark:text-blue-300 bg-blue-50 dark:bg-blue-900/10' : 'border-transparent text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 hover:border-gray-300 dark:hover:border-gray-600'}`}
+              onClick={() => setActiveTab('proctoring')}
+            >
+              Proctoring
+            </Link>
           </nav>
         </div>
         
@@ -106,6 +116,7 @@ const AdminPanel = ({ user }) => {
             <Route path="contests/:contestId/leaderboard" element={<ContestLeaderboard />} />
             <Route path="sheets" element={<SheetsManager />} />
             <Route path="leaderboard" element={<Leaderboard />} />
+            <Route path="proctoring" element={<ProctoringLogs />} />
           </Routes>
         </div>
       </div>
@@ -228,6 +239,123 @@ const UsersManagement = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const ProctoringLogs = () => {
+    const [logs, setLogs] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
+    const [filters, setFilters] = useState({
+      assessmentId: '',
+      assessmentType: '',
+      userId: '',
+      limit: 200,
+    });
+
+    const loadLogs = async () => {
+      setLoading(true);
+      setError('');
+      try {
+        const data = await fetchViolations({
+          assessmentId: filters.assessmentId || undefined,
+          assessmentType: filters.assessmentType || undefined,
+          userId: filters.userId || undefined,
+          limit: filters.limit || 200,
+        });
+        setLogs(Array.isArray(data) ? data : data?.data || []);
+      } catch (err) {
+        setError(err?.message || 'Failed to load violations');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    useEffect(() => {
+      loadLogs();
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFilters((prev) => ({ ...prev, [name]: value }));
+    };
+
+    const handleSubmit = (e) => {
+      e.preventDefault();
+      loadLogs();
+    };
+
+    return (
+      <div className="space-y-6">
+        <div>
+          <h2 className="text-2xl font-bold mb-2">Proctoring Violations</h2>
+          <p className="text-sm text-gray-600">View tab switches, fullscreen exits, paste attempts, and reload attempts.</p>
+        </div>
+
+        <form onSubmit={handleSubmit} className="grid md:grid-cols-4 gap-4 bg-white p-4 rounded-lg border">
+          <div>
+            <label className="text-sm font-medium text-gray-700">Assessment ID</label>
+            <input name="assessmentId" value={filters.assessmentId} onChange={handleChange} className="mt-1 w-full border rounded px-3 py-2" placeholder="contest_id or quiz_id" />
+          </div>
+          <div>
+            <label className="text-sm font-medium text-gray-700">Assessment Type</label>
+            <select name="assessmentType" value={filters.assessmentType} onChange={handleChange} className="mt-1 w-full border rounded px-3 py-2">
+              <option value="">Any</option>
+              <option value="contest">Contest</option>
+              <option value="quiz">Quiz</option>
+              <option value="assessment">Assessment</option>
+            </select>
+          </div>
+          <div>
+            <label className="text-sm font-medium text-gray-700">User ID</label>
+            <input name="userId" value={filters.userId} onChange={handleChange} className="mt-1 w-full border rounded px-3 py-2" placeholder="user id" />
+          </div>
+          <div>
+            <label className="text-sm font-medium text-gray-700">Limit</label>
+            <input name="limit" type="number" min="1" max="500" value={filters.limit} onChange={handleChange} className="mt-1 w-full border rounded px-3 py-2" />
+          </div>
+          <div className="md:col-span-4 flex justify-end">
+            <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50" disabled={loading}>
+              {loading ? 'Loading…' : 'Apply Filters'}
+            </button>
+          </div>
+        </form>
+
+        {error && <div className="bg-red-100 text-red-700 px-4 py-2 rounded border border-red-200">{error}</div>}
+
+        <div className="bg-white border rounded-lg overflow-x-auto">
+          <table className="min-w-full text-sm">
+            <thead className="bg-gray-100 text-gray-700">
+              <tr>
+                <th className="px-4 py-2 text-left">Time (UTC)</th>
+                <th className="px-4 py-2 text-left">User</th>
+                <th className="px-4 py-2 text-left">Assessment</th>
+                <th className="px-4 py-2 text-left">Type</th>
+                <th className="px-4 py-2 text-left">Violation</th>
+                <th className="px-4 py-2 text-left">Meta</th>
+              </tr>
+            </thead>
+            <tbody>
+              {logs.length === 0 && !loading && (
+                <tr>
+                  <td colSpan="6" className="px-4 py-3 text-center text-gray-500">No violations found.</td>
+                </tr>
+              )}
+              {logs.map((log) => (
+                <tr key={log.id} className="border-t">
+                  <td className="px-4 py-2 text-gray-700">{new Date(log.created_at).toISOString()}</td>
+                  <td className="px-4 py-2">{log.user_id}</td>
+                  <td className="px-4 py-2">{log.assessment_type}:{log.assessment_id}</td>
+                  <td className="px-4 py-2 uppercase">{log.assessment_type}</td>
+                  <td className="px-4 py-2 font-semibold">{log.violation_type}</td>
+                  <td className="px-4 py-2 text-xs font-mono max-w-xs whitespace-pre-wrap">{log.meta ? JSON.stringify(log.meta) : ''}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    );
   };
 
   if (loading) {
@@ -891,6 +1019,123 @@ const QuizzesManagement = () => {
           onCancel={handleFormCancel}
         />
       )}
+    </div>
+  );
+};
+
+const ProctoringLogs = () => {
+  const [logs, setLogs] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [filters, setFilters] = useState({
+    assessmentId: '',
+    assessmentType: '',
+    userId: '',
+    limit: 200,
+  });
+
+  const loadLogs = async () => {
+    setLoading(true);
+    setError('');
+    try {
+      const data = await fetchViolations({
+        assessmentId: filters.assessmentId || undefined,
+        assessmentType: filters.assessmentType || undefined,
+        userId: filters.userId || undefined,
+        limit: filters.limit || 200,
+      });
+      setLogs(Array.isArray(data) ? data : data?.data || []);
+    } catch (err) {
+      setError(err?.message || 'Failed to load violations');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadLogs();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFilters((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    loadLogs();
+  };
+
+  return (
+    <div className="space-y-6">
+      <div>
+        <h2 className="text-2xl font-bold mb-2">Proctoring Violations</h2>
+        <p className="text-sm text-gray-600">View tab switches, fullscreen exits, paste attempts, and reload attempts.</p>
+      </div>
+
+      <form onSubmit={handleSubmit} className="grid md:grid-cols-4 gap-4 bg-white p-4 rounded-lg border">
+        <div>
+          <label className="text-sm font-medium text-gray-700">Assessment ID</label>
+          <input name="assessmentId" value={filters.assessmentId} onChange={handleChange} className="mt-1 w-full border rounded px-3 py-2" placeholder="contest_id or quiz_id" />
+        </div>
+        <div>
+          <label className="text-sm font-medium text-gray-700">Assessment Type</label>
+          <select name="assessmentType" value={filters.assessmentType} onChange={handleChange} className="mt-1 w-full border rounded px-3 py-2">
+            <option value="">Any</option>
+            <option value="contest">Contest</option>
+            <option value="quiz">Quiz</option>
+            <option value="assessment">Assessment</option>
+          </select>
+        </div>
+        <div>
+          <label className="text-sm font-medium text-gray-700">User ID</label>
+          <input name="userId" value={filters.userId} onChange={handleChange} className="mt-1 w-full border rounded px-3 py-2" placeholder="user id" />
+        </div>
+        <div>
+          <label className="text-sm font-medium text-gray-700">Limit</label>
+          <input name="limit" type="number" min="1" max="500" value={filters.limit} onChange={handleChange} className="mt-1 w-full border rounded px-3 py-2" />
+        </div>
+        <div className="md:col-span-4 flex justify-end">
+          <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50" disabled={loading}>
+            {loading ? 'Loading…' : 'Apply Filters'}
+          </button>
+        </div>
+      </form>
+
+      {error && <div className="bg-red-100 text-red-700 px-4 py-2 rounded border border-red-200">{error}</div>}
+
+      <div className="bg-white border rounded-lg overflow-x-auto">
+        <table className="min-w-full text-sm">
+          <thead className="bg-gray-100 text-gray-700">
+            <tr>
+              <th className="px-4 py-2 text-left">Time (UTC)</th>
+              <th className="px-4 py-2 text-left">User</th>
+              <th className="px-4 py-2 text-left">Assessment</th>
+              <th className="px-4 py-2 text-left">Type</th>
+              <th className="px-4 py-2 text-left">Violation</th>
+              <th className="px-4 py-2 text-left">Meta</th>
+            </tr>
+          </thead>
+          <tbody>
+            {logs.length === 0 && !loading && (
+              <tr>
+                <td colSpan="6" className="px-4 py-3 text-center text-gray-500">No violations found.</td>
+              </tr>
+            )}
+            {logs.map((log) => (
+              <tr key={log.id} className="border-t">
+                <td className="px-4 py-2 text-gray-700">{new Date(log.created_at).toISOString()}</td>
+                <td className="px-4 py-2">{log.user_id}</td>
+                <td className="px-4 py-2">{log.assessment_type}:{log.assessment_id}</td>
+                <td className="px-4 py-2 uppercase">{log.assessment_type}</td>
+                <td className="px-4 py-2 font-semibold">{log.violation_type}</td>
+                <td className="px-4 py-2 text-xs font-mono max-w-xs whitespace-pre-wrap">{log.meta ? JSON.stringify(log.meta) : ''}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };

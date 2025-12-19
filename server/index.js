@@ -16,6 +16,7 @@ const adminRoutes = require('./routes/admin');
 const codeDraftRoutes = require('./routes/codeDrafts');
 const contestRoutes = require('./routes/contests');
 const sheetsRoutes = require('./routes/sheets');
+const proctoringRoutes = require('./routes/proctoring');
 
 // Create Express app
 const app = express();
@@ -97,6 +98,30 @@ async function ensureDatabaseSchema() {
   const connection = await pool.getConnection();
 
   try {
+    // Check and create violation_logs table if it doesn't exist
+    console.log('[DB] Checking if violation_logs table exists...');
+    const [violationTables] = await connection.query("SHOW TABLES LIKE 'violation_logs'");
+    if (violationTables.length === 0) {
+      console.log('[DB] Creating violation_logs table...');
+      await connection.query(`
+        CREATE TABLE violation_logs (
+          id INT AUTO_INCREMENT PRIMARY KEY,
+          user_id INT NOT NULL,
+          assessment_id VARCHAR(64) NOT NULL,
+          assessment_type ENUM('quiz','contest','assessment') NOT NULL DEFAULT 'assessment',
+          violation_type VARCHAR(64) NOT NULL,
+          meta JSON NULL,
+          created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+          INDEX idx_violation_user (user_id),
+          INDEX idx_violation_assessment (assessment_id, assessment_type),
+          CONSTRAINT fk_violation_user FOREIGN KEY (user_id) REFERENCES users(id)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+      `);
+      console.log('[DB] violation_logs table created successfully');
+    } else {
+      console.log('[DB] violation_logs table already exists');
+    }
+
     const [exampleColumn] = await connection.query("SHOW COLUMNS FROM questions LIKE 'examples'");
     if (exampleColumn.length === 0) {
       console.log("[DB] Adding missing 'examples' column to questions table");
@@ -138,6 +163,7 @@ app.use('/api/admin', adminRoutes);
 app.use('/api/code-drafts', codeDraftRoutes);
 app.use('/api/contests', contestRoutes);
 app.use('/api/sheets', sheetsRoutes);
+app.use('/api/proctoring', proctoringRoutes);
 
 // Health check route
 app.get('/api/health', (req, res) => {
